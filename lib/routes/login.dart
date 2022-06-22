@@ -137,10 +137,10 @@ class _LoginState extends State<Login> {
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(25.0),
               child: Image(
                 image: AssetImage("assets/images/cck_logo_transparent.png"),
                 height: 220,
