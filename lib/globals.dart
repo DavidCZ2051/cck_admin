@@ -1,9 +1,10 @@
-library my_prj.globals;
-
-String? firstName;
-String? lastName;
-String? token;
-const String url = "https://veverice.skautvdf.cz";
-String currentPage = "/login";
-const bool debug = false; //debug variable
+const String url = "localhost";
 const String appVersion = "DEV-1";
+const bool debug = true; //debug variable
+User user = User();
+
+class User {
+  String? firstName;
+  String? lastName;
+  String? token;
+}

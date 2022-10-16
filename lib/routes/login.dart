@@ -5,22 +5,6 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 //files
 import 'package:cck_admin/globals.dart' as globals;
-//routes
-import 'package:cck_admin/routes/lobby.dart';
-
-void main() {
-  runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: "/login",
-      routes: {
-        "/login": (context) => const Login(),
-        "/lobby": (context) => const Lobby(),
-      },
-      title: "ČČK Admin",
-    ),
-  );
-}
 
 const borderColor = Color(0xFF805306);
 
@@ -45,8 +29,8 @@ class _LoginState extends State<Login> {
     );
     final jsonData = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      globals.firstName = jsonData["firstName"];
-      globals.lastName = jsonData["lastName"];
+      globals.user.firstName = jsonData["firstName"];
+      globals.user.lastName = jsonData["lastName"];
     } else {
       print("Request failed with status: ${response.statusCode}.");
     }
@@ -63,7 +47,7 @@ class _LoginState extends State<Login> {
     final jsonData = jsonDecode(response.body);
     if (response.statusCode == 200) {
       await getUserDetails(jsonData["token"], jsonData["userId"]);
-      globals.token = jsonData["token"];
+      globals.user.token = jsonData["token"];
       final storage = new FlutterSecureStorage();
       storage.write(
           key: "rememberPassword", value: _rememberPassword.toString());
@@ -75,7 +59,7 @@ class _LoginState extends State<Login> {
         storage.delete(key: "password");
         print("heslo smazáno");
       }
-      globals.currentPage = "/lobby";
+
       Navigator.pushReplacementNamed(context, "/lobby");
       password = null;
     } else {
@@ -252,7 +236,6 @@ class _LoginState extends State<Login> {
               child: ElevatedButton(
                 onPressed: () {
                   if (globals.debug) {
-                    globals.currentPage = "/lobby";
                     Navigator.pushReplacementNamed(context, "/lobby");
                   } else if (email == null ||
                       email == "" ||

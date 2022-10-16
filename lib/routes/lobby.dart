@@ -51,9 +51,9 @@ class _LobbyState extends State<Lobby> {
                           backgroundColor: Colors.red, primary: Colors.white),
                       onPressed: () {
                         Navigator.pushReplacementNamed(context, "/login");
-                        globals.firstName = null;
-                        globals.lastName = null;
-                        globals.token = null;
+                        globals.user.firstName = null;
+                        globals.user.lastName = null;
+                        globals.user.token = null;
                       },
                       child: const Text(
                         "Odhlásit se",
