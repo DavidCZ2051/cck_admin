@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 //files
 import 'package:cck_admin/globals.dart' as globals;
+import 'package:cck_admin/widgets.dart' as widgets;
 
 class Lobby extends StatefulWidget {
   const Lobby({Key? key}) : super(key: key);
@@ -11,10 +12,19 @@ class Lobby extends StatefulWidget {
 }
 
 class _LobbyState extends State<Lobby> {
+  bool _isDrawerOpen = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () {
+            setState(() {
+              _isDrawerOpen = !_isDrawerOpen;
+            });
+          },
+        ),
         backgroundColor: Colors.red,
         title: const Text("Hlavní panel"),
         actions: <Widget>[
@@ -71,8 +81,18 @@ class _LobbyState extends State<Lobby> {
           ),
         ],
       ),
-      body: const Center(
-        child: Text('Lobby'),
+      body: Row(
+        children: [
+          widgets.MyNavigationRail(
+            isDrawerOpen: _isDrawerOpen,
+          ),
+          const VerticalDivider(thickness: 1.5, width: 1),
+          Expanded(
+            child: Center(
+              child: Text('Lobby'),
+            ),
+          )
+        ],
       ),
     );
   }

@@ -46,7 +46,7 @@ class _LoginState extends State<Login> {
     if (response.statusCode == 200) {
       await getUserDetails(jsonData["token"], jsonData["userId"]);
       globals.user.token = jsonData["token"];
-      final storage = FlutterSecureStorage();
+      const storage = FlutterSecureStorage();
       storage.write(
           key: "rememberPassword", value: _rememberPassword.toString());
       print("$_rememberPassword test");
@@ -184,13 +184,15 @@ class _LoginState extends State<Login> {
                       hintText: "Heslo",
                       suffixIcon: InkWell(
                         child: Icon(
-                            hiddenPassword
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: Colors.red),
+                          hiddenPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.red,
+                        ),
                         onTap: () {
-                          hiddenPassword = !hiddenPassword;
-                          setState(() {});
+                          setState(() {
+                            hiddenPassword = !hiddenPassword;
+                          });
                         },
                       ),
                       prefixIcon: Icon(
