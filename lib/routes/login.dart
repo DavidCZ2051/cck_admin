@@ -6,8 +6,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 //files
 import 'package:cck_admin/globals.dart' as globals;
 
-const borderColor = Color(0xFF805306);
-
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -48,7 +46,7 @@ class _LoginState extends State<Login> {
     if (response.statusCode == 200) {
       await getUserDetails(jsonData["token"], jsonData["userId"]);
       globals.user.token = jsonData["token"];
-      final storage = new FlutterSecureStorage();
+      final storage = FlutterSecureStorage();
       storage.write(
           key: "rememberPassword", value: _rememberPassword.toString());
       print("$_rememberPassword test");
@@ -59,7 +57,6 @@ class _LoginState extends State<Login> {
         storage.delete(key: "password");
         print("heslo smazáno");
       }
-
       Navigator.pushReplacementNamed(context, "/lobby");
       password = null;
     } else {
@@ -76,13 +73,10 @@ class _LoginState extends State<Login> {
               "Email nebo heslo nejsou správné.",
               style: TextStyle(fontSize: 18),
             ),
-            actions: [
+            actions: <Widget>[
               TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.red,
-                ),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
                 },
                 child: const Text(
                   "OK",
@@ -119,171 +113,188 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(25.0),
-              child: Image(
-                image: AssetImage("assets/images/cck_logo_transparent.png"),
-                height: 220,
-              ),
-            ),
-            const Text(
-              "Přihlášení",
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-              child: TextFormField(
-                onChanged: (value) {
-                  if (!_isLoading) {
-                    email = value;
-                  }
-                },
-                textAlign: TextAlign.justify,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.red[50],
-                  hintText: "Email",
-                  prefixIcon: const Icon(
-                    Icons.email,
-                    color: Colors.amber,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(color: Colors.red),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: Colors.red, width: 2),
-                  ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const Padding(
+                padding: EdgeInsets.all(25.0),
+                child: Image(
+                  image: AssetImage("assets/images/cck_logo_transparent.png"),
+                  height: 220,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-              child: TextFormField(
-                onChanged: (value) {
-                  if (!_isLoading) {
-                    password = value;
-                  }
-                },
-                controller: TextEditingController(text: password),
-                obscureText: hiddenPassword,
-                textAlign: TextAlign.justify,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.red[50],
-                  hintText: "Heslo",
-                  suffixIcon: InkWell(
-                    child: Icon(
-                        hiddenPassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: Colors.red),
-                    onTap: () {
-                      hiddenPassword = !hiddenPassword;
-                      setState(() {});
-                    },
-                  ),
-                  prefixIcon: Icon(
-                    Icons.lock,
-                    color: Colors.grey[600],
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(color: Colors.red),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: Colors.red, width: 2),
-                  ),
+              const Text(
+                "Přihlášení",
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
                 ),
+                textAlign: TextAlign.center,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
-              child: Row(
-                children: <Widget>[
-                  Checkbox(
-                    activeColor: Colors.red,
-                    value: _rememberPassword,
-                    onChanged: (value) =>
-                        setState(() => _rememberPassword = value!),
-                  ),
-                  GestureDetector(
-                    child: const Text(
-                      "Zapamatovat heslo",
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    onTap: () {
-                      setState(() {
-                        _rememberPassword = !_rememberPassword;
-                      });
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 500),
+                  child: TextFormField(
+                    onChanged: (value) {
+                      if (!_isLoading) {
+                        email = value;
+                      }
                     },
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(50, 5, 50, 0),
-              child: ElevatedButton(
-                onPressed: () {
-                  if (globals.debug) {
-                    Navigator.pushReplacementNamed(context, "/lobby");
-                  } else if (email == null ||
-                      email == "" ||
-                      password == null ||
-                      password == "") {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          "Vyplňte email a heslo",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        backgroundColor: Colors.red,
-                        duration: Duration(seconds: 3),
+                    textAlign: TextAlign.justify,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.red[50],
+                      hintText: "Email",
+                      prefixIcon: const Icon(
+                        Icons.email,
+                        color: Colors.amber,
                       ),
-                    );
-                  } else if (!_isLoading) {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    sendLoginRequest();
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.red,
-                  onPrimary: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: Center(
-                    child: _isLoading
-                        ? const CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 4,
-                          )
-                        : const Text(
-                            "Přihlásit se",
-                            style: TextStyle(fontSize: 18),
-                          ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: const BorderSide(color: Colors.red),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide:
+                            const BorderSide(color: Colors.red, width: 2),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 60),
-          ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 500),
+                  child: TextFormField(
+                    onChanged: (value) {
+                      if (!_isLoading) {
+                        password = value;
+                      }
+                    },
+                    controller: TextEditingController(text: password),
+                    obscureText: hiddenPassword,
+                    textAlign: TextAlign.justify,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.red[50],
+                      hintText: "Heslo",
+                      suffixIcon: InkWell(
+                        child: Icon(
+                            hiddenPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.red),
+                        onTap: () {
+                          hiddenPassword = !hiddenPassword;
+                          setState(() {});
+                        },
+                      ),
+                      prefixIcon: Icon(
+                        Icons.lock,
+                        color: Colors.grey[600],
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: const BorderSide(color: Colors.red),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide:
+                            const BorderSide(color: Colors.red, width: 2),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+                child: ConstrainedBox(
+                  constraints:
+                      const BoxConstraints(maxWidth: 500, minWidth: 500),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Checkbox(
+                        activeColor: Colors.red,
+                        value: _rememberPassword,
+                        onChanged: (value) =>
+                            setState(() => _rememberPassword = value!),
+                      ),
+                      GestureDetector(
+                        child: const Text(
+                          "Zapamatovat heslo",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            _rememberPassword = !_rememberPassword;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 5, 50, 0),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 500),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (globals.debug) {
+                        Navigator.pushReplacementNamed(context, "/lobby");
+                      } else if (email == null ||
+                          email == "" ||
+                          password == null ||
+                          password == "") {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Vyplňte email a heslo",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            backgroundColor: Colors.red,
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                      } else if (!_isLoading) {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        sendLoginRequest();
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: Center(
+                        child: _isLoading
+                            ? const CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 4,
+                              )
+                            : const Text(
+                                "Přihlásit se",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 60),
+            ],
+          ),
         ),
       ),
     );

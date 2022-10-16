@@ -15,8 +15,9 @@ class _LobbyState extends State<Lobby> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.red,
         title: const Text("Hlavní panel"),
-        actions: [
+        actions: <Widget>[
           IconButton(
             tooltip: "Odhlášení",
             icon: const Icon(Icons.exit_to_app),
@@ -34,21 +35,23 @@ class _LobbyState extends State<Lobby> {
                     style: TextStyle(fontSize: 18),
                     overflow: TextOverflow.ellipsis,
                   ),
-                  actions: [
+                  actions: <Widget>[
                     TextButton(
-                      style: TextButton.styleFrom(primary: Colors.red),
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
                       },
                       child: const Text(
                         "Zrušit",
-                        style: TextStyle(fontSize: 15),
-                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.red,
+                        ),
                       ),
                     ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: Colors.red, primary: Colors.white),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.red),
+                      ),
                       onPressed: () {
                         Navigator.pushReplacementNamed(context, "/login");
                         globals.user.firstName = null;
@@ -58,7 +61,6 @@ class _LobbyState extends State<Lobby> {
                       child: const Text(
                         "Odhlásit se",
                         style: TextStyle(fontSize: 15),
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],

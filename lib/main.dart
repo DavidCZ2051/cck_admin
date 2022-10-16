@@ -14,6 +14,7 @@ void main() {
         "/lobby": (context) => const Lobby(),
       },
       title: "ČČK Admin",
+      color: Colors.red,
     ),
   );
 }
