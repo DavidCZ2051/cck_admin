@@ -12,7 +12,6 @@ class Lobby extends StatefulWidget {
 }
 
 class _LobbyState extends State<Lobby> {
-  bool _isDrawerOpen = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +20,8 @@ class _LobbyState extends State<Lobby> {
           icon: const Icon(Icons.menu),
           onPressed: () {
             setState(() {
-              _isDrawerOpen = !_isDrawerOpen;
+              globals.navigationDrawer.expanded =
+                  !globals.navigationDrawer.expanded;
             });
           },
         ),
@@ -83,9 +83,7 @@ class _LobbyState extends State<Lobby> {
       ),
       body: Row(
         children: [
-          widgets.MyNavigationRail(
-            isDrawerOpen: _isDrawerOpen,
-          ),
+          widgets.MyNavigationRail(),
           const VerticalDivider(thickness: 1.5, width: 1),
           Expanded(
             child: Center(

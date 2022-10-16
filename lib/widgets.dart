@@ -4,22 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:cck_admin/globals.dart' as globals;
 
 class MyNavigationRail extends StatefulWidget {
-  const MyNavigationRail({super.key, required this.isDrawerOpen});
-
-  final bool isDrawerOpen;
+  const MyNavigationRail({super.key});
 
   @override
   State<MyNavigationRail> createState() => _MyNavigationRailState();
 }
 
 class _MyNavigationRailState extends State<MyNavigationRail> {
-  int selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return NavigationRail(
-      extended: widget.isDrawerOpen,
+      extended: globals.navigationDrawer.expanded,
       indicatorColor: Colors.red,
+      onDestinationSelected: (value) {
+        setState(() {
+          if (globals.navigationDrawer.index != value) {
+            globals.navigationDrawer.index = value;
+
+            Navigator.pushReplacementNamed(
+                context, globals.navigationDrawer.navigationMap[value]);
+          }
+        });
+      },
       destinations: <NavigationRailDestination>[
         NavigationRailDestination(
           icon: const Icon(Icons.home),
@@ -30,7 +36,7 @@ class _MyNavigationRailState extends State<MyNavigationRail> {
           label: const Text("Nastavení"),
         ),
       ],
-      selectedIndex: selectedIndex,
+      selectedIndex: globals.navigationDrawer.index,
     );
   }
 }
