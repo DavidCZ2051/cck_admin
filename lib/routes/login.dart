@@ -240,7 +240,8 @@ class _LoginState extends State<Login> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (globals.debug) {
-                        Navigator.pushReplacementNamed(context, "/lobby");
+                        Navigator.pushReplacementNamed(
+                            context, "/competitions");
                       } else if (email == null ||
                           email == "" ||
                           password == null ||

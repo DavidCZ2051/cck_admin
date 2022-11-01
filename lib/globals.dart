@@ -7,6 +7,29 @@ const bool debug = true; //debug variable
 
 User user = User();
 NavigationDrawer navigationDrawer = NavigationDrawer();
+List<Competition> competitions = <Competition>[
+  Competition(
+    id: 2,
+    startDate: DateTime(2022),
+    endDate: DateTime(2022),
+    type: "d",
+    description: "d",
+  ),
+  Competition(
+    id: 3,
+    startDate: DateTime(2022),
+    endDate: DateTime(2022),
+    type: "ds",
+    description: "sd",
+  ),
+  Competition(
+    id: 4,
+    startDate: DateTime(2022),
+    endDate: DateTime(2022),
+    type: "ddew",
+    description: "wedd",
+  )
+];
 
 class NavigationDrawer {
   bool expanded = false;
