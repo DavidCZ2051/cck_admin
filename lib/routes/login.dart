@@ -144,22 +144,18 @@ class _LoginState extends State<Login> {
                       }
                     },
                     textAlign: TextAlign.justify,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.red[50],
-                      hintText: "Email",
-                      prefixIcon: const Icon(
+                    decoration: const InputDecoration(
+                      labelText: "Email",
+                      labelStyle: TextStyle(color: Colors.red),
+                      prefixIcon: Icon(
                         Icons.email,
                         color: Colors.amber,
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: const BorderSide(color: Colors.red),
+                        borderSide: BorderSide(color: Colors.red),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide:
-                            const BorderSide(color: Colors.red, width: 2),
+                        borderSide: BorderSide(color: Colors.red),
                       ),
                     ),
                   ),
@@ -179,34 +175,30 @@ class _LoginState extends State<Login> {
                     obscureText: hiddenPassword,
                     textAlign: TextAlign.justify,
                     decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.red[50],
-                      hintText: "Heslo",
-                      suffixIcon: InkWell(
-                        child: Icon(
-                          hiddenPassword
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          color: Colors.red,
-                        ),
-                        onTap: () {
+                      labelText: "Heslo",
+                      labelStyle: const TextStyle(color: Colors.red),
+                      suffixIcon: IconButton(
+                        onPressed: () {
                           setState(() {
                             hiddenPassword = !hiddenPassword;
                           });
                         },
+                        icon: Icon(
+                          color: Colors.black,
+                          hiddenPassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
                       ),
                       prefixIcon: Icon(
                         Icons.lock,
-                        color: Colors.grey[600],
+                        color: Colors.grey[700],
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: const BorderSide(color: Colors.red),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide:
-                            const BorderSide(color: Colors.red, width: 2),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
                       ),
                     ),
                   ),
