@@ -139,7 +139,12 @@ class _CompetitionsState extends State<Competitions> {
                                 (context, animation, secondaryAnimation) {
                               return AlertDialog(
                                 title: const Text("Přidání soutěže"),
-                                content: const Text("Content"),
+                                content: ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    minWidth: 800,
+                                    minHeight: 500,
+                                  ),
+                                ),
                                 actions: [
                                   TextButton(
                                     style: ButtonStyle(
@@ -181,7 +186,51 @@ class _CompetitionsState extends State<Competitions> {
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.red),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        showGeneralDialog(
+                            context: context,
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                              return AlertDialog(
+                                title: const Text("Úprava soutěže"),
+                                content: Column(
+                                  children: [
+                                    Row(
+                                      children: const [
+                                        Text("Typ: "),
+                                        Text("Předkolo"),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    style: ButtonStyle(
+                                      overlayColor: MaterialStateProperty.all(
+                                          Colors.red[50]),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      "Zrušit úpravu",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(Colors.red),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Aplikovat změny"),
+                                  ),
+                                ],
+                              );
+                            });
+                      },
                       child: Row(
                         children: const [
                           Icon(Icons.edit),
@@ -190,13 +239,35 @@ class _CompetitionsState extends State<Competitions> {
                         ],
                       ),
                     ),
+                    const SizedBox(width: 40),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.red),
+                      ),
+                      onPressed: () {},
+                      child: Row(
+                        children: const [
+                          Icon(Icons.delete_forever),
+                          SizedBox(width: 5),
+                          Text("Smazat"),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                 child: Card(
-                  child: Text("Detail"),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("Content"),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
