@@ -14,6 +14,7 @@ List<Competition> competitions = <Competition>[
     endDate: DateTime(2023),
     type: "d",
     description: "d",
+    teams: [],
   ),
   Competition(
     id: 3,
@@ -21,6 +22,7 @@ List<Competition> competitions = <Competition>[
     endDate: DateTime(2022),
     type: "ds",
     description: "sd",
+    teams: [],
   ),
   Competition(
     id: 4,
@@ -28,6 +30,7 @@ List<Competition> competitions = <Competition>[
     endDate: DateTime(2022, 12, 31),
     type: "ddew",
     description: "wedd",
+    teams: [],
   )
 ];
 
@@ -54,12 +57,14 @@ class Competition {
   DateTime endDate;
   String type;
   String description;
+  List<Team> teams;
   Competition({
     required this.id,
     required this.startDate,
     required this.endDate,
     required this.type,
     required this.description,
+    required this.teams,
   });
 
   String get startDateString {
@@ -83,3 +88,5 @@ class Competition {
     return "Error";
   }
 }
+
+class Team {}
