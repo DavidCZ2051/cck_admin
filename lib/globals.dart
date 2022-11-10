@@ -1,9 +1,9 @@
 // packages
 import 'package:flutter/material.dart';
 
-const String url = "localhost";
+const String url = "localhost:7041";
 const String appVersion = "1.0.0-DEV";
-const bool debug = true; //debug variable
+const bool debug = false; //debug variable
 
 User user = User();
 NavigationDrawer navigationDrawer = NavigationDrawer();
@@ -48,6 +48,7 @@ class User {
   String? firstName;
   String? lastName;
   String? token;
+  int? userID;
   User({this.firstName, this.lastName, this.token});
 }
 
@@ -90,3 +91,9 @@ class Competition {
 }
 
 class Team {}
+
+class FunctionObject {
+  int statusCode; //status code of the response
+  int functionCode; //function code of the function. 0 = success, 1 = error
+  FunctionObject({required this.statusCode, required this.functionCode});
+}

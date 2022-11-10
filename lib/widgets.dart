@@ -40,3 +40,34 @@ class _MyNavigationRailState extends State<MyNavigationRail> {
     );
   }
 }
+
+class ErrorDialog extends StatefulWidget {
+  const ErrorDialog({super.key, required this.statusCode});
+
+  final int statusCode;
+
+  @override
+  State<ErrorDialog> createState() => _ErrorDialogState();
+}
+
+class _ErrorDialogState extends State<ErrorDialog> {
+  Map errorDescription = {};
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Chyba ${widget.statusCode}'),
+      content: errorDescription.containsKey(widget.statusCode)
+          ? Text(errorDescription[widget.statusCode])
+          : const Text('Neznámá chyba'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text("OK"),
+        ),
+      ],
+    );
+  }
+}
