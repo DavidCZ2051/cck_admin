@@ -35,16 +35,16 @@ class _LoginState extends State<Login> {
   }
 
   sendLoginRequest() async {
+    print('${email}${password!}');
     final response = await get(
-      Uri.parse("https://${globals.url}/user/login"),
+      Uri.parse("https://${globals.url}/api/login"),
       headers: {"email": email!, "password": password!},
     );
     setState(() {
       _isLoading = false;
     });
-    print(response.body);
-    final jsonData = jsonDecode(response.body);
     if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
       await getUserDetails(jsonData["token"], jsonData["userId"]);
       globals.user.token = jsonData["token"];
       const storage = FlutterSecureStorage();
@@ -62,33 +62,32 @@ class _LoginState extends State<Login> {
       password = null;
     } else {
       print("Request failed with status: ${response.statusCode}.");
-      if (jsonData["error"] == "Bad login") {
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: const Text(
-              "Chyba",
-              style: TextStyle(fontSize: 22),
-            ),
-            content: const Text(
-              "Email nebo heslo nejsou správné.",
-              style: TextStyle(fontSize: 18),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  "OK",
-                  style: TextStyle(fontSize: 15),
-                ),
-              ),
-            ],
+
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text(
+            "Chyba",
+            style: TextStyle(fontSize: 22),
           ),
-          barrierDismissible: true,
-        );
-      }
+          content: const Text(
+            "Email nebo heslo nejsou správné.",
+            style: TextStyle(fontSize: 18),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                "OK",
+                style: TextStyle(fontSize: 15),
+              ),
+            ),
+          ],
+        ),
+        barrierDismissible: true,
+      );
     }
   }
 
