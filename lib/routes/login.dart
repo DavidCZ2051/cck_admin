@@ -36,12 +36,13 @@ class _LoginState extends State<Login> {
 
   sendLoginRequest() async {
     final response = await get(
-      Uri.parse("${globals.url}/user/login"),
+      Uri.parse("https://${globals.url}/user/login"),
       headers: {"email": email!, "password": password!},
     );
     setState(() {
       _isLoading = false;
     });
+    print(response.body);
     final jsonData = jsonDecode(response.body);
     if (response.statusCode == 200) {
       await getUserDetails(jsonData["token"], jsonData["userId"]);
