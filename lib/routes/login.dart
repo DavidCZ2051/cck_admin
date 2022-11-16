@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 //files
 import 'package:cck_admin/globals.dart' as globals;
+import 'package:cck_admin/functions.dart' as functions;
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -20,33 +21,15 @@ class _LoginState extends State<Login> {
   bool _rememberPassword = false;
   bool _isLoading = false;
 
-  getUserDetails(String token, int userId) async {
-    final response = await get(
-      Uri.parse("${globals.url}/user/detail/$userId"),
-      headers: {"token": token},
-    );
-    final jsonData = jsonDecode(response.body);
-    if (response.statusCode == 200) {
-      globals.user.firstName = jsonData["firstName"];
-      globals.user.lastName = jsonData["lastName"];
-    } else {
-      print("Request failed with status: ${response.statusCode}.");
-    }
-  }
-
-  sendLoginRequest() async {
-    print('${email}${password!}');
-    final response = await get(
-      Uri.parse("https://${globals.url}/api/login"),
-      headers: {"email": email!, "password": password!},
-    );
+  handleLogin() async {
+    setState(() {
+      _isLoading = true;
+    });
+    var object = await functions.login(email: email!, password: password!);
     setState(() {
       _isLoading = false;
     });
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
-      await getUserDetails(jsonData["token"], jsonData["userId"]);
-      globals.user.token = jsonData["token"];
+    if (object.functionCode == globals.FunctionCode.success) {
       const storage = FlutterSecureStorage();
       storage.write(
           key: "rememberPassword", value: _rememberPassword.toString());
@@ -58,11 +41,10 @@ class _LoginState extends State<Login> {
         storage.delete(key: "password");
         print("heslo smazáno");
       }
-      Navigator.pushReplacementNamed(context, "/lobby");
+      Navigator.pushReplacementNamed(context, "/competitions");
       password = null;
     } else {
-      print("Request failed with status: ${response.statusCode}.");
-
+      print("Request failed with status: ${object.statusCode}.");
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
@@ -138,6 +120,7 @@ class _LoginState extends State<Login> {
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 500),
                   child: TextFormField(
+                    initialValue: 'lukasl32@atlas.cz',
                     onChanged: (value) {
                       if (!_isLoading) {
                         email = value;
@@ -207,10 +190,8 @@ class _LoginState extends State<Login> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 6, 0, 6),
                 child: ConstrainedBox(
-                  constraints:
-                      const BoxConstraints(maxWidth: 500, minWidth: 500),
+                  constraints: const BoxConstraints(maxWidth: 500),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Checkbox(
                         activeColor: Colors.red,
@@ -257,10 +238,7 @@ class _LoginState extends State<Login> {
                           ),
                         );
                       } else if (!_isLoading) {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        sendLoginRequest();
+                        handleLogin();
                       }
                     },
                     style: ElevatedButton.styleFrom(

@@ -1,38 +1,13 @@
 // packages
 import 'package:flutter/material.dart';
 
-const String url = "localhost:7041";
+const String url = "https://localhost:7041";
 const String appVersion = "1.0.0-DEV";
 const bool debug = false; //debug variable
 
 User user = User();
 NavigationDrawer navigationDrawer = NavigationDrawer();
-List<Competition> competitions = <Competition>[
-  Competition(
-    id: 2,
-    startDate: DateTime(2023),
-    endDate: DateTime(2023),
-    type: "d",
-    description: "d",
-    teams: [],
-  ),
-  Competition(
-    id: 3,
-    startDate: DateTime(2022),
-    endDate: DateTime(2022),
-    type: "ds",
-    description: "sd",
-    teams: [],
-  ),
-  Competition(
-    id: 4,
-    startDate: DateTime(2021),
-    endDate: DateTime(2022, 12, 31),
-    type: "ddew",
-    description: "wedd",
-    teams: [],
-  )
-];
+List<Competition> competitions = <Competition>[];
 
 class NavigationDrawer {
   bool expanded = false;
@@ -48,8 +23,9 @@ class User {
   String? firstName;
   String? lastName;
   String? token;
+  int? tokenId;
   int? userID;
-  User({this.firstName, this.lastName, this.token});
+  User({this.firstName, this.lastName, this.token, this.tokenId, this.userID});
 }
 
 class Competition {
@@ -92,8 +68,14 @@ class Competition {
 
 class Team {}
 
+enum FunctionCode {
+  success,
+  error;
+}
+
 class FunctionObject {
   int statusCode; //status code of the response
-  int functionCode; //function code of the function. 0 = success, 1 = error
+  FunctionCode
+      functionCode; //function code of the function. see enum FunctionCode
   FunctionObject({required this.statusCode, required this.functionCode});
 }
