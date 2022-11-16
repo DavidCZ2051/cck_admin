@@ -12,10 +12,47 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading> {
+  @override
+  void initState() {
+    super.initState();
+    handleLoadingStuff();
+  }
+
   Map description = {
-    0: 'Načítání soutěží',
+    0: 'Načítám soutěže...',
+    1: 'Načítám informace o soutěžích...',
   };
   int progress = 0;
+
+  handleLoadingStuff() async {
+    var object = await functions.getCompetitions(token: globals.user.token!);
+    if (object.functionCode == globals.FunctionCode.error) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Chyba'),
+              content: Text(
+                  'Nepodařilo se načíst soutěže. Chybový kód: ${object.statusCode}'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Zavřít'),
+                ),
+              ],
+            );
+          });
+      Navigator.pushReplacementNamed(context, "/login");
+      return;
+    }
+    setState(() {
+      progress = 1;
+    });
+    Navigator.pushReplacementNamed(context, "/competitions");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

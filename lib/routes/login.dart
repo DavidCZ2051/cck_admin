@@ -41,7 +41,7 @@ class _LoginState extends State<Login> {
         storage.delete(key: "password");
         print("heslo smazáno");
       }
-      Navigator.pushReplacementNamed(context, "/competitions");
+      Navigator.pushReplacementNamed(context, "/loading");
       password = null;
     } else {
       print("Request failed with status: ${object.statusCode}.");

@@ -5,6 +5,7 @@ import 'package:cck_admin/routes/lobby.dart';
 import 'package:cck_admin/routes/login.dart';
 import 'package:cck_admin/routes/settings.dart';
 import 'package:cck_admin/routes/competitions.dart';
+import 'package:cck_admin/routes/loading.dart';
 
 void main() {
   runApp(
@@ -13,6 +14,7 @@ void main() {
       initialRoute: "/login",
       routes: {
         "/login": (context) => const Login(),
+        '/loading': (context) => const Loading(),
         "/lobby": (context) => const Lobby(),
         "/settings": (context) => const Settings(),
         "/competitions": (context) => const Competitions(),

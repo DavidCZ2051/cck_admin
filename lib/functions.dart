@@ -48,7 +48,7 @@ Future<globals.FunctionObject> getCompetitions({required String token}) async {
         id: competition['id'],
         startDate: DateTime.parse(competition['startDate']),
         endDate: DateTime.parse(competition['endDate']),
-        type: competition['type'],
+        type: globals.competitionTypes[competition['type']],
         description: competition['description'],
         teams: [],
       ));

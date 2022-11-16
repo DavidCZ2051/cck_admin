@@ -9,6 +9,14 @@ User user = User();
 NavigationDrawer navigationDrawer = NavigationDrawer();
 List<Competition> competitions = <Competition>[];
 
+Map competitionTypes = {
+  1: 'Okresní',
+  2: 'Krajské',
+  3: 'Republikové',
+  4: 'Mezinárodní',
+  5: 'Testovací',
+};
+
 class NavigationDrawer {
   bool expanded = false;
   int index = 0;
