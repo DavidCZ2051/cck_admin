@@ -186,51 +186,55 @@ class _CompetitionsState extends State<Competitions> {
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.red),
                       ),
-                      onPressed: () {
-                        showGeneralDialog(
-                            context: context,
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) {
-                              return AlertDialog(
-                                title: const Text("Úprava soutěže"),
-                                content: Column(
-                                  children: [
-                                    Row(
-                                      children: const [
-                                        Text("Typ: "),
-                                        Text("Předkolo"),
+                      onPressed: selectedCompetetion == null
+                          ? null
+                          : () {
+                              showGeneralDialog(
+                                  context: context,
+                                  pageBuilder:
+                                      (context, animation, secondaryAnimation) {
+                                    return AlertDialog(
+                                      title: const Text("Úprava soutěže"),
+                                      content: Column(
+                                        children: [
+                                          Row(
+                                            children: const [
+                                              Text("Typ: "),
+                                              Text("Předkolo"),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          style: ButtonStyle(
+                                            overlayColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.red[50]),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text(
+                                            "Zrušit úpravu",
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
+                                        ElevatedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.red),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text("Aplikovat změny"),
+                                        ),
                                       ],
-                                    )
-                                  ],
-                                ),
-                                actions: [
-                                  TextButton(
-                                    style: ButtonStyle(
-                                      overlayColor: MaterialStateProperty.all(
-                                          Colors.red[50]),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text(
-                                      "Zrušit úpravu",
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                  ),
-                                  ElevatedButton(
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(Colors.red),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text("Aplikovat změny"),
-                                  ),
-                                ],
-                              );
-                            });
-                      },
+                                    );
+                                  });
+                            },
                       child: Row(
                         children: const [
                           Icon(Icons.edit),
@@ -244,7 +248,7 @@ class _CompetitionsState extends State<Competitions> {
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.red),
                       ),
-                      onPressed: () {},
+                      onPressed: selectedCompetetion == null ? null : () {},
                       child: Row(
                         children: const [
                           Icon(Icons.delete_forever),

@@ -1,5 +1,6 @@
 //packages
 import 'package:flutter/material.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 //routes
 import 'package:cck_admin/routes/lobby.dart';
 import 'package:cck_admin/routes/login.dart';
@@ -23,4 +24,12 @@ void main() {
       color: Colors.red,
     ),
   );
+
+  doWhenWindowReady(() {
+    appWindow.minSize = const Size(850, 650);
+    appWindow.size = const Size(1600, 900);
+    appWindow.alignment = Alignment.center;
+    appWindow.title = "ČČK Admin";
+    appWindow.show();
+  });
 }

@@ -8,6 +8,7 @@ const bool debug = false; //debug variable
 User user = User();
 NavigationDrawer navigationDrawer = NavigationDrawer();
 List<Competition> competitions = <Competition>[];
+Competition? selectedCompetition;
 
 Map competitionTypes = {
   1: 'Okresní',
