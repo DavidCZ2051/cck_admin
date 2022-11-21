@@ -253,9 +253,19 @@ class _LoginState extends State<Login> {
                       height: 50,
                       child: Center(
                         child: _isLoading
-                            ? const CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 4,
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 4,
+                                  ),
+                                  SizedBox(width: 20),
+                                  Text(
+                                    'Přihlašování...',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                ],
                               )
                             : const Text(
                                 "Přihlásit se",
