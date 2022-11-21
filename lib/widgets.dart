@@ -1,5 +1,6 @@
 // packages
 import 'package:flutter/material.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 // files
 import 'package:cck_admin/globals.dart' as globals;
 
@@ -68,6 +69,64 @@ class _ErrorDialogState extends State<ErrorDialog> {
           child: const Text("OK"),
         ),
       ],
+    );
+  }
+}
+
+class WindowsStuff extends StatelessWidget {
+  const WindowsStuff({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return WindowTitleBarBox(
+      child: Row(
+        children: [
+          Expanded(
+            child: MoveWindow(
+              onDoubleTap: () {
+                appWindow.maximizeOrRestore();
+              },
+            ),
+          ),
+          MinimizeWindowButton(
+            animate: true,
+          ),
+          MaximizeWindowButton(
+            animate: true,
+          ),
+          CloseWindowButton(
+            animate: true,
+            onPressed: () async {
+              showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text("Opravdu chcete ukončit aplikaci?"),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text("Zrušit",
+                          style: TextStyle(color: Colors.red)),
+                    ),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.red),
+                      ),
+                      onPressed: () {
+                        appWindow.close();
+                      },
+                      child: const Text("Zavřít aplikaci"),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

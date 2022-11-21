@@ -79,12 +79,13 @@ class Team {}
 
 enum FunctionCode {
   success,
-  error;
+  error,
+  connectionError;
 }
 
 class FunctionObject {
-  int statusCode; //status code of the response
+  final int? statusCode; //status code of the response
   FunctionCode
       functionCode; //function code of the function. see enum FunctionCode
-  FunctionObject({required this.statusCode, required this.functionCode});
+  FunctionObject({this.statusCode, required this.functionCode});
 }

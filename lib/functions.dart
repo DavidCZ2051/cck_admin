@@ -1,4 +1,5 @@
 // packages
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
@@ -9,26 +10,32 @@ Future<globals.FunctionObject> login({
   required String email,
   required String password,
 }) async {
-  Response response = await get(
-    Uri.parse("${globals.url}/api/login"),
-    headers: {
-      'email': email,
-      'password': password,
-    },
-  );
-
-  if (response.statusCode == 200) {
-    Map data = jsonDecode(response.body);
-    globals.user.token = data['hash'];
-    globals.user.userID = data['userId'];
-    return globals.FunctionObject(
-      functionCode: globals.FunctionCode.success,
-      statusCode: response.statusCode,
+  try {
+    Response response = await get(
+      Uri.parse("${globals.url}/api/login"),
+      headers: {
+        'email': email,
+        'password': password,
+      },
     );
-  } else {
+
+    if (response.statusCode == 200) {
+      Map data = jsonDecode(response.body);
+      globals.user.token = data['hash'];
+      globals.user.userID = data['userId'];
+      return globals.FunctionObject(
+        functionCode: globals.FunctionCode.success,
+        statusCode: response.statusCode,
+      );
+    } else {
+      return globals.FunctionObject(
+        functionCode: globals.FunctionCode.error,
+        statusCode: response.statusCode,
+      );
+    }
+  } on SocketException catch (_) {
     return globals.FunctionObject(
-      functionCode: globals.FunctionCode.error,
-      statusCode: response.statusCode,
+      functionCode: globals.FunctionCode.connectionError,
     );
   }
 }

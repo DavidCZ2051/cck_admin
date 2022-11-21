@@ -1,5 +1,5 @@
 name: cck_admin
-description: A new Flutter project.
+description: Flutter aplikace pro správu soutěží ČČK.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.

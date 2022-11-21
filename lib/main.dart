@@ -27,7 +27,7 @@ void main() {
 
   doWhenWindowReady(() {
     appWindow.minSize = const Size(850, 650);
-    appWindow.size = const Size(1600, 900);
+    appWindow.size = const Size(850, 650);
     appWindow.alignment = Alignment.center;
     appWindow.title = "ČČK Admin";
     appWindow.show();
