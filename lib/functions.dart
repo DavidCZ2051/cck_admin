@@ -57,8 +57,43 @@ Future<globals.FunctionObject> getCompetitions({required String token}) async {
         endDate: DateTime.parse(competition['endDate']),
         type: globals.competitionTypes[competition['type']],
         description: competition['description'],
-        teams: [],
       ));
+    }
+
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> getTeams({required String token}) async {
+  Response response = await get(
+    Uri.parse("${globals.url}/api/teams"),
+    headers: {
+      'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    List data = jsonDecode(response.body);
+    for (Map team in data) {
+      for (globals.Competition competition in globals.competitions) {
+        if (competition.id == team['competitionId']) {
+          competition.teams.add(globals.Team(
+            id: team['id'],
+            competitionId: team['competitionId'],
+            number: team['number'],
+            organization: team['organization'],
+            points: team['points'],
+          ));
+        }
+      }
     }
 
     return globals.FunctionObject(

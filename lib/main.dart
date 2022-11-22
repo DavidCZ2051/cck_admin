@@ -7,6 +7,8 @@ import 'package:cck_admin/routes/login.dart';
 import 'package:cck_admin/routes/settings.dart';
 import 'package:cck_admin/routes/competitions.dart';
 import 'package:cck_admin/routes/loading.dart';
+// files
+import 'package:cck_admin/globals.dart' as globals;
 
 void main() {
   runApp(

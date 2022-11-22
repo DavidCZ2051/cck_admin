@@ -1,8 +1,5 @@
 //packages
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'dart:convert';
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 //files
 import 'package:cck_admin/globals.dart' as globals;
@@ -92,7 +89,10 @@ class _LoginState extends State<Login> {
               },
               child: const Text(
                 "OK",
-                style: TextStyle(fontSize: 15),
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.red,
+                ),
               ),
             ),
           ],

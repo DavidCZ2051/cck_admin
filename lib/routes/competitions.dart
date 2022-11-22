@@ -198,6 +198,7 @@ class _CompetitionsState extends State<Competitions> {
                           onPressed: selectedCompetetion == null
                               ? null
                               : () {
+                                  print(globals.competitions);
                                   showGeneralDialog(
                                       context: context,
                                       pageBuilder: (context, animation,
@@ -279,7 +280,7 @@ class _CompetitionsState extends State<Competitions> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: Text("Content"),
                           ),
                         ],

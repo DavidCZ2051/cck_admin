@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 // files
 import 'package:cck_admin/globals.dart' as globals;
 import 'package:cck_admin/functions.dart' as functions;
+import 'package:cck_admin/widgets.dart' as widgets;
 
 class Loading extends StatefulWidget {
   const Loading({super.key});
@@ -19,8 +20,8 @@ class _LoadingState extends State<Loading> {
   }
 
   Map description = {
-    0: 'Načítám soutěže...',
-    1: 'Načítám informace o soutěžích...',
+    0: 'Načítání soutěží...',
+    1: 'Načítání informací o soutěžích...',
   };
   int progress = 0;
 
@@ -50,24 +51,51 @@ class _LoadingState extends State<Loading> {
     setState(() {
       progress = 1;
     });
+    object = await functions.getTeams(token: globals.user.token!);
+    if (object.functionCode == globals.FunctionCode.error) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Chyba'),
+              content: Text(
+                  'Nepodařilo se načíst týmy. Chybový kód: ${object.statusCode}'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Zavřít'),
+                ),
+              ],
+            );
+          });
+      Navigator.pushReplacementNamed(context, "/login");
+      return;
+    }
     Navigator.pushReplacementNamed(context, "/competitions");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              description[progress],
-              style: const TextStyle(fontSize: 22),
+      body: Column(
+        children: [
+          const widgets.WindowsStuff(),
+          const Spacer(),
+          ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 50, minWidth: 50),
+            child: const CircularProgressIndicator(
+              color: Colors.red,
             ),
-            const SizedBox(height: 20),
-            const CircularProgressIndicator(),
-          ],
-        ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            description[progress],
+            style: const TextStyle(fontSize: 22),
+          ),
+          const Spacer(),
+        ],
       ),
     );
   }

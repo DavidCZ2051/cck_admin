@@ -7,7 +7,7 @@ const bool debug = false; //debug variable
 
 User user = User();
 NavigationDrawer navigationDrawer = NavigationDrawer();
-List<Competition> competitions = <Competition>[];
+List<Competition> competitions = [];
 Competition? selectedCompetition;
 
 Map competitionTypes = {
@@ -43,14 +43,13 @@ class Competition {
   DateTime endDate;
   String type;
   String description;
-  List<Team> teams;
+  List<Team> teams = [];
   Competition({
     required this.id,
     required this.startDate,
     required this.endDate,
     required this.type,
     required this.description,
-    required this.teams,
   });
 
   String get startDateString {
@@ -75,7 +74,20 @@ class Competition {
   }
 }
 
-class Team {}
+class Team {
+  int id;
+  int competitionId;
+  int number;
+  String organization;
+  int? points;
+  Team({
+    required this.id,
+    required this.competitionId,
+    required this.number,
+    required this.organization,
+    this.points,
+  });
+}
 
 enum FunctionCode {
   success,
