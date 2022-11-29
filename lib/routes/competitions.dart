@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 // files
 import 'package:cck_admin/globals.dart' as globals;
 import 'package:cck_admin/widgets.dart' as widgets;
+import 'package:cck_admin/functions.dart' as functions;
 
 class Competitions extends StatefulWidget {
   const Competitions({super.key});
@@ -13,6 +14,10 @@ class Competitions extends StatefulWidget {
 
 class _CompetitionsState extends State<Competitions> {
   int? selectedCompetetion;
+
+  handleTeamDelete({required String token, required int teamId}) async {
+    print("Deleting team with id: $teamId");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,69 +133,66 @@ class _CompetitionsState extends State<Competitions> {
               ),
               const VerticalDivider(),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(25),
                     child: Row(
                       children: [
-                        ElevatedButton(
+                        ElevatedButton.icon(
+                          icon: const Icon(Icons.add),
                           style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.red),
                           ),
                           onPressed: () {
                             showGeneralDialog(
-                                context: context,
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) {
-                                  return AlertDialog(
-                                    title: const Text("Přidání soutěže"),
-                                    content: ConstrainedBox(
-                                      constraints: const BoxConstraints(
-                                        minWidth: 800,
-                                        minHeight: 500,
+                              context: context,
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) {
+                                return AlertDialog(
+                                  title: const Text("Přidání soutěže"),
+                                  content: ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                      minWidth: 800,
+                                      minHeight: 500,
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      style: ButtonStyle(
+                                        overlayColor: MaterialStateProperty.all(
+                                            Colors.red[50]),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text(
+                                        "Zrušit",
+                                        style: TextStyle(color: Colors.red),
                                       ),
                                     ),
-                                    actions: [
-                                      TextButton(
-                                        style: ButtonStyle(
-                                          overlayColor:
-                                              MaterialStateProperty.all(
-                                                  Colors.red[50]),
-                                        ),
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text(
-                                          "Zrušit",
-                                          style: TextStyle(color: Colors.red),
-                                        ),
+                                    ElevatedButton(
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.red),
                                       ),
-                                      ElevatedButton(
-                                        style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  Colors.red),
-                                        ),
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text("Přidat soutěž"),
-                                      ),
-                                    ],
-                                  );
-                                });
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text("Přidat soutěž"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           },
-                          child: Row(
-                            children: const [
-                              Icon(Icons.add),
-                              SizedBox(width: 5),
-                              Text("Přidat"),
-                            ],
-                          ),
+                          label: const Text("Přidat"),
                         ),
                         const SizedBox(width: 40),
-                        ElevatedButton(
+                        ElevatedButton.icon(
+                          icon: const Icon(Icons.edit),
                           style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.red),
@@ -247,48 +249,91 @@ class _CompetitionsState extends State<Competitions> {
                                         );
                                       });
                                 },
-                          child: Row(
-                            children: const [
-                              Icon(Icons.edit),
-                              SizedBox(width: 5),
-                              Text("Upravit"),
-                            ],
-                          ),
+                          label: const Text("Upravit"),
                         ),
                         const SizedBox(width: 40),
-                        ElevatedButton(
+                        ElevatedButton.icon(
+                          icon: const Icon(Icons.delete),
                           style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.red),
                           ),
-                          onPressed: selectedCompetetion == null ? null : () {},
-                          child: Row(
-                            children: const [
-                              Icon(Icons.delete_forever),
-                              SizedBox(width: 5),
-                              Text("Smazat"),
-                            ],
-                          ),
+                          onPressed: selectedCompetetion == null
+                              ? null
+                              : () {
+                                  showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (context) {
+                                      return StatefulBuilder(
+                                        builder: (context, setState) {
+                                          return AlertDialog(
+                                            title:
+                                                const Text("Smazání soutěže"),
+                                            content: const Text(
+                                                "Opravdu chcete smazat soutěž?"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text(
+                                                  "Zrušit",
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                              ),
+                                              ElevatedButton(
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                    Colors.red,
+                                                  ),
+                                                ),
+                                                onPressed: () async {
+                                                  await handleTeamDelete(
+                                                    token: globals.user
+                                                        .token!, // TODO: buttons
+                                                    teamId:
+                                                        globals // TODO: rework the selected competitions
+                                                            .competitions[
+                                                                selectedCompetetion! +
+                                                                    1]
+                                                            .id,
+                                                  );
+                                                },
+                                                child:
+                                                    const Text("Smazat soutěž"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                          label: const Text("Smazat"),
                         )
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                    child: Card(
+                  Card(
+                    child: SizedBox(
+                      width: 500,
+                      height: 400,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Text("Content"),
+                            child: Text("Contents"),
                           ),
                         ],
                       ),
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ],

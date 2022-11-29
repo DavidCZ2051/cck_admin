@@ -3,11 +3,41 @@ import 'package:flutter/material.dart';
 
 const String url = "https://localhost:7041";
 const String appVersion = "1.0.0-DEV";
-const bool debug = false; //debug variable
+const bool debug = true; //debug variable
 
 User user = User();
 NavigationDrawer navigationDrawer = NavigationDrawer();
-List<Competition> competitions = [];
+List<Competition> competitions = [
+  // offline testing data
+  Competition(
+    description: "This is a test competition",
+    endDate: DateTime.now(),
+    id: 1,
+    type: "Okresní",
+    startDate: DateTime.now(),
+  ),
+  Competition(
+    description: "This is a test competition",
+    endDate: DateTime.now(),
+    id: 2,
+    type: "Okresní",
+    startDate: DateTime.now(),
+  ),
+  Competition(
+    description: "This is a test competition",
+    endDate: DateTime.now(),
+    id: 3,
+    type: "Okresní",
+    startDate: DateTime.now(),
+  ),
+  Competition(
+    description: "This is a test competition",
+    endDate: DateTime.now(),
+    id: 4,
+    type: "Okresní",
+    startDate: DateTime.now(),
+  ),
+];
 Competition? selectedCompetition;
 
 Map competitionTypes = {
