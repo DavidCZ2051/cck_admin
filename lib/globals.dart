@@ -48,6 +48,11 @@ Map competitionTypes = {
   5: 'Testovací',
 };
 
+String getCompetitionTypeId(String type) {
+  return competitionTypes.keys
+      .firstWhere((k) => competitionTypes[k] == type, orElse: () => 0);
+}
+
 class NavigationDrawer {
   bool expanded = false;
   int index = 0;
@@ -64,7 +69,13 @@ class User {
   String? token;
   int? tokenId;
   int? userID;
-  User({this.firstName, this.lastName, this.token, this.tokenId, this.userID});
+  User({
+    this.firstName,
+    this.lastName,
+    this.token,
+    this.tokenId,
+    this.userID,
+  });
 }
 
 class Competition {

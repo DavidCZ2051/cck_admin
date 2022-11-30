@@ -1,5 +1,6 @@
 // packages
 import 'package:flutter/material.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 // files
 import 'package:cck_admin/globals.dart' as globals;
 import 'package:cck_admin/widgets.dart' as widgets;
@@ -13,10 +14,27 @@ class Competitions extends StatefulWidget {
 }
 
 class _CompetitionsState extends State<Competitions> {
-  int? selectedCompetetion;
+  globals.Competition? selectedCompetition;
+  Map<String, dynamic> newCompetition = {};
 
-  handleTeamDelete({required String token, required int teamId}) async {
-    print("Deleting team with id: $teamId");
+  handleCompetitionDelete(
+      {required String token, required int competitionId}) async {
+    var object = await functions.deleteCompetition(
+      token: token,
+      competitionId: competitionId,
+    );
+    print("Deleting competition with id: $competitionId");
+  }
+
+  handleCompetitionCreate({
+    required String token,
+    required Map<String, dynamic> competition,
+  }) async {
+    var object = await functions.createCompetition(
+      token: token,
+      competition: competition,
+    );
+    print("Creating competition");
   }
 
   @override
@@ -76,32 +94,40 @@ class _CompetitionsState extends State<Competitions> {
                           minWidth: 250,
                         ),
                         child: Card(
-                          color: selectedCompetetion ==
-                                  globals.competitions.indexOf(competition)
+                          color: selectedCompetition == competition
                               ? Colors.red
                               : Colors.white,
                           child: InkWell(
                             onTap: () {
-                              if (selectedCompetetion ==
-                                  globals.competitions.indexOf(competition)) {
+                              if (selectedCompetition == competition) {
                                 setState(() {
-                                  selectedCompetetion = null;
+                                  selectedCompetition = null;
                                 });
                               } else {
                                 setState(() {
-                                  selectedCompetetion = globals.competitions
-                                      .indexWhere((element) =>
-                                          element.id == competition.id);
+                                  selectedCompetition = competition;
                                 });
                               }
-                              print(selectedCompetetion);
+                              print(selectedCompetition == null
+                                  ? "No competition selected"
+                                  : "Selected competition with id: ${selectedCompetition!.id}");
                             },
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(competition.type),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(competition.type),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {},
+                                      child: Text("Otevřít"),
+                                    ),
+                                  ],
                                 ),
                                 Row(
                                   children: [
@@ -146,44 +172,140 @@ class _CompetitionsState extends State<Competitions> {
                                 MaterialStateProperty.all(Colors.red),
                           ),
                           onPressed: () {
-                            showGeneralDialog(
+                            showDialog(
+                              barrierDismissible: false,
                               context: context,
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) {
-                                return AlertDialog(
-                                  title: const Text("Přidání soutěže"),
-                                  content: ConstrainedBox(
-                                    constraints: const BoxConstraints(
-                                      minWidth: 800,
-                                      minHeight: 500,
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      style: ButtonStyle(
-                                        overlayColor: MaterialStateProperty.all(
-                                            Colors.red[50]),
+                              builder: (context) {
+                                return StatefulBuilder(
+                                  builder: (context, setState) {
+                                    return AlertDialog(
+                                      title: const Text("Přidání soutěže"),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              // competition type
+                                              children: [
+                                                const Text(
+                                                  "Typ soutěže: ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                DropdownButton(
+                                                  value: newCompetition["type"],
+                                                  items: [
+                                                    for (String type in globals
+                                                        .competitionTypes
+                                                        .values)
+                                                      DropdownMenuItem(
+                                                        value: type,
+                                                        child: Text(type),
+                                                      ),
+                                                  ],
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      newCompetition["type"] =
+                                                          value;
+                                                    });
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: TextField(
+                                              // competition description
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  newCompetition[
+                                                      "description"] = value;
+                                                });
+                                              },
+                                              decoration: const InputDecoration(
+                                                labelText: "Popis soutěže",
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                const Text(
+                                                  "Datum začátku: ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                ElevatedButton(
+                                                  onPressed: () async {
+                                                    // TODO: use a better date picker
+                                                    DateTime? date =
+                                                        await showDatePicker(
+                                                      context: context,
+                                                      initialDate:
+                                                          DateTime.now(),
+                                                      firstDate: DateTime(2021),
+                                                      lastDate: DateTime(2030),
+                                                    );
+
+                                                    if (date != null) {
+                                                      setState(() {
+                                                        newCompetition[
+                                                            "startDate"] = date;
+                                                      });
+                                                      print(
+                                                          "Selected date: ${newCompetition["startDate"]}");
+                                                    }
+                                                  },
+                                                  child: Text(
+                                                    newCompetition[
+                                                                "startDate"] ==
+                                                            null
+                                                        ? "Vyberte datum"
+                                                        : functions
+                                                            .formatDateTime(
+                                                                newCompetition[
+                                                                    "startDate"]),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text(
-                                        "Zrušit",
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    ),
-                                    ElevatedButton(
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.red),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text("Přidat soutěž"),
-                                    ),
-                                  ],
+                                      actions: [
+                                        TextButton(
+                                          style: ButtonStyle(
+                                            overlayColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.red[50]),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text(
+                                            "Zrušit",
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
+                                        ElevatedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.red),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text("Přidat soutěž"),
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 );
                               },
                             );
@@ -197,7 +319,7 @@ class _CompetitionsState extends State<Competitions> {
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.red),
                           ),
-                          onPressed: selectedCompetetion == null
+                          onPressed: selectedCompetition == null
                               ? null
                               : () {
                                   print(globals.competitions);
@@ -258,7 +380,7 @@ class _CompetitionsState extends State<Competitions> {
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.red),
                           ),
-                          onPressed: selectedCompetetion == null
+                          onPressed: selectedCompetition == null
                               ? null
                               : () {
                                   showDialog(
@@ -292,15 +414,10 @@ class _CompetitionsState extends State<Competitions> {
                                                   ),
                                                 ),
                                                 onPressed: () async {
-                                                  await handleTeamDelete(
-                                                    token: globals.user
-                                                        .token!, // TODO: buttons
-                                                    teamId:
-                                                        globals // TODO: rework the selected competitions
-                                                            .competitions[
-                                                                selectedCompetetion! +
-                                                                    1]
-                                                            .id,
+                                                  await handleCompetitionDelete(
+                                                    token: globals.user.token!,
+                                                    competitionId:
+                                                        selectedCompetition!.id,
                                                   );
                                                 },
                                                 child:

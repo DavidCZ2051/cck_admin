@@ -6,6 +6,10 @@ import 'dart:convert';
 // files
 import 'package:cck_admin/globals.dart' as globals;
 
+String formatDateTime(DateTime dateTime) {
+  return "${dateTime.day.toString().padLeft(2, '0')}.${dateTime.month.toString().padLeft(2, '0')}.${dateTime.year.toString()}";
+}
+
 Future<globals.FunctionObject> login({
   required String email,
   required String password,
@@ -108,14 +112,44 @@ Future<globals.FunctionObject> getTeams({required String token}) async {
   }
 }
 
-Future<globals.FunctionObject> deleteTeam({
+Future<globals.FunctionObject> deleteCompetition({
   required String token,
-  required int teamId,
+  required int competitionId,
 }) async {
   Response response = await delete(
-    Uri.parse("${globals.url}/api/teams/$teamId"),
+    Uri.parse("${globals.url}/api/competitions/$competitionId"),
     headers: {
       'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> createCompetition({
+  required String token,
+  required Map<String, dynamic> competition,
+}) async {
+  Response response = await post(
+    Uri.parse("${globals.url}/api/competitions"),
+    headers: {
+      'token': token,
+    },
+    body: {
+      'startDate': competition['startDate'],
+      'endDate': competition['endDate'],
+      'type': competition['type'],
+      'description': competition['description'],
     },
   );
 
