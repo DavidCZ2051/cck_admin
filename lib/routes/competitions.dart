@@ -20,13 +20,15 @@ class _CompetitionsState extends State<Competitions> {
     setState(() {});
   }
 
-  handleCompetitionDelete(
-      {required String token, required int competitionId}) async {
+  handleCompetitionDelete({
+    required String token,
+    required int competitionId,
+  }) async {
+    print("Deleting competition with id: $competitionId");
     var object = await functions.deleteCompetition(
       token: token,
       competitionId: competitionId,
     );
-    print("Deleting competition with id: $competitionId");
   }
 
   handleCompetitionCreate({

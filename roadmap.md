@@ -19,5 +19,7 @@ Release bude muset být hotový ke konci února. Oficiální první spuštění 
 
 - CCK Admin:
     - Date picker
+    - Vizuální styl
+    - Chybové hlášky
 - CCK Referee:
     - Intuitivnost
