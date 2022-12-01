@@ -5,7 +5,7 @@ const String url = "https://localhost:7041";
 const String appVersion = "1.0.0-DEV";
 const bool debug = true; //debug variable
 
-User user = User();
+User user = User(token: "THIS IS A TEST");
 NavigationDrawer navigationDrawer = NavigationDrawer();
 List<Competition> competitions = [
   // offline testing data
@@ -48,7 +48,7 @@ Map competitionTypes = {
   5: 'Testovací',
 };
 
-String getCompetitionTypeId(String type) {
+int getCompetitionTypeId({required String type}) {
   return competitionTypes.keys
       .firstWhere((k) => competitionTypes[k] == type, orElse: () => 0);
 }

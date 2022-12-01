@@ -1,6 +1,5 @@
 // packages
 import 'package:flutter/material.dart';
-import 'package:nepali_date_picker/nepali_date_picker.dart';
 // files
 import 'package:cck_admin/globals.dart' as globals;
 import 'package:cck_admin/widgets.dart' as widgets;
@@ -17,6 +16,10 @@ class _CompetitionsState extends State<Competitions> {
   globals.Competition? selectedCompetition;
   Map<String, dynamic> newCompetition = {};
 
+  setstate() {
+    setState(() {});
+  }
+
   handleCompetitionDelete(
       {required String token, required int competitionId}) async {
     var object = await functions.deleteCompetition(
@@ -30,11 +33,20 @@ class _CompetitionsState extends State<Competitions> {
     required String token,
     required Map<String, dynamic> competition,
   }) async {
+    competition["startDate"] = functions.formatDateTime(
+      dateTime: competition["startDate"],
+    );
+    competition["endDate"] = functions.formatDateTime(
+      dateTime: competition["endDate"],
+    );
+    competition["type"] = globals.getCompetitionTypeId(
+      type: competition["type"],
+    );
+    print("Creating competition with data: $competition");
     var object = await functions.createCompetition(
       token: token,
       competition: competition,
     );
-    print("Creating competition");
   }
 
   @override
@@ -210,6 +222,7 @@ class _CompetitionsState extends State<Competitions> {
                                                       newCompetition["type"] =
                                                           value;
                                                     });
+                                                    setstate();
                                                   },
                                                 ),
                                               ],
@@ -224,6 +237,7 @@ class _CompetitionsState extends State<Competitions> {
                                                   newCompetition[
                                                       "description"] = value;
                                                 });
+                                                setstate();
                                               },
                                               decoration: const InputDecoration(
                                                 labelText: "Popis soutěže",
@@ -233,6 +247,7 @@ class _CompetitionsState extends State<Competitions> {
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
+                                              // competition start date
                                               children: [
                                                 const Text(
                                                   "Datum začátku: ",
@@ -242,21 +257,20 @@ class _CompetitionsState extends State<Competitions> {
                                                 ),
                                                 ElevatedButton(
                                                   onPressed: () async {
-                                                    // TODO: use a better date picker
                                                     DateTime? date =
                                                         await showDatePicker(
                                                       context: context,
                                                       initialDate:
                                                           DateTime.now(),
-                                                      firstDate: DateTime(2021),
-                                                      lastDate: DateTime(2030),
+                                                      firstDate: DateTime.now(),
+                                                      lastDate: DateTime(2100),
                                                     );
-
                                                     if (date != null) {
                                                       setState(() {
                                                         newCompetition[
                                                             "startDate"] = date;
                                                       });
+                                                      setstate();
                                                       print(
                                                           "Selected date: ${newCompetition["startDate"]}");
                                                     }
@@ -266,10 +280,54 @@ class _CompetitionsState extends State<Competitions> {
                                                                 "startDate"] ==
                                                             null
                                                         ? "Vyberte datum"
-                                                        : functions
-                                                            .formatDateTime(
+                                                        : functions.formatDateTime(
+                                                            dateTime:
                                                                 newCompetition[
                                                                     "startDate"]),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              // competition end date
+                                              children: [
+                                                const Text(
+                                                  "Datum konce: ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                ElevatedButton(
+                                                  onPressed: () async {
+                                                    DateTime? date =
+                                                        await showDatePicker(
+                                                      context: context,
+                                                      initialDate:
+                                                          DateTime.now(),
+                                                      firstDate: DateTime.now(),
+                                                      lastDate: DateTime(2100),
+                                                    );
+                                                    if (date != null) {
+                                                      setState(() {
+                                                        newCompetition[
+                                                            "endDate"] = date;
+                                                      });
+                                                      setstate();
+                                                      print(
+                                                          "Selected date: ${newCompetition["endDate"]}");
+                                                    }
+                                                  },
+                                                  child: Text(
+                                                    newCompetition["endDate"] ==
+                                                            null
+                                                        ? "Vyberte datum"
+                                                        : functions.formatDateTime(
+                                                            dateTime:
+                                                                newCompetition[
+                                                                    "endDate"]),
                                                   ),
                                                 ),
                                               ],
@@ -298,9 +356,22 @@ class _CompetitionsState extends State<Competitions> {
                                                 MaterialStateProperty.all(
                                                     Colors.red),
                                           ),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
+                                          onPressed: (newCompetition["type"] ==
+                                                      null ||
+                                                  newCompetition[
+                                                          "description"] ==
+                                                      null ||
+                                                  newCompetition["startDate"] ==
+                                                      null ||
+                                                  newCompetition["endDate"] ==
+                                                      null)
+                                              ? null
+                                              : () async {
+                                                  await handleCompetitionCreate(
+                                                    token: globals.user.token!,
+                                                    competition: newCompetition,
+                                                  );
+                                                },
                                           child: const Text("Přidat soutěž"),
                                         ),
                                       ],

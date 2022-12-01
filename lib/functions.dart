@@ -6,7 +6,7 @@ import 'dart:convert';
 // files
 import 'package:cck_admin/globals.dart' as globals;
 
-String formatDateTime(DateTime dateTime) {
+String formatDateTime({required DateTime dateTime}) {
   return "${dateTime.day.toString().padLeft(2, '0')}.${dateTime.month.toString().padLeft(2, '0')}.${dateTime.year.toString()}";
 }
 
@@ -148,7 +148,7 @@ Future<globals.FunctionObject> createCompetition({
     body: {
       'startDate': competition['startDate'],
       'endDate': competition['endDate'],
-      'type': competition['type'],
+      'type': competition['type'].toString(),
       'description': competition['description'],
     },
   );
