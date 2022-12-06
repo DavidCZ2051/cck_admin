@@ -149,11 +149,12 @@ Future<globals.FunctionObject> createCompetition({
       'startDate': competition['startDate'],
       'endDate': competition['endDate'],
       'type': competition['type'].toString(),
-      'description': competition['description'],
+      if (competition['description'] != null)
+        'description': competition['description'],
     },
   );
 
-  if (response.statusCode == 200) {
+  if (response.statusCode == 201) {
     return globals.FunctionObject(
       functionCode: globals.FunctionCode.success,
       statusCode: response.statusCode,
