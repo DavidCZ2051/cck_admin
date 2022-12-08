@@ -621,20 +621,6 @@ class _CompetitionsState extends State<Competitions> {
                         ],
                       ),
                     ),
-                    Card(
-                      child: SizedBox(
-                        width: 500,
-                        height: 400,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text("Contents"),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ],
