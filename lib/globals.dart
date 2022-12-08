@@ -53,14 +53,15 @@ class Competition {
   DateTime startDate;
   DateTime endDate;
   String type;
-  String description;
+  String? description;
   List<Team> teams = [];
+  List<Station> stations = [];
   Competition({
     required this.id,
     required this.startDate,
     required this.endDate,
     required this.type,
-    required this.description,
+    this.description,
   });
 
   String get startDateString {
@@ -91,12 +92,55 @@ class Team {
   int number;
   String organization;
   int? points;
+  List<TeamMember> teamMembers = [];
   Team({
     required this.id,
     required this.competitionId,
     required this.number,
     required this.organization,
     this.points,
+  });
+}
+
+class Station {
+  int id;
+  int competitionId;
+  String title;
+  int number;
+  int type;
+  int tier;
+  DateTime created;
+  Station({
+    required this.id,
+    required this.competitionId,
+    required this.title,
+    required this.number,
+    required this.type,
+    required this.tier,
+    required this.created,
+  });
+
+  String get createdString {
+    return "${created.day}.${created.month}.${created.year} ${created.hour}:${created.minute}";
+  }
+}
+
+class TeamMember {
+  int id;
+  int teamId;
+  String firstName;
+  String lastName;
+  int type;
+  String? phoneNumber;
+  String? birthDate;
+  TeamMember({
+    required this.id,
+    required this.teamId,
+    required this.firstName,
+    required this.lastName,
+    required this.type,
+    this.phoneNumber,
+    this.birthDate,
   });
 }
 

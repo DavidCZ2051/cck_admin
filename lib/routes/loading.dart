@@ -21,7 +21,8 @@ class _LoadingState extends State<Loading> {
 
   Map description = {
     0: 'Načítání soutěží...',
-    1: 'Načítání informací o soutěžích...',
+    1: 'Načítání týmů...',
+    2: 'Načítání stanovišť...'
   };
   int progress = 0;
 
@@ -60,6 +61,31 @@ class _LoadingState extends State<Loading> {
               title: const Text('Chyba'),
               content: Text(
                   'Nepodařilo se načíst týmy. Chybový kód: ${object.statusCode}'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Zavřít'),
+                ),
+              ],
+            );
+          });
+      Navigator.pushReplacementNamed(context, "/login");
+      return;
+    }
+    setState(() {
+      progress = 2;
+    });
+    object = await functions.getStations(token: globals.user.token!);
+    if (object.functionCode == globals.FunctionCode.error) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Chyba'),
+              content: Text(
+                  'Nepodařilo se načíst stanoviště. Chybový kód: ${object.statusCode}'),
               actions: [
                 TextButton(
                   onPressed: () {

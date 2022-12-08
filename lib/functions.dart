@@ -166,3 +166,41 @@ Future<globals.FunctionObject> createCompetition({
     );
   }
 }
+
+Future<globals.FunctionObject> getStations({required String token}) async {
+  Response response = await get(
+    Uri.parse("${globals.url}/api/stations"),
+    headers: {
+      'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    List stations = jsonDecode(response.body);
+    for (Map station in stations) {
+      for (globals.Competition competition in globals.competitions) {
+        if (competition.id == station['competitionId']) {
+          competition.stations.add(globals.Station(
+            id: station['id'],
+            competitionId: station['competitionId'],
+            title: station['title'],
+            number: station['number'],
+            type: station['type'],
+            tier: station['tier'],
+            created: station['created'],
+          ));
+        }
+      }
+    }
+
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
