@@ -9,6 +9,7 @@ User user = User();
 NavigationDrawer navigationDrawer = NavigationDrawer();
 List<Competition> competitions = [];
 Competition? selectedCompetition;
+String? loadMode;
 
 Map competitionTypes = {
   1: 'Okresní',

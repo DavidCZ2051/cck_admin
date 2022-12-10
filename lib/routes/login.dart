@@ -40,6 +40,7 @@ class _LoginState extends State<Login> {
         storage.delete(key: "password");
         print("heslo smazáno");
       }
+      globals.loadMode = "competitions";
       Navigator.pushReplacementNamed(context, "/loading");
       password = null;
     } else if (object.functionCode == globals.FunctionCode.error) {
