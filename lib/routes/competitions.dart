@@ -188,7 +188,14 @@ class _CompetitionsState extends State<Competitions> {
                                         child: Text(competition.type),
                                       ),
                                       ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          selectedCompetition = competition;
+                                          globals.selectedCompetition =
+                                              selectedCompetition;
+                                          globals.loadMode = "competition";
+                                          Navigator.pushReplacementNamed(
+                                              context, "/loading");
+                                        },
                                         child: const Text("Otevřít"),
                                       ),
                                     ],

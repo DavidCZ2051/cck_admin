@@ -50,7 +50,7 @@ class _LoadingState extends State<Loading> {
         return;
       }
       Navigator.pushReplacementNamed(context, "/competitions");
-    } else if (globals.loadMode == "teams") {
+    } else if (globals.loadMode == "competition") {
       var object = await functions.getTeams(token: globals.user.token!);
       if (object.functionCode == globals.FunctionCode.error) {
         showDialog(
@@ -73,9 +73,7 @@ class _LoadingState extends State<Loading> {
         Navigator.pushReplacementNamed(context, "/competitions");
         return;
       }
-      Navigator.pushReplacementNamed(context, "/competition");
-    } else if (globals.loadMode == "stations") {
-      var object = await functions.getStations(token: globals.user.token!);
+      object = await functions.getStations(token: globals.user.token!);
       if (object.functionCode == globals.FunctionCode.error) {
         showDialog(
             context: context,
@@ -97,7 +95,7 @@ class _LoadingState extends State<Loading> {
         Navigator.pushReplacementNamed(context, "/competitions");
         return;
       }
-      Navigator.pushReplacementNamed(context, "/stations");
+      Navigator.pushReplacementNamed(context, "/competition");
     }
   }
 
