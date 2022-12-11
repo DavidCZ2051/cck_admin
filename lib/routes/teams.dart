@@ -27,16 +27,16 @@ class _TeamsState extends State<Teams> {
 
   handleTeamDelete({
     required String token,
-    required int competitionId,
+    required int teamId,
   }) async {
     setState(() {
       loading["delete"] = true;
     });
     setstate();
-    print("Deleting competition with id: $competitionId");
-    var object = await functions.deleteCompetition(
+    print("Deleting competition with id: $teamId");
+    var object = await functions.deleteTeam(
       token: token,
-      competitionId: competitionId,
+      teamId: selectedTeam!.id,
     );
     setState(() {
       loading["delete"] = false;
@@ -46,7 +46,7 @@ class _TeamsState extends State<Teams> {
     if (object.functionCode == globals.FunctionCode.success) {
       setState(() {
         globals.competitions.removeWhere(
-          (competition) => competition.id == competitionId,
+          (team) => team.id == teamId,
         );
       });
       Navigator.pop(context);
@@ -111,13 +111,14 @@ class _TeamsState extends State<Teams> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          minWidth: 250,
-                        ),
-                        child: Card(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      minWidth: 250,
+                      maxWidth: 330,
+                    ),
+                    child: Column(
+                      children: [
+                        Card(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -153,16 +154,21 @@ class _TeamsState extends State<Teams> {
                             ],
                           ),
                         ),
-                      ),
-                      const ListTile(
-                        title: Text("Přehled soutěže"),
-                        leading: Icon(Icons.list),
-                      ),
-                      const ListTile(
-                        title: Text("Stanoviště"),
-                        leading: Icon(Icons.room),
-                      ),
-                    ],
+                        const Divider(),
+                        ListTile(
+                          leading: const Icon(Icons.home),
+                          title: const Text("Přehled soutěže"),
+                          onTap: () {
+                            Navigator.pushNamed(context, "/competition");
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.room),
+                          title: const Text("Stanoviště"),
+                          onTap: () {},
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const VerticalDivider(),
@@ -223,9 +229,10 @@ class _TeamsState extends State<Teams> {
                                                   MaterialStateProperty.all(
                                                       Colors.red),
                                             ),
-                                            onPressed: loading["create"] == true
+                                            onPressed: () {},
+                                            /* loading["create"] == true
                                                 ? null
-                                                : (true)
+                                                : (true) // here should be some validation
                                                     ? null
                                                     : () async {
                                                         await handleTeamCreate(
@@ -233,7 +240,7 @@ class _TeamsState extends State<Teams> {
                                                               .user.token!,
                                                           team: newTeam,
                                                         );
-                                                      },
+                                                      }, */
                                             child: const Text("Přidat tým"),
                                           ),
                                         ],
@@ -367,7 +374,7 @@ class _TeamsState extends State<Teams> {
                                                                 token: globals
                                                                     .user
                                                                     .token!,
-                                                                competitionId:
+                                                                teamId:
                                                                     selectedTeam!
                                                                         .id,
                                                               );
@@ -387,6 +394,50 @@ class _TeamsState extends State<Teams> {
                         ],
                       ),
                     ),
+                    const Divider(),
+                    if (globals.selectedCompetition!.teams.isEmpty)
+                      const Center(
+                        child: Text(
+                          "Zatím nejsou přidány žádné týmy",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    if (globals.selectedCompetition!.teams.isNotEmpty)
+                      for (globals.Team team
+                          in globals.selectedCompetition!.teams)
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            minHeight: 80,
+                            minWidth: 330,
+                          ),
+                          child: Card(
+                            color: selectedTeam == team
+                                ? Colors.red
+                                : Colors.white,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if (selectedTeam == team) {
+                                    selectedTeam = null;
+                                  } else {
+                                    selectedTeam = team;
+                                  }
+                                });
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text("${team.number} - ID: ${team.id}"),
+                                    ],
+                                  ),
+                                  Text(team.organization),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                   ],
                 ),
               ],

@@ -30,13 +30,14 @@ class _CompetitionState extends State<Competition> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          minWidth: 250,
-                        ),
-                        child: Card(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      minWidth: 250,
+                      maxWidth: 330,
+                    ),
+                    child: Column(
+                      children: [
+                        Card(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -72,18 +73,21 @@ class _CompetitionState extends State<Competition> {
                             ],
                           ),
                         ),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.people),
-                        title: const Text('Týmy'),
-                        onTap: () {},
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.room),
-                        title: const Text('Stanoviště'),
-                        onTap: () {},
-                      ),
-                    ],
+                        const Divider(),
+                        ListTile(
+                          leading: const Icon(Icons.group),
+                          title: const Text('Týmy'),
+                          onTap: () {
+                            Navigator.pushNamed(context, "/teams");
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.room),
+                          title: const Text('Stanoviště'),
+                          onTap: () {},
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 const VerticalDivider(),

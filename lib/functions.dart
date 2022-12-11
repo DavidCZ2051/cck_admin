@@ -204,3 +204,27 @@ Future<globals.FunctionObject> getStations({required String token}) async {
     );
   }
 }
+
+//Future<globals.FunctionObject> createTeam({required String token}) async {}
+
+Future<globals.FunctionObject> deleteTeam(
+    {required String token, required int teamId}) async {
+  Response response = await delete(
+    Uri.parse("${globals.url}/api/teams/$teamId"),
+    headers: {
+      'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}

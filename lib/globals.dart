@@ -88,12 +88,12 @@ class Competition {
 }
 
 class Team {
-  int id;
-  int competitionId;
-  int number;
-  String organization;
-  int? points;
-  List<TeamMember> teamMembers = [];
+  int id; // id týmu
+  int competitionId; // id soutěže, ke které tým patří
+  int number; // číslo týmu
+  String organization; // organizace, ke které tým patří
+  int? points; // počet bodů týmu
+  List<TeamMember> teamMembers = []; // členové týmu
   Team({
     required this.id,
     required this.competitionId,

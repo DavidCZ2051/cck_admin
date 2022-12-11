@@ -111,13 +111,14 @@ class _CompetitionsState extends State<Competitions> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          minWidth: 250,
-                        ),
-                        child: Card(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      minWidth: 250,
+                      maxWidth: 330,
+                    ),
+                    child: Column(
+                      children: [
+                        Card(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -150,14 +151,9 @@ class _CompetitionsState extends State<Competitions> {
                             ],
                           ),
                         ),
-                      ),
-                      for (globals.Competition competition
-                          in globals.competitions)
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            minWidth: 250,
-                          ),
-                          child: Card(
+                        for (globals.Competition competition
+                            in globals.competitions)
+                          Card(
                             color: selectedCompetition == competition
                                 ? Colors.red
                                 : Colors.white,
@@ -185,7 +181,8 @@ class _CompetitionsState extends State<Competitions> {
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text(competition.type),
+                                        child: Text(
+                                            "${competition.type} - ID: ${competition.id}"),
                                       ),
                                       ElevatedButton(
                                         onPressed: () {
@@ -224,8 +221,8 @@ class _CompetitionsState extends State<Competitions> {
                               ),
                             ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 const VerticalDivider(),

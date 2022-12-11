@@ -16,17 +16,27 @@ class _LoadingState extends State<Loading> {
   @override
   void initState() {
     super.initState();
+    if (globals.loadMode == "competitions") {
+      loadType = "competitions";
+    } else if (globals.loadMode == "competition") {
+      loadType = "teams";
+    }
     handleLoadingStuff();
   }
 
+  String? loadType;
+
   Map description = {
     "competitions": 'Načítání soutěží...',
-    "teams": 'Načítání týmů...',
+    "teams": 'Načítání týmů...', //TODO: fix later
     "stations": 'Načítání stanovišť...'
   };
 
   handleLoadingStuff() async {
     if (globals.loadMode == "competitions") {
+      setState(() {
+        loadType = "competitions";
+      });
       var object = await functions.getCompetitions(token: globals.user.token!);
       if (object.functionCode == globals.FunctionCode.error) {
         showDialog(
@@ -51,6 +61,9 @@ class _LoadingState extends State<Loading> {
       }
       Navigator.pushReplacementNamed(context, "/competitions");
     } else if (globals.loadMode == "competition") {
+      setState(() {
+        loadType = "teams";
+      });
       var object = await functions.getTeams(token: globals.user.token!);
       if (object.functionCode == globals.FunctionCode.error) {
         showDialog(
@@ -73,6 +86,9 @@ class _LoadingState extends State<Loading> {
         Navigator.pushReplacementNamed(context, "/competitions");
         return;
       }
+      setState(() {
+        loadType = "stations";
+      });
       object = await functions.getStations(token: globals.user.token!);
       if (object.functionCode == globals.FunctionCode.error) {
         showDialog(
@@ -114,7 +130,7 @@ class _LoadingState extends State<Loading> {
           ),
           const SizedBox(height: 20),
           Text(
-            description[globals.loadMode],
+            description[loadType] ?? 'error',
             style: const TextStyle(fontSize: 22),
           ),
           const Spacer(),
