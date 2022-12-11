@@ -205,7 +205,34 @@ Future<globals.FunctionObject> getStations({required String token}) async {
   }
 }
 
-//Future<globals.FunctionObject> createTeam({required String token}) async {}
+Future<globals.FunctionObject> createTeam({
+  required String token,
+  required Map<String, dynamic> team,
+}) async {
+  Response response = await post(
+    Uri.parse("${globals.url}/api/teams"),
+    headers: {
+      'token': token,
+    },
+    body: {
+      'competitionId': team['competitionId'].toString(),
+      'number': team['number'].toString(),
+      'organization': team['organization'],
+    },
+  );
+
+  if (response.statusCode == 201) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
 
 Future<globals.FunctionObject> deleteTeam(
     {required String token, required int teamId}) async {
