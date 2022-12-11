@@ -91,10 +91,21 @@ class _CompetitionState extends State<Competition> {
                   ),
                 ),
                 const VerticalDivider(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [],
-                ),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Card(
+                    child: Column(
+                      children: [
+                        Text(
+                            "Popis soutěže: ${globals.selectedCompetition!.description}"),
+                        Text(
+                            "Počet týmů: ${globals.selectedCompetition!.teams.length}"),
+                        Text(
+                            "Počet stanovišť: ${globals.selectedCompetition!.stations.length}"),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           ),

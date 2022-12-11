@@ -28,7 +28,7 @@ class _LoadingState extends State<Loading> {
 
   Map description = {
     "competitions": 'Načítání soutěží...',
-    "teams": 'Načítání týmů...', //TODO: fix later
+    "teams": 'Načítání týmů...',
     "stations": 'Načítání stanovišť...'
   };
 
