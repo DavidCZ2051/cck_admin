@@ -13,8 +13,8 @@ String? loadMode;
 
 Map competitionTypes = {
   1: 'Okresní',
-  2: 'Krajské',
-  3: 'Republikové',
+  2: 'Krajská',
+  3: 'Republiková',
   4: 'Mezinárodní',
   5: 'Testovací',
 };

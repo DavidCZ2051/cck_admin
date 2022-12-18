@@ -136,6 +136,34 @@ Future<globals.FunctionObject> deleteCompetition({
   }
 }
 
+Future<globals.FunctionObject> editCompetition({
+  required String token,
+  required int competitionId,
+  required Map<String, dynamic> competition,
+}) async {
+  Response response = await put(
+    Uri.parse("${globals.url}/api/competitions/$competitionId"),
+    body: {
+      'startDate': competition['startDate'],
+      'endDate': competition['endDate'],
+      'type': competition['type'].toString(),
+      'description': competition['description'],
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
 Future<globals.FunctionObject> createCompetition({
   required String token,
   required Map<String, dynamic> competition,
