@@ -4,7 +4,7 @@ Roadmapa projektu CCK
 
 # Beta
 
-Beta bude muset být dokončena cca. 12.12.2022
+Beta bude muset být dokončena do konce roku.
 
 ## TODO
 
@@ -14,7 +14,8 @@ Beta bude muset být dokončena cca. 12.12.2022
 ## Bugs
 
 - CCK Admin:
-  - Competitions - nefunguje scroll
+  - Competitions - nefunguje editace
+  - Competitions - nelze použít tlačítko "vytvořit" 2x
 
 # Release
 

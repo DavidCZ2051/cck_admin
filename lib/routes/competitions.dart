@@ -40,6 +40,7 @@ class _CompetitionsState extends State<Competitions> {
     );
     setState(() {
       loading["delete"] = false;
+      selectedCompetition = null;
     });
     setstate();
 
@@ -82,13 +83,25 @@ class _CompetitionsState extends State<Competitions> {
       token: token,
       competition: competition,
     );
-    setState(() {
-      loading["create"] = false;
-    });
 
     if (object.functionCode == globals.FunctionCode.success) {
-      setState(() {});
-      Navigator.pop(context);
+      object = await functions.getCompetitions(
+        token: token,
+      );
+      if (object.functionCode == globals.FunctionCode.success) {
+        setState(() {
+          loading["create"] = false;
+        });
+        Navigator.pop(context);
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return widgets.ErrorDialog(
+                statusCode: object.statusCode!,
+              );
+            });
+      }
     } else {
       showDialog(
           context: context,
