@@ -38,7 +38,7 @@ int getStationTypeId({required String type}) {
 }
 
 Map stationTiers = {
-  1: 'Unkown',
+  1: 'Unknown',
   2: 'PrvniStupen',
   3: 'DruhyStupen',
 };
@@ -135,6 +135,7 @@ class Station {
   int type;
   int tier;
   DateTime created;
+  List<Injury> injuries = [];
   Station({
     required this.id,
     required this.competitionId,
@@ -180,4 +181,69 @@ class FunctionObject {
   FunctionCode
       functionCode; //function code of the function. see enum FunctionCode
   FunctionObject({this.statusCode, required this.functionCode});
+}
+
+class Injury {
+  int id;
+  int stationId;
+  int refereeId;
+  String letter;
+  String situation;
+  String diagnosis;
+  int maximalPoints;
+  String necessaryThings;
+  String info;
+  List<Figurant> figurants = [];
+  List<ThreathmentProcedures> threathmentProcedures = [];
+  List<Task> tasks = [];
+  Injury({
+    required this.id,
+    required this.stationId,
+    required this.refereeId,
+    required this.letter,
+    required this.situation,
+    required this.diagnosis,
+    required this.maximalPoints,
+    required this.necessaryThings,
+    required this.info,
+  });
+}
+
+class Figurant {
+  int id;
+  int injuryId;
+  String instructions;
+  String makeup;
+  Figurant({
+    required this.id,
+    required this.injuryId,
+    required this.instructions,
+    required this.makeup,
+  });
+}
+
+class ThreathmentProcedures {
+  int id;
+  int injuryId;
+  String activity;
+  int order;
+  ThreathmentProcedures({
+    required this.id,
+    required this.injuryId,
+    required this.activity,
+    required this.order,
+  });
+}
+
+class Task {
+  int id;
+  int injuryId;
+  String title;
+  int maximalMinusPoints;
+  Task({
+    required this.id,
+    required this.injuryId,
+    required this.title,
+    required this.maximalMinusPoints,
+  });
 }

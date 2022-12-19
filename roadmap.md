@@ -17,6 +17,11 @@ Beta bude muset být dokončena do konce roku.
   - Competitions - nefunguje editace
   - Competitions - nelze použít tlačítko "vytvořit" 2x
 
+
+# Pre-release
+
+Ke konci ledna.
+
 # Release
 
 Release bude muset být hotový ke konci února. Oficiální první spuštění aplikace proběhne v dubnu.
