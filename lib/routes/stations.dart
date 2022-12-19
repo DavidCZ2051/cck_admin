@@ -69,6 +69,9 @@ class _StationsState extends State<Stations> {
     setState(() {
       loading["create"] = true;
     });
+    station["type"] = globals.getStationTypeId(type: station["type"]);
+    station["tier"] = globals.getStationTierId(tier: station["tier"]);
+
     print("Creating station with data: $station");
     var object = await functions.createStation(
       token: token,
@@ -220,13 +223,36 @@ class _StationsState extends State<Stations> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   TextFormField(
+                                                    initialValue: newStation[
+                                                                    "number"]
+                                                                .toString() ==
+                                                            "null"
+                                                        ? ""
+                                                        : newStation["number"]
+                                                            .toString(),
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      labelText: "Číslo",
+                                                    ),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newStation["number"] =
+                                                            int.tryParse(value);
+                                                      });
+                                                    },
+                                                  ),
+                                                  TextFormField(
+                                                    initialValue:
+                                                        newStation["title"],
                                                     decoration:
                                                         const InputDecoration(
                                                       labelText: "Název",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newStation["name"] =
+                                                        newStation["title"] =
                                                             value;
                                                       });
                                                     },
@@ -234,21 +260,35 @@ class _StationsState extends State<Stations> {
                                                   //station type
                                                   DropdownButton(
                                                     value: newStation["type"],
-                                                    items: [
-                                                      DropdownMenuItem(
-                                                        child: const Text(
-                                                            "Přírodní"),
-                                                        value: "Přírodní",
-                                                      ),
-                                                      DropdownMenuItem(
-                                                        child: const Text(
-                                                            "Technická"),
-                                                        value: "Technická",
-                                                      ),
-                                                    ],
+                                                    items: globals
+                                                        .stationTypes.values
+                                                        .map((e) =>
+                                                            DropdownMenuItem(
+                                                              value: e,
+                                                              child: Text(e),
+                                                            ))
+                                                        .toList(),
                                                     onChanged: (value) {
                                                       setState(() {
                                                         newStation["type"] =
+                                                            value;
+                                                      });
+                                                    },
+                                                  ),
+                                                  //station tier
+                                                  DropdownButton(
+                                                    value: newStation["tier"],
+                                                    items: globals
+                                                        .stationTiers.values
+                                                        .map((e) =>
+                                                            DropdownMenuItem(
+                                                              value: e,
+                                                              child: Text(e),
+                                                            ))
+                                                        .toList(),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newStation["tier"] =
                                                             value;
                                                       });
                                                     },
@@ -279,18 +319,23 @@ class _StationsState extends State<Stations> {
                                                   MaterialStateProperty.all(
                                                       Colors.red),
                                             ),
-                                            onPressed: () {},
-                                            /* loading["create"] == true
+                                            onPressed: loading["create"] == true
                                                 ? null
-                                                : (true) // here should be some validation
-                                                    ? null
-                                                    : () async {
-                                                        await handleTeamCreate(
+                                                : (newStation["name"] != null &&
+                                                        newStation["tier"] !=
+                                                            null &&
+                                                        newStation["type"] !=
+                                                            null &&
+                                                        newStation["number"] !=
+                                                            null)
+                                                    ? () async {
+                                                        await handleStationCreate(
                                                           token: globals
                                                               .user.token!,
-                                                          team: newTeam,
+                                                          station: newStation,
                                                         );
-                                                      }, */
+                                                      }
+                                                    : null,
                                             child:
                                                 const Text("Přidat stanoviště"),
                                           ),

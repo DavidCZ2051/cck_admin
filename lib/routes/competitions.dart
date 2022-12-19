@@ -227,6 +227,14 @@ class _CompetitionsState extends State<Competitions> {
                                 ? Colors.red
                                 : Colors.white,
                             child: InkWell(
+                              /* onDoubleTap: () {
+                                selectedCompetition = competition;
+                                globals.selectedCompetition =
+                                    selectedCompetition;
+                                globals.loadMode = "competition";
+                                Navigator.pushReplacementNamed(
+                                    context, "/loading");
+                              }, */
                               onTap: () {
                                 if (selectedCompetition == competition) {
                                   setState(() {
@@ -646,12 +654,10 @@ class _CompetitionsState extends State<Competitions> {
                                                           padding:
                                                               const EdgeInsets
                                                                   .all(8.0),
-                                                          child: TextField(
-                                                            controller:
-                                                                TextEditingController(
-                                                              text: editCompetition[
-                                                                  "description"],
-                                                            ),
+                                                          child: TextFormField(
+                                                            initialValue:
+                                                                editCompetition[
+                                                                    "description"],
                                                             onChanged:
                                                                 (String value) {
                                                               setState(() {
