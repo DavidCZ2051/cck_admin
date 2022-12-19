@@ -75,17 +75,25 @@ class _CompetitionState extends State<Competition> {
                         ),
                         const Divider(),
                         ListTile(
-                          leading: const Icon(Icons.group),
-                          title: const Text('Týmy'),
+                          leading: const Icon(Icons.home),
+                          title: const Text("Přehled soutěže"),
+                          onTap: null,
+                          selected: true,
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.room),
+                          title: const Text("Stanoviště"),
+                          onTap: () {
+                            Navigator.pushNamed(context, "/stations");
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.people),
+                          title: const Text("Týmy"),
                           onTap: () {
                             Navigator.pushNamed(context, "/teams");
                           },
                         ),
-                        ListTile(
-                          leading: const Icon(Icons.room),
-                          title: const Text('Stanoviště'),
-                          onTap: () {},
-                        )
                       ],
                     ),
                   ),

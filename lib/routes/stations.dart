@@ -2,19 +2,20 @@
 import 'package:flutter/material.dart';
 // files
 import 'package:cck_admin/globals.dart' as globals;
-import 'package:cck_admin/widgets.dart' as widgets;
 import 'package:cck_admin/functions.dart' as functions;
+import 'package:cck_admin/widgets.dart' as widgets;
 
-class Teams extends StatefulWidget {
-  const Teams({super.key});
+class Stations extends StatefulWidget {
+  const Stations({super.key});
 
   @override
-  State<Teams> createState() => _TeamsState();
+  State<Stations> createState() => _StationsState();
 }
 
-class _TeamsState extends State<Teams> {
-  Map<String, dynamic> newTeam = {};
-  globals.Team? selectedTeam;
+class _StationsState extends State<Stations> {
+  Map<String, dynamic> newStation = {};
+  Map<String, dynamic> editStation = {};
+  globals.Station? selectedStation;
   Map<String, bool> loading = {
     "delete": false,
     "create": false,
@@ -25,18 +26,18 @@ class _TeamsState extends State<Teams> {
     setState(() {});
   }
 
-  handleTeamDelete({
+  handleStationDelete({
     required String token,
-    required int teamId,
+    required int stationId,
   }) async {
     setState(() {
       loading["delete"] = true;
     });
     setstate();
-    print("Deleting competition with id: $teamId");
-    var object = await functions.deleteTeam(
+    print("Deleting station with id: $stationId");
+    var object = await functions.deleteStation(
       token: token,
-      teamId: selectedTeam!.id,
+      stationId: selectedStation!.id,
     );
     setState(() {
       loading["delete"] = false;
@@ -45,8 +46,8 @@ class _TeamsState extends State<Teams> {
 
     if (object.functionCode == globals.FunctionCode.success) {
       setState(() {
-        globals.competitions.removeWhere(
-          (team) => team.id == teamId,
+        globals.selectedCompetition!.stations.removeWhere(
+          (station) => station.id == selectedStation!.id,
         );
       });
       Navigator.pop(context);
@@ -61,26 +62,18 @@ class _TeamsState extends State<Teams> {
     }
   }
 
-  handleTeamCreate({
+  handleStationCreate({
     required String token,
-    required Map<String, dynamic> competition,
+    required Map<String, dynamic> station,
   }) async {
     setState(() {
       loading["create"] = true;
     });
-    competition["startDate"] = functions.formatDateTime(
-      dateTime: competition["startDate"],
-    );
-    competition["endDate"] = functions.formatDateTime(
-      dateTime: competition["endDate"],
-    );
-    competition["type"] = globals.getCompetitionTypeId(
-      type: competition["type"],
-    );
-    print("Creating competition with data: $competition");
-    var object = await functions.createCompetition(
+    print("Creating station with data: $station");
+    var object = await functions.createStation(
       token: token,
-      competition: competition,
+      station: station,
+      competitionId: globals.selectedCompetition!.id,
     );
     setState(() {
       loading["create"] = false;
@@ -165,15 +158,15 @@ class _TeamsState extends State<Teams> {
                         ListTile(
                           leading: const Icon(Icons.room),
                           title: const Text("Stanoviště"),
-                          onTap: () {
-                            Navigator.pushNamed(context, "/stations");
-                          },
+                          onTap: null,
+                          selected: true,
                         ),
                         ListTile(
                           leading: const Icon(Icons.people),
                           title: const Text("Týmy"),
-                          onTap: null,
-                          selected: true,
+                          onTap: () {
+                            Navigator.pushNamed(context, "/teams");
+                          },
                         ),
                       ],
                     ),
@@ -201,7 +194,7 @@ class _TeamsState extends State<Teams> {
                                   return StatefulBuilder(
                                     builder: (context, setState) {
                                       return AlertDialog(
-                                        title: const Text("Přidání týmu"),
+                                        title: const Text("Přidání stanoviště"),
                                         content: loading["create"] == true
                                             ? Column(
                                                 mainAxisSize: MainAxisSize.min,
@@ -249,7 +242,8 @@ class _TeamsState extends State<Teams> {
                                                           team: newTeam,
                                                         );
                                                       }, */
-                                            child: const Text("Přidat tým"),
+                                            child:
+                                                const Text("Přidat stanoviště"),
                                           ),
                                         ],
                                       );
@@ -267,7 +261,7 @@ class _TeamsState extends State<Teams> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red),
                             ),
-                            onPressed: selectedTeam == null
+                            onPressed: selectedStation == null
                                 ? null
                                 : () {
                                     print(globals.competitions);
@@ -276,7 +270,8 @@ class _TeamsState extends State<Teams> {
                                         pageBuilder: (context, animation,
                                             secondaryAnimation) {
                                           return AlertDialog(
-                                            title: const Text("Úprava soutěže"),
+                                            title:
+                                                const Text("Úprava stanoviště"),
                                             content: Column(
                                               children: [
                                                 Row(
@@ -328,7 +323,7 @@ class _TeamsState extends State<Teams> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red),
                             ),
-                            onPressed: selectedTeam == null
+                            onPressed: selectedStation == null
                                 ? null
                                 : () {
                                     showDialog(
@@ -338,8 +333,8 @@ class _TeamsState extends State<Teams> {
                                         return StatefulBuilder(
                                           builder: (context, setState) {
                                             return AlertDialog(
-                                              title:
-                                                  const Text("Smazání soutěže"),
+                                              title: const Text(
+                                                  "Smazání stanoviště"),
                                               content: loading["delete"] == true
                                                   ? Column(
                                                       mainAxisSize:
@@ -349,7 +344,7 @@ class _TeamsState extends State<Teams> {
                                                       ],
                                                     )
                                                   : const Text(
-                                                      "Opravdu chcete smazat soutěž?"),
+                                                      "Opravdu chcete smazat stanoviště?"),
                                               actions: [
                                                 TextButton(
                                                   onPressed:
@@ -378,17 +373,17 @@ class _TeamsState extends State<Teams> {
                                                       loading["delete"] == true
                                                           ? null
                                                           : () async {
-                                                              await handleTeamDelete(
+                                                              await handleStationDelete(
                                                                 token: globals
                                                                     .user
                                                                     .token!,
-                                                                teamId:
-                                                                    selectedTeam!
+                                                                stationId:
+                                                                    selectedStation!
                                                                         .id,
                                                               );
                                                             },
                                                   child: const Text(
-                                                      "Smazat soutěž"),
+                                                      "Smazat stanoviště"),
                                                 ),
                                               ],
                                             );
@@ -406,29 +401,29 @@ class _TeamsState extends State<Teams> {
                     if (globals.selectedCompetition!.teams.isEmpty)
                       const Center(
                         child: Text(
-                          "Zatím nejsou přidány žádné týmy",
+                          "Zatím nejsou přidány žádné stanoviště",
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
-                    if (globals.selectedCompetition!.teams.isNotEmpty)
-                      for (globals.Team team
-                          in globals.selectedCompetition!.teams)
+                    if (globals.selectedCompetition!.stations.isNotEmpty)
+                      for (globals.Station station
+                          in globals.selectedCompetition!.stations)
                         ConstrainedBox(
                           constraints: const BoxConstraints(
                             minHeight: 80,
                             minWidth: 330,
                           ),
                           child: Card(
-                            color: selectedTeam == team
+                            color: selectedStation == station
                                 ? Colors.red
                                 : Colors.white,
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  if (selectedTeam == team) {
-                                    selectedTeam = null;
+                                  if (selectedStation == station) {
+                                    selectedStation = null;
                                   } else {
-                                    selectedTeam = team;
+                                    selectedStation = station;
                                   }
                                 });
                               },
@@ -437,10 +432,11 @@ class _TeamsState extends State<Teams> {
                                 children: [
                                   Row(
                                     children: [
-                                      Text("${team.number} - ID: ${team.id}"),
+                                      Text(
+                                          "${station.title} - ID: ${station.id}"),
                                     ],
                                   ),
-                                  Text(team.organization),
+                                  Text(station.number.toString()),
                                 ],
                               ),
                             ),

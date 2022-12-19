@@ -24,6 +24,30 @@ int getCompetitionTypeId({required String type}) {
       .firstWhere((k) => competitionTypes[k] == type, orElse: () => 0);
 }
 
+Map stationTypes = {
+  1: 'Volný',
+  2: 'Standart',
+  3: 'Improvizace',
+  4: 'Obvazovka',
+  5: 'Transport',
+};
+
+int getStationTypeId({required String type}) {
+  return stationTypes.keys
+      .firstWhere((k) => stationTypes[k] == type, orElse: () => 0);
+}
+
+Map stationTiers = {
+  1: 'Unkown',
+  2: 'PrvniStupen',
+  3: 'DruhyStupen',
+};
+
+int getStationTierId({required String tier}) {
+  return stationTiers.keys
+      .firstWhere((k) => stationTiers[k] == tier, orElse: () => 0);
+}
+
 class NavigationDrawer {
   bool expanded = false;
   int index = 0;

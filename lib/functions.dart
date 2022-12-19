@@ -168,6 +168,8 @@ Future<globals.FunctionObject> createCompetition({
   required String token,
   required Map<String, dynamic> competition,
 }) async {
+  await Future.delayed(Duration(seconds: 4));
+
   Response response = await post(
     Uri.parse("${globals.url}/api/competitions"),
     headers: {
@@ -221,6 +223,62 @@ Future<globals.FunctionObject> getStations({required String token}) async {
       }
     }
 
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> deleteStation({
+  required String token,
+  required int stationId,
+}) async {
+  Response response = await delete(
+    Uri.parse("${globals.url}/api/stations/$stationId"),
+    headers: {
+      'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> createStation({
+  required String token,
+  required Map<String, dynamic> station,
+  required int competitionId,
+}) async {
+  Response response = await post(
+    Uri.parse("${globals.url}/api/stations"),
+    headers: {
+      'token': token,
+    },
+    body: {
+      'competitionId': competitionId.toString(),
+      'title': station['title'],
+      'number': station['number'].toString(),
+      'type': station['type'].toString(),
+      'tier': station['tier'].toString(),
+    },
+  );
+
+  if (response.statusCode == 201) {
     return globals.FunctionObject(
       functionCode: globals.FunctionCode.success,
       statusCode: response.statusCode,
