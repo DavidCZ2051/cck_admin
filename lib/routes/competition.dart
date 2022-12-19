@@ -41,9 +41,23 @@ class _CompetitionState extends State<Competition> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(globals.selectedCompetition!.type),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child:
+                                        Text(globals.selectedCompetition!.type),
+                                  ),
+                                  const Spacer(),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      globals.loadMode = "competitions";
+                                      Navigator.pushReplacementNamed(
+                                          context, "/loading");
+                                    },
+                                    child: const Text("Zpět"),
+                                  ),
+                                ],
                               ),
                               Row(
                                 children: [

@@ -143,6 +143,9 @@ Future<globals.FunctionObject> editCompetition({
 }) async {
   Response response = await put(
     Uri.parse("${globals.url}/api/competitions/$competitionId"),
+    headers: {
+      'token': token,
+    },
     body: {
       'startDate': competition['startDate'],
       'endDate': competition['endDate'],

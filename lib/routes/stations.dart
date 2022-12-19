@@ -115,9 +115,23 @@ class _StationsState extends State<Stations> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(globals.selectedCompetition!.type),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child:
+                                        Text(globals.selectedCompetition!.type),
+                                  ),
+                                  const Spacer(),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      globals.loadMode = "competitions";
+                                      Navigator.pushReplacementNamed(
+                                          context, "/loading");
+                                    },
+                                    child: const Text("Zpět"),
+                                  ),
+                                ],
                               ),
                               Row(
                                 children: [
@@ -204,7 +218,42 @@ class _StationsState extends State<Stations> {
                                               )
                                             : Column(
                                                 mainAxisSize: MainAxisSize.min,
-                                                children: [],
+                                                children: [
+                                                  TextFormField(
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      labelText: "Název",
+                                                    ),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newStation["name"] =
+                                                            value;
+                                                      });
+                                                    },
+                                                  ),
+                                                  //station type
+                                                  DropdownButton(
+                                                    value: newStation["type"],
+                                                    items: [
+                                                      DropdownMenuItem(
+                                                        child: const Text(
+                                                            "Přírodní"),
+                                                        value: "Přírodní",
+                                                      ),
+                                                      DropdownMenuItem(
+                                                        child: const Text(
+                                                            "Technická"),
+                                                        value: "Technická",
+                                                      ),
+                                                    ],
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newStation["type"] =
+                                                            value;
+                                                      });
+                                                    },
+                                                  ),
+                                                ],
                                               ),
                                         actions: [
                                           TextButton(

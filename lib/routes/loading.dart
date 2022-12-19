@@ -37,6 +37,7 @@ class _LoadingState extends State<Loading> {
       setState(() {
         loadType = "competitions";
       });
+      globals.competitions = [];
       var object = await functions.getCompetitions(token: globals.user.token!);
       if (object.functionCode == globals.FunctionCode.error) {
         showDialog(
