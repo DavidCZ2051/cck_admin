@@ -78,13 +78,26 @@ class _StationsState extends State<Stations> {
       station: station,
       competitionId: globals.selectedCompetition!.id,
     );
-    setState(() {
-      loading["create"] = false;
-    });
 
     if (object.functionCode == globals.FunctionCode.success) {
-      setState(() {});
-      Navigator.pop(context);
+      globals.selectedCompetition!.stations = [];
+      object = await functions.getStations(
+        token: token,
+      );
+      setState(() {
+        loading["create"] = false;
+      });
+      if (object.functionCode == globals.FunctionCode.success) {
+        Navigator.pop(context);
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return widgets.ErrorDialog(
+                statusCode: object.statusCode!,
+              );
+            });
+      }
     } else {
       showDialog(
           context: context,
