@@ -557,11 +557,28 @@ class _StationsState extends State<Stations> {
                                         children: [
                                           Row(
                                             children: [
-                                              Text(
-                                                  "${station.title} - ID: ${station.id}"),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        8, 8, 0, 0),
+                                                child: Text(
+                                                    "${station.title} - ID: ${station.id}"),
+                                              ),
                                             ],
                                           ),
-                                          Text(station.number.toString()),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                8, 8, 0, 0),
+                                            child: Text(
+                                                "Číslo: ${station.number}"),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                8, 8, 0, 8),
+                                            child: Text(
+                                              "Typ: ${globals.stationTypes[station.type]}",
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -604,11 +621,28 @@ class _StationsState extends State<Stations> {
                                         children: [
                                           Row(
                                             children: [
-                                              Text(
-                                                  "${station.title} - ID: ${station.id}"),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        8, 8, 0, 0),
+                                                child: Text(
+                                                    "${station.title} - ID: ${station.id}"),
+                                              ),
                                             ],
                                           ),
-                                          Text(station.number.toString()),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                8, 8, 0, 0),
+                                            child: Text(
+                                                "Číslo: ${station.number}"),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                8, 8, 0, 8),
+                                            child: Text(
+                                              "Typ: ${globals.stationTypes[station.type]}",
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
