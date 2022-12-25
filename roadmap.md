@@ -17,7 +17,6 @@ Beta bude muset být dokončena do konce roku.
   - Competitions - nefunguje editace
   - Competitions - nelze použít tlačítko "vytvořit" 2x
 
-
 # Pre-release
 
 Ke konci ledna.

@@ -220,7 +220,7 @@ Future<globals.FunctionObject> getStations({required String token}) async {
             number: station['number'],
             type: station['type'],
             tier: station['tier'],
-            created: station['created'],
+            created: DateTime.parse(station['created']),
           ));
         }
       }

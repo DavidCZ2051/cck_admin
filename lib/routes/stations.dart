@@ -492,7 +492,7 @@ class _StationsState extends State<Stations> {
                       ),
                     ),
                     const Divider(),
-                    if (globals.selectedCompetition!.teams.isEmpty)
+                    if (globals.selectedCompetition!.stations.isEmpty)
                       const Center(
                         child: Text(
                           "Zatím nejsou přidány žádné stanoviště",
@@ -500,42 +500,105 @@ class _StationsState extends State<Stations> {
                         ),
                       ),
                     if (globals.selectedCompetition!.stations.isNotEmpty)
-                      for (globals.Station station
-                          in globals.selectedCompetition!.stations)
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            minHeight: 80,
-                            minWidth: 330,
-                          ),
-                          child: Card(
-                            color: selectedStation == station
-                                ? Colors.red
-                                : Colors.white,
-                            child: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (selectedStation == station) {
-                                    selectedStation = null;
-                                  } else {
-                                    selectedStation = station;
-                                  }
-                                });
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                          "${station.title} - ID: ${station.id}"),
-                                    ],
-                                  ),
-                                  Text(station.number.toString()),
-                                ],
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            children: [
+                              const Text(
+                                "První stupeň",
+                                style: TextStyle(fontSize: 20),
                               ),
-                            ),
+                              for (globals.Station station in globals
+                                  .selectedCompetition!.stations
+                                  .where((element) => element.tier == 2))
+                                ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    minHeight: 80,
+                                    minWidth: 330,
+                                  ),
+                                  child: Card(
+                                    color: selectedStation == station
+                                        ? Colors.red
+                                        : Colors.white,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          if (selectedStation == station) {
+                                            selectedStation = null;
+                                          } else {
+                                            selectedStation = station;
+                                          }
+                                        });
+                                      },
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                  "${station.title} - ID: ${station.id}"),
+                                            ],
+                                          ),
+                                          Text(station.number.toString()),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
-                        ),
+                          const VerticalDivider(),
+                          Column(
+                            children: [
+                              const Text(
+                                "Druhý stupeň",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              for (globals.Station station in globals
+                                  .selectedCompetition!.stations
+                                  .where((element) => element.tier == 3))
+                                ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    minHeight: 80,
+                                    minWidth: 330,
+                                  ),
+                                  child: Card(
+                                    color: selectedStation == station
+                                        ? Colors.red
+                                        : Colors.white,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          if (selectedStation == station) {
+                                            selectedStation = null;
+                                          } else {
+                                            selectedStation = station;
+                                          }
+                                        });
+                                      },
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                  "${station.title} - ID: ${station.id}"),
+                                            ],
+                                          ),
+                                          Text(station.number.toString()),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ],
