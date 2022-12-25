@@ -259,6 +259,8 @@ class _StationsState extends State<Stations> {
                                                   ),
                                                   //station type
                                                   DropdownButton(
+                                                    hint: const Text(
+                                                        "Typ stanoviště"),
                                                     value: newStation["type"],
                                                     items: globals
                                                         .stationTypes.values
@@ -277,15 +279,17 @@ class _StationsState extends State<Stations> {
                                                   ),
                                                   //station tier
                                                   DropdownButton(
+                                                    hint: const Text(
+                                                        "Druh stanoviště"),
                                                     value: newStation["tier"],
                                                     items: globals
                                                         .stationTiers.values
-                                                        .map((e) =>
-                                                            DropdownMenuItem(
-                                                              value: e,
-                                                              child: Text(e),
-                                                            ))
-                                                        .toList(),
+                                                        .map((e) {
+                                                      return DropdownMenuItem(
+                                                        value: e,
+                                                        child: Text(e),
+                                                      );
+                                                    }).toList(),
                                                     onChanged: (value) {
                                                       setState(() {
                                                         newStation["tier"] =
@@ -305,6 +309,7 @@ class _StationsState extends State<Stations> {
                                             onPressed: loading["create"] == true
                                                 ? null
                                                 : () {
+                                                    newStation = {};
                                                     Navigator.pop(context);
                                                   },
                                             child: const Text(
@@ -321,7 +326,8 @@ class _StationsState extends State<Stations> {
                                             ),
                                             onPressed: loading["create"] == true
                                                 ? null
-                                                : (newStation["name"] != null &&
+                                                : (newStation["title"] !=
+                                                            null &&
                                                         newStation["tier"] !=
                                                             null &&
                                                         newStation["type"] !=

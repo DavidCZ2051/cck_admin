@@ -39,8 +39,8 @@ int getStationTypeId({required String type}) {
 
 Map stationTiers = {
   1: 'Unknown',
-  2: 'PrvniStupen',
-  3: 'DruhyStupen',
+  2: 'První stupeň',
+  3: 'Druhý stupeň',
 };
 
 int getStationTierId({required String tier}) {
