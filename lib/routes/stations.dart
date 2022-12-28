@@ -43,6 +43,7 @@ class _StationsState extends State<Stations> {
       loading["delete"] = false;
     });
     setstate();
+    selectedStation = null;
 
     if (object.functionCode == globals.FunctionCode.success) {
       setState(() {
@@ -86,6 +87,54 @@ class _StationsState extends State<Stations> {
       );
       setState(() {
         loading["create"] = false;
+      });
+      if (object.functionCode == globals.FunctionCode.success) {
+        Navigator.pop(context);
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return widgets.ErrorDialog(
+                statusCode: object.statusCode!,
+              );
+            });
+      }
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return widgets.ErrorDialog(
+              statusCode: object.statusCode!,
+            );
+          });
+    }
+  }
+
+  handleStationEdit({
+    required String token,
+    required Map<String, dynamic> station,
+  }) async {
+    setState(() {
+      loading["edit"] = true;
+    });
+
+    station["type"] = globals.getStationTypeId(type: station["type"]);
+    station["tier"] = globals.getStationTierId(tier: station["tier"]);
+
+    print("Editing station with data: $station");
+    var object = await functions.editStation(
+      token: token,
+      station: station,
+      stationId: selectedStation!.id,
+    );
+
+    if (object.functionCode == globals.FunctionCode.success) {
+      globals.selectedCompetition!.stations = [];
+      object = await functions.getStations(
+        token: token,
+      );
+      setState(() {
+        loading["edit"] = false;
       });
       if (object.functionCode == globals.FunctionCode.success) {
         Navigator.pop(context);
@@ -185,10 +234,9 @@ class _StationsState extends State<Stations> {
                             Navigator.pushNamed(context, "/competition");
                           },
                         ),
-                        ListTile(
-                          leading: const Icon(Icons.room),
-                          title: const Text("Stanoviště"),
-                          onTap: null,
+                        const ListTile(
+                          leading: Icon(Icons.room),
+                          title: Text("Stanoviště"),
                           selected: true,
                         ),
                         ListTile(
@@ -377,55 +425,215 @@ class _StationsState extends State<Stations> {
                             onPressed: selectedStation == null
                                 ? null
                                 : () {
-                                    print(globals.competitions);
-                                    showGeneralDialog(
-                                        context: context,
-                                        pageBuilder: (context, animation,
-                                            secondaryAnimation) {
-                                          return AlertDialog(
-                                            title:
-                                                const Text("Úprava stanoviště"),
-                                            content: Column(
-                                              children: [
-                                                Row(
-                                                  children: const [
-                                                    Text("Typ: "),
-                                                    Text("Předkolo"),
-                                                  ],
-                                                )
+                                    editStation = selectedStation!.map;
+                                    editStation["tier"] = globals
+                                        .stationTiers[editStation["tier"]];
+                                    editStation["type"] = globals
+                                        .stationTypes[editStation["type"]];
+                                    print(editStation);
+                                    showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (context) {
+                                        return StatefulBuilder(
+                                          builder: (context, setState) {
+                                            return AlertDialog(
+                                              title: const Text(
+                                                  "Úprava stanoviště"),
+                                              content: loading["edit"] == true
+                                                  ? Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: const [
+                                                        CircularProgressIndicator(),
+                                                      ],
+                                                    )
+                                                  : Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        TextFormField(
+                                                          initialValue: editStation[
+                                                                          "number"]
+                                                                      .toString() ==
+                                                                  "null"
+                                                              ? ""
+                                                              : editStation[
+                                                                      "number"]
+                                                                  .toString(),
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .number,
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText: "Číslo",
+                                                          ),
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              editStation[
+                                                                      "number"] =
+                                                                  int.tryParse(
+                                                                      value);
+                                                            });
+                                                          },
+                                                        ),
+                                                        TextFormField(
+                                                          initialValue:
+                                                              editStation[
+                                                                  "title"],
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText: "Název",
+                                                          ),
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              editStation[
+                                                                      "title"] =
+                                                                  value;
+                                                            });
+                                                          },
+                                                        ),
+                                                        //station competition
+                                                        DropdownButton(
+                                                          hint: const Text(
+                                                              "Soutěž"),
+                                                          value: editStation[
+                                                              "competitionId"],
+                                                          items: [
+                                                            for (globals
+                                                                    .Competition competition
+                                                                in globals
+                                                                    .competitions)
+                                                              DropdownMenuItem(
+                                                                value:
+                                                                    competition
+                                                                        .id,
+                                                                child: Text(
+                                                                    "${competition.type} (${competition.startDateString} - ${competition.endDateString})"),
+                                                              ),
+                                                          ],
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              editStation[
+                                                                      "competitionId"] =
+                                                                  value;
+                                                            });
+                                                          },
+                                                        ),
+                                                        //station type
+                                                        DropdownButton(
+                                                          hint: const Text(
+                                                              "Typ stanoviště"),
+                                                          value: editStation[
+                                                              "type"],
+                                                          items: [
+                                                            for (String value
+                                                                in globals
+                                                                    .stationTypes
+                                                                    .values)
+                                                              DropdownMenuItem(
+                                                                value: value,
+                                                                child:
+                                                                    Text(value),
+                                                              ),
+                                                          ],
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              editStation[
+                                                                      "type"] =
+                                                                  value;
+                                                            });
+                                                          },
+                                                        ),
+                                                        //station tier
+                                                        DropdownButton(
+                                                          hint: const Text(
+                                                              "Druh stanoviště"),
+                                                          value: editStation[
+                                                              "tier"],
+                                                          items: [
+                                                            for (String value
+                                                                in globals
+                                                                    .stationTiers
+                                                                    .values)
+                                                              DropdownMenuItem(
+                                                                value: value,
+                                                                child:
+                                                                    Text(value),
+                                                              ),
+                                                          ],
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              editStation[
+                                                                      "tier"] =
+                                                                  value;
+                                                            });
+                                                          },
+                                                        ),
+                                                      ],
+                                                    ),
+                                              actions: [
+                                                TextButton(
+                                                  style: ButtonStyle(
+                                                    overlayColor:
+                                                        MaterialStateProperty
+                                                            .all(
+                                                                Colors.red[50]),
+                                                  ),
+                                                  onPressed:
+                                                      loading["edit"] == true
+                                                          ? null
+                                                          : () {
+                                                              editStation = {};
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                  child: const Text(
+                                                    "Zrušit",
+                                                    style: TextStyle(
+                                                        color: Colors.red),
+                                                  ),
+                                                ),
+                                                ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all(Colors.red),
+                                                  ),
+                                                  onPressed: loading["edit"] ==
+                                                          true
+                                                      ? null
+                                                      : (editStation[
+                                                                      "title"] !=
+                                                                  null &&
+                                                              editStation[
+                                                                      "tier"] !=
+                                                                  null &&
+                                                              editStation[
+                                                                      "type"] !=
+                                                                  null &&
+                                                              editStation[
+                                                                      "number"] !=
+                                                                  null)
+                                                          ? () async {
+                                                              await handleStationEdit(
+                                                                token: globals
+                                                                    .user
+                                                                    .token!,
+                                                                station:
+                                                                    editStation,
+                                                              );
+                                                            }
+                                                          : null,
+                                                  child: const Text(
+                                                      "Upravit stanoviště"),
+                                                ),
                                               ],
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                style: ButtonStyle(
-                                                  overlayColor:
-                                                      MaterialStateProperty.all(
-                                                          Colors.red[50]),
-                                                ),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: const Text(
-                                                  "Zrušit úpravu",
-                                                  style: TextStyle(
-                                                      color: Colors.red),
-                                                ),
-                                              ),
-                                              ElevatedButton(
-                                                style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          Colors.red),
-                                                ),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: const Text(
-                                                    "Aplikovat změny"),
-                                              ),
-                                            ],
-                                          );
-                                        });
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
                                   },
                             label: const Text("Upravit"),
                           ),

@@ -14,9 +14,8 @@ Beta bude muset být dokončena do konce roku.
 ## Bugs
 
 - CCK Admin:
-  - Competitions - nefunguje editace
   - Competitions - nelze použít tlačítko "vytvořit" 2x
-  - Stations - přetečení obsahu -> přidat scrollbar a zvětšit defaultní velikost okna
+  - Stations - přetečení obsahu -> přidat scrollbar
 
 # Pre-release
 
@@ -32,5 +31,6 @@ Release bude muset být hotový ke konci února. Oficiální první spuštění 
   - Date picker
   - Vizuální styl
   - Chybové hlášky
+  - Načítání
 - CCK Referee:
   - Intuitivnost

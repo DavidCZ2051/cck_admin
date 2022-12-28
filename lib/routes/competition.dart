@@ -88,10 +88,9 @@ class _CompetitionState extends State<Competition> {
                           ),
                         ),
                         const Divider(),
-                        ListTile(
-                          leading: const Icon(Icons.home),
-                          title: const Text("Přehled soutěže"),
-                          onTap: null,
+                        const ListTile(
+                          leading: Icon(Icons.home),
+                          title: Text("Přehled soutěže"),
                           selected: true,
                         ),
                         ListTile(

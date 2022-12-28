@@ -149,6 +149,18 @@ class Station {
   String get createdString {
     return "${created.day}.${created.month}.${created.year} ${created.hour}:${created.minute}";
   }
+
+  Map<String, dynamic> get map {
+    return {
+      "id": id,
+      "competitionId": competitionId,
+      "title": title,
+      "number": number,
+      "type": type,
+      "tier": tier,
+      "created": created,
+    };
+  }
 }
 
 class TeamMember {

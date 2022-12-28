@@ -183,10 +183,9 @@ class _TeamsState extends State<Teams> {
                             Navigator.pushNamed(context, "/stations");
                           },
                         ),
-                        ListTile(
+                        const ListTile(
                           leading: const Icon(Icons.people),
                           title: const Text("Týmy"),
-                          onTap: null,
                           selected: true,
                         ),
                       ],
