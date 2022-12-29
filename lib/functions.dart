@@ -44,6 +44,8 @@ Future<globals.FunctionObject> login({
   }
 }
 
+// Competitions
+
 Future<globals.FunctionObject> getCompetitions({required String token}) async {
   Response response = await get(
     Uri.parse("${globals.url}/api/competitions"),
@@ -62,42 +64,6 @@ Future<globals.FunctionObject> getCompetitions({required String token}) async {
         type: globals.competitionTypes[competition['type']],
         description: competition['description'],
       ));
-    }
-
-    return globals.FunctionObject(
-      functionCode: globals.FunctionCode.success,
-      statusCode: response.statusCode,
-    );
-  } else {
-    return globals.FunctionObject(
-      functionCode: globals.FunctionCode.error,
-      statusCode: response.statusCode,
-    );
-  }
-}
-
-Future<globals.FunctionObject> getTeams({required String token}) async {
-  Response response = await get(
-    Uri.parse("${globals.url}/api/teams"),
-    headers: {
-      'token': token,
-    },
-  );
-
-  if (response.statusCode == 200) {
-    List data = jsonDecode(response.body);
-    for (Map team in data) {
-      for (globals.Competition competition in globals.competitions) {
-        if (competition.id == team['competitionId']) {
-          competition.teams.add(globals.Team(
-            id: team['id'],
-            competitionId: team['competitionId'],
-            number: team['number'],
-            organization: team['organization'],
-            points: team['points'],
-          ));
-        }
-      }
     }
 
     return globals.FunctionObject(
@@ -197,6 +163,97 @@ Future<globals.FunctionObject> createCompetition({
     );
   }
 }
+
+// Teams
+
+Future<globals.FunctionObject> getTeams({required String token}) async {
+  Response response = await get(
+    Uri.parse("${globals.url}/api/teams"),
+    headers: {
+      'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    List data = jsonDecode(response.body);
+    for (Map team in data) {
+      for (globals.Competition competition in globals.competitions) {
+        if (competition.id == team['competitionId']) {
+          competition.teams.add(globals.Team(
+            id: team['id'],
+            competitionId: team['competitionId'],
+            number: team['number'],
+            organization: team['organization'],
+            points: team['points'],
+          ));
+        }
+      }
+    }
+
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> createTeam({
+  required String token,
+  required Map<String, dynamic> team,
+}) async {
+  Response response = await post(
+    Uri.parse("${globals.url}/api/teams"),
+    headers: {
+      'token': token,
+    },
+    body: {
+      'competitionId': team['competitionId'].toString(),
+      'number': team['number'].toString(),
+      'organization': team['organization'],
+    },
+  );
+
+  if (response.statusCode == 201) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> deleteTeam(
+    {required String token, required int teamId}) async {
+  Response response = await delete(
+    Uri.parse("${globals.url}/api/teams/$teamId"),
+    headers: {
+      'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+// Stations
 
 Future<globals.FunctionObject> getStations({required String token}) async {
   Response response = await get(
@@ -326,19 +383,70 @@ Future<globals.FunctionObject> createStation({
   }
 }
 
-Future<globals.FunctionObject> createTeam({
+// Injuries
+
+Future<globals.FunctionObject> getInjuries({
   required String token,
-  required Map<String, dynamic> team,
+}) async {
+  Response response = await get(
+    Uri.parse("${globals.url}/api/injuries"),
+    headers: {
+      'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    List injuries = jsonDecode(response.body);
+    for (Map injury in injuries) {
+      for (globals.Competition competition in globals.competitions) {
+        for (globals.Station station in competition.stations) {
+          if (station.id == injury['stationId']) {
+            station.injuries.add(globals.Injury(
+              id: injury['id'],
+              stationId: injury['stationId'],
+              refereeId: injury['refereeId'],
+              letter: injury['letter'],
+              situation: injury['situation'],
+              diagnosis: injury['diagnose'],
+              maximalPoints: injury['maximalPoints'],
+              necessaryEquipment: injury['neccesseryEquipment'],
+              info: injury['info'],
+            ));
+          }
+        }
+      }
+    }
+
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> createInjury({
+  required String token,
+  required Map<String, dynamic> injury,
 }) async {
   Response response = await post(
-    Uri.parse("${globals.url}/api/teams"),
+    Uri.parse("${globals.url}/api/injuries"),
     headers: {
       'token': token,
     },
     body: {
-      'competitionId': team['competitionId'].toString(),
-      'number': team['number'].toString(),
-      'organization': team['organization'],
+      'stationId': injury['stationId'].toString(),
+      'refereeId': injury['refereeId'].toString(),
+      'letter': injury['letter'],
+      'situation': injury['situation'],
+      'diagnose': injury['diagnosis'],
+      'maximalPoints': injury['maximalPoints'].toString(),
+      'neccesseryEquipment': injury['necessaryEquipment'],
+      'info': injury['info'],
     },
   );
 
@@ -355,10 +463,47 @@ Future<globals.FunctionObject> createTeam({
   }
 }
 
-Future<globals.FunctionObject> deleteTeam(
-    {required String token, required int teamId}) async {
+Future<globals.FunctionObject> editInjury({
+  required String token,
+  required int injuryId,
+  required Map<String, dynamic> injury,
+}) async {
+  Response response = await put(
+    Uri.parse("${globals.url}/api/injuries/$injuryId"),
+    headers: {
+      'token': token,
+    },
+    body: {
+      'stationId': injury['stationId'].toString(),
+      'refereeId': injury['refereeId'].toString(),
+      'letter': injury['letter'],
+      'situation': injury['situation'],
+      'diagnose': injury['diagnosis'],
+      'maximalPoints': injury['maximalPoints'].toString(),
+      'neccesseryEquipment': injury['necessaryEquipment'],
+      'info': injury['info'],
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> deleteInjury({
+  required String token,
+  required int injuryId,
+}) async {
   Response response = await delete(
-    Uri.parse("${globals.url}/api/teams/$teamId"),
+    Uri.parse("${globals.url}/api/injuries/$injuryId"),
     headers: {
       'token': token,
     },

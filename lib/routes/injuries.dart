@@ -5,17 +5,17 @@ import 'package:cck_admin/globals.dart' as globals;
 import 'package:cck_admin/functions.dart' as functions;
 import 'package:cck_admin/widgets.dart' as widgets;
 
-class Stations extends StatefulWidget {
-  const Stations({super.key});
+class Injuries extends StatefulWidget {
+  const Injuries({super.key});
 
   @override
-  State<Stations> createState() => _StationsState();
+  State<Injuries> createState() => _InjuriesState();
 }
 
-class _StationsState extends State<Stations> {
-  Map<String, dynamic> newStation = {};
-  Map<String, dynamic> editStation = {};
-  globals.Station? selectedStation;
+class _InjuriesState extends State<Injuries> {
+  Map<String, dynamic> newInjury = {};
+  Map<String, dynamic> editInjury = {};
+  globals.Injury? selectedInjury;
   Map<String, bool> loading = {
     "delete": false,
     "create": false,
@@ -26,29 +26,29 @@ class _StationsState extends State<Stations> {
     setState(() {});
   }
 
-  handleStationDelete({
+  handleInjuryDelete({
     required String token,
-    required int stationId,
+    required int injuryId,
   }) async {
     setState(() {
       loading["delete"] = true;
     });
     setstate();
-    print("Deleting station with id: $stationId");
-    var object = await functions.deleteStation(
+    print("Deleting injury with id: $injuryId");
+    var object = await functions.deleteInjury(
       token: token,
-      stationId: selectedStation!.id,
+      injuryId: selectedInjury!.id,
     );
     setState(() {
       loading["delete"] = false;
     });
     setstate();
-    selectedStation = null;
+    selectedInjury = null;
 
     if (object.functionCode == globals.FunctionCode.success) {
       setState(() {
-        globals.selectedCompetition!.stations.removeWhere(
-          (station) => station.id == selectedStation!.id,
+        globals.selectedStation!.injuries.removeWhere(
+          (injury) => injury.id == injuryId,
         );
       });
       Navigator.pop(context);
@@ -63,26 +63,23 @@ class _StationsState extends State<Stations> {
     }
   }
 
-  handleStationCreate({
+  handleInjuryCreate({
     required String token,
-    required Map<String, dynamic> station,
+    required Map<String, dynamic> injury,
   }) async {
     setState(() {
       loading["create"] = true;
     });
-    station["type"] = globals.getStationTypeId(type: station["type"]);
-    station["tier"] = globals.getStationTierId(tier: station["tier"]);
 
-    print("Creating station with data: $station");
-    var object = await functions.createStation(
+    print("Creating injury with data: $injury");
+    var object = await functions.createInjury(
       token: token,
-      station: station,
-      competitionId: globals.selectedCompetition!.id,
+      injury: injury,
     );
 
     if (object.functionCode == globals.FunctionCode.success) {
-      globals.selectedCompetition!.stations = [];
-      object = await functions.getStations(
+      globals.selectedStation!.injuries = [];
+      object = await functions.getInjuries(
         token: token,
       );
       setState(() {
@@ -110,27 +107,24 @@ class _StationsState extends State<Stations> {
     }
   }
 
-  handleStationEdit({
+  handleInjuryEdit({
     required String token,
-    required Map<String, dynamic> station,
+    required Map<String, dynamic> injury,
   }) async {
     setState(() {
       loading["edit"] = true;
     });
 
-    station["type"] = globals.getStationTypeId(type: station["type"]);
-    station["tier"] = globals.getStationTierId(tier: station["tier"]);
-
-    print("Editing station with data: $station");
-    var object = await functions.editStation(
+    print("Editing injury with data: $injury");
+    var object = await functions.editInjury(
       token: token,
-      station: station,
-      stationId: selectedStation!.id,
+      injury: injury,
+      injuryId: selectedInjury!.id,
     );
 
     if (object.functionCode == globals.FunctionCode.success) {
-      globals.selectedCompetition!.stations = [];
-      object = await functions.getStations(
+      globals.selectedStation!.injuries = [];
+      object = await functions.getInjuries(
         token: token,
       );
       setState(() {
@@ -183,69 +177,89 @@ class _StationsState extends State<Stations> {
                               Row(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child:
-                                        Text(globals.selectedCompetition!.type),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 8, 0, 0),
+                                    child: Text(
+                                        "${globals.selectedStation!.title} - ID: ${globals.selectedStation!.id}"),
                                   ),
                                   const Spacer(),
                                   ElevatedButton(
                                     onPressed: () {
-                                      globals.loadMode = "competitions";
+                                      globals.selectedStation!.injuries = [];
                                       Navigator.pushReplacementNamed(
-                                          context, "/loading");
+                                          context, "/stations");
                                     },
                                     child: const Text("Zpět"),
                                   ),
                                 ],
                               ),
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      globals
-                                          .selectedCompetition!.startDateString,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 30),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      globals
-                                          .selectedCompetition!.endDateString,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 30),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                        globals.selectedCompetition!.state),
-                                  ),
-                                ],
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
+                                child: Text(
+                                  "Číslo: ${globals.selectedStation!.number}",
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
+                                child: Text(
+                                  "Typ: ${globals.stationTypes[globals.selectedStation!.type]}",
+                                ),
                               ),
                             ],
                           ),
                         ),
                         const Divider(),
-                        ListTile(
-                          leading: const Icon(Icons.home),
-                          title: const Text("Přehled soutěže"),
-                          onTap: () {
-                            Navigator.pushNamed(context, "/competition");
-                          },
-                        ),
-                        const ListTile(
-                          leading: Icon(Icons.room),
-                          title: Text("Stanoviště"),
-                          selected: true,
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.people),
-                          title: const Text("Týmy"),
-                          onTap: () {
-                            Navigator.pushNamed(context, "/teams");
-                          },
-                        ),
+                        for (globals.Injury injury
+                            in globals.selectedStation!.injuries)
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              minHeight: 80,
+                              minWidth: 330,
+                            ),
+                            child: Card(
+                              color: selectedInjury == injury
+                                  ? Colors.red
+                                  : Colors.white,
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    if (selectedInjury == injury) {
+                                      selectedInjury = null;
+                                    } else {
+                                      selectedInjury = injury;
+                                    }
+                                  });
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              8, 8, 0, 0),
+                                          child: Text(
+                                              "${injury.situation} - ID: ${injury.id}"),
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(8, 8, 0, 0),
+                                      child: Text("Číslo: ${injury.letter}"),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(8, 8, 0, 8),
+                                      child: Text(
+                                        "Typ: ${globals.stationTypes[injury.diagnosis]}",
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -272,7 +286,7 @@ class _StationsState extends State<Stations> {
                                   return StatefulBuilder(
                                     builder: (context, setState) {
                                       return AlertDialog(
-                                        title: const Text("Přidání stanoviště"),
+                                        title: const Text("Přidání zranění"),
                                         content: loading["create"] == true
                                             ? Column(
                                                 mainAxisSize: MainAxisSize.min,
@@ -284,12 +298,12 @@ class _StationsState extends State<Stations> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   TextFormField(
-                                                    initialValue: newStation[
+                                                    initialValue: newInjury[
                                                                     "number"]
                                                                 .toString() ==
                                                             "null"
                                                         ? ""
-                                                        : newStation["number"]
+                                                        : newInjury["number"]
                                                             .toString(),
                                                     keyboardType:
                                                         TextInputType.number,
@@ -299,30 +313,29 @@ class _StationsState extends State<Stations> {
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newStation["number"] =
+                                                        newInjury["number"] =
                                                             int.tryParse(value);
                                                       });
                                                     },
                                                   ),
                                                   TextFormField(
                                                     initialValue:
-                                                        newStation["title"],
+                                                        newInjury["title"],
                                                     decoration:
                                                         const InputDecoration(
                                                       labelText: "Název",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newStation["title"] =
+                                                        newInjury["title"] =
                                                             value;
                                                       });
                                                     },
                                                   ),
-                                                  //station type
                                                   DropdownButton(
                                                     hint: const Text(
-                                                        "Typ stanoviště"),
-                                                    value: newStation["type"],
+                                                        "Typ zranění"),
+                                                    value: newInjury["type"],
                                                     items: globals
                                                         .stationTypes.values
                                                         .map((e) =>
@@ -333,16 +346,15 @@ class _StationsState extends State<Stations> {
                                                         .toList(),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newStation["type"] =
+                                                        newInjury["type"] =
                                                             value;
                                                       });
                                                     },
                                                   ),
-                                                  //station tier
                                                   DropdownButton(
                                                     hint: const Text(
-                                                        "Druh stanoviště"),
-                                                    value: newStation["tier"],
+                                                        "Druh zranění"),
+                                                    value: newInjury["tier"],
                                                     items: globals
                                                         .stationTiers.values
                                                         .map((e) {
@@ -353,7 +365,7 @@ class _StationsState extends State<Stations> {
                                                     }).toList(),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newStation["tier"] =
+                                                        newInjury["tier"] =
                                                             value;
                                                       });
                                                     },
@@ -370,7 +382,7 @@ class _StationsState extends State<Stations> {
                                             onPressed: loading["create"] == true
                                                 ? null
                                                 : () {
-                                                    newStation = {};
+                                                    newInjury = {};
                                                     Navigator.pop(context);
                                                   },
                                             child: const Text(
@@ -387,24 +399,22 @@ class _StationsState extends State<Stations> {
                                             ),
                                             onPressed: loading["create"] == true
                                                 ? null
-                                                : (newStation["title"] !=
+                                                : (newInjury["title"] != null &&
+                                                        newInjury["tier"] !=
                                                             null &&
-                                                        newStation["tier"] !=
+                                                        newInjury["type"] !=
                                                             null &&
-                                                        newStation["type"] !=
-                                                            null &&
-                                                        newStation["number"] !=
+                                                        newInjury["number"] !=
                                                             null)
                                                     ? () async {
-                                                        await handleStationCreate(
+                                                        await handleInjuryCreate(
                                                           token: globals
                                                               .user.token!,
-                                                          station: newStation,
+                                                          injury: newInjury,
                                                         );
                                                       }
                                                     : null,
-                                            child:
-                                                const Text("Přidat stanoviště"),
+                                            child: const Text("Přidat zranění"),
                                           ),
                                         ],
                                       );
@@ -422,15 +432,15 @@ class _StationsState extends State<Stations> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red),
                             ),
-                            onPressed: selectedStation == null
+                            onPressed: selectedInjury == null
                                 ? null
                                 : () {
-                                    editStation = selectedStation!.map;
-                                    editStation["tier"] = globals
-                                        .stationTiers[editStation["tier"]];
-                                    editStation["type"] = globals
-                                        .stationTypes[editStation["type"]];
-                                    print(editStation);
+                                    editInjury = selectedInjury!.map;
+                                    editInjury["tier"] = globals
+                                        .stationTiers[editInjury["tier"]];
+                                    editInjury["type"] = globals
+                                        .stationTypes[editInjury["type"]];
+                                    print(editInjury);
                                     showDialog(
                                       barrierDismissible: false,
                                       context: context,
@@ -438,8 +448,8 @@ class _StationsState extends State<Stations> {
                                         return StatefulBuilder(
                                           builder: (context, setState) {
                                             return AlertDialog(
-                                              title: const Text(
-                                                  "Úprava stanoviště"),
+                                              title:
+                                                  const Text("Úprava zranění"),
                                               content: loading["edit"] == true
                                                   ? Column(
                                                       mainAxisSize:
@@ -453,12 +463,12 @@ class _StationsState extends State<Stations> {
                                                           MainAxisSize.min,
                                                       children: [
                                                         TextFormField(
-                                                          initialValue: editStation[
+                                                          initialValue: editInjury[
                                                                           "number"]
                                                                       .toString() ==
                                                                   "null"
                                                               ? ""
-                                                              : editStation[
+                                                              : editInjury[
                                                                       "number"]
                                                                   .toString(),
                                                           keyboardType:
@@ -470,7 +480,7 @@ class _StationsState extends State<Stations> {
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editStation[
+                                                              editInjury[
                                                                       "number"] =
                                                                   int.tryParse(
                                                                       value);
@@ -479,7 +489,7 @@ class _StationsState extends State<Stations> {
                                                         ),
                                                         TextFormField(
                                                           initialValue:
-                                                              editStation[
+                                                              editInjury[
                                                                   "title"],
                                                           decoration:
                                                               const InputDecoration(
@@ -487,17 +497,16 @@ class _StationsState extends State<Stations> {
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editStation[
+                                                              editInjury[
                                                                       "title"] =
                                                                   value;
                                                             });
                                                           },
                                                         ),
-                                                        //station competition
                                                         DropdownButton(
                                                           hint: const Text(
                                                               "Soutěž"),
-                                                          value: editStation[
+                                                          value: editInjury[
                                                               "competitionId"],
                                                           items: [
                                                             for (globals
@@ -514,17 +523,16 @@ class _StationsState extends State<Stations> {
                                                           ],
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editStation[
+                                                              editInjury[
                                                                       "competitionId"] =
                                                                   value;
                                                             });
                                                           },
                                                         ),
-                                                        //station type
                                                         DropdownButton(
                                                           hint: const Text(
-                                                              "Typ stanoviště"),
-                                                          value: editStation[
+                                                              "Typ zranění"),
+                                                          value: editInjury[
                                                               "type"],
                                                           items: [
                                                             for (String value
@@ -539,17 +547,16 @@ class _StationsState extends State<Stations> {
                                                           ],
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editStation[
+                                                              editInjury[
                                                                       "type"] =
                                                                   value;
                                                             });
                                                           },
                                                         ),
-                                                        //station tier
                                                         DropdownButton(
                                                           hint: const Text(
-                                                              "Druh stanoviště"),
-                                                          value: editStation[
+                                                              "Druh zranění"),
+                                                          value: editInjury[
                                                               "tier"],
                                                           items: [
                                                             for (String value
@@ -564,7 +571,7 @@ class _StationsState extends State<Stations> {
                                                           ],
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editStation[
+                                                              editInjury[
                                                                       "tier"] =
                                                                   value;
                                                             });
@@ -584,7 +591,7 @@ class _StationsState extends State<Stations> {
                                                       loading["edit"] == true
                                                           ? null
                                                           : () {
-                                                              editStation = {};
+                                                              editInjury = {};
                                                               Navigator.pop(
                                                                   context);
                                                             },
@@ -603,30 +610,29 @@ class _StationsState extends State<Stations> {
                                                   onPressed: loading["edit"] ==
                                                           true
                                                       ? null
-                                                      : (editStation[
-                                                                      "title"] !=
+                                                      : (editInjury["title"] !=
                                                                   null &&
-                                                              editStation[
+                                                              editInjury[
                                                                       "tier"] !=
                                                                   null &&
-                                                              editStation[
+                                                              editInjury[
                                                                       "type"] !=
                                                                   null &&
-                                                              editStation[
+                                                              editInjury[
                                                                       "number"] !=
                                                                   null)
                                                           ? () async {
-                                                              await handleStationEdit(
+                                                              await handleInjuryEdit(
                                                                 token: globals
                                                                     .user
                                                                     .token!,
-                                                                station:
-                                                                    editStation,
+                                                                injury:
+                                                                    editInjury,
                                                               );
                                                             }
                                                           : null,
                                                   child: const Text(
-                                                      "Upravit stanoviště"),
+                                                      "Upravit zranění"),
                                                 ),
                                               ],
                                             );
@@ -644,7 +650,7 @@ class _StationsState extends State<Stations> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red),
                             ),
-                            onPressed: selectedStation == null
+                            onPressed: selectedInjury == null
                                 ? null
                                 : () {
                                     showDialog(
@@ -654,8 +660,8 @@ class _StationsState extends State<Stations> {
                                         return StatefulBuilder(
                                           builder: (context, setState) {
                                             return AlertDialog(
-                                              title: const Text(
-                                                  "Smazání stanoviště"),
+                                              title:
+                                                  const Text("Smazání zranění"),
                                               content: loading["delete"] == true
                                                   ? Column(
                                                       mainAxisSize:
@@ -665,7 +671,7 @@ class _StationsState extends State<Stations> {
                                                       ],
                                                     )
                                                   : const Text(
-                                                      "Opravdu chcete smazat stanoviště?"),
+                                                      "Opravdu chcete smazat zranění?"),
                                               actions: [
                                                 TextButton(
                                                   onPressed:
@@ -694,17 +700,17 @@ class _StationsState extends State<Stations> {
                                                       loading["delete"] == true
                                                           ? null
                                                           : () async {
-                                                              await handleStationDelete(
+                                                              await handleInjuryDelete(
                                                                 token: globals
                                                                     .user
                                                                     .token!,
-                                                                stationId:
-                                                                    selectedStation!
+                                                                injuryId:
+                                                                    selectedInjury!
                                                                         .id,
                                                               );
                                                             },
                                                   child: const Text(
-                                                      "Smazat stanoviště"),
+                                                      "Smazat zranění"),
                                                 ),
                                               ],
                                             );
@@ -719,177 +725,50 @@ class _StationsState extends State<Stations> {
                       ),
                     ),
                     const Divider(),
-                    if (globals.selectedCompetition!.stations.isEmpty)
-                      const Center(
-                        child: Text(
-                          "Zatím nejsou přidány žádné stanoviště",
-                          style: TextStyle(fontSize: 20),
+                    if (selectedInjury != null)
+                      Card(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                              child: Text(
+                                  "Diagnóza: ${selectedInjury!.diagnosis}"),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                              child: Text("ID: ${selectedInjury!.id}"),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                              child: Text("Informace: ${selectedInjury!.info}"),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                              child: Text("Písmeno: ${selectedInjury!.letter}"),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                              child: Text(
+                                  "Maximální počet bodů: ${selectedInjury!.maximalPoints}"),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                              child: Text(
+                                  "Nezbytné vybavení: ${selectedInjury!.necessaryEquipment}"),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                              child: Text(
+                                  "ID rozhodčího: ${selectedInjury!.refereeId}"),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                              child:
+                                  Text("Situace: ${selectedInjury!.situation}"),
+                            ),
+                          ],
                         ),
-                      ),
-                    if (globals.selectedCompetition!.stations.isNotEmpty)
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Column(
-                            children: [
-                              const Text(
-                                "První stupeň",
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              for (globals.Station station in globals
-                                  .selectedCompetition!.stations
-                                  .where((element) => element.tier == 2))
-                                ConstrainedBox(
-                                  constraints: const BoxConstraints(
-                                    minHeight: 80,
-                                    minWidth: 330,
-                                  ),
-                                  child: Card(
-                                    color: selectedStation == station
-                                        ? Colors.red
-                                        : Colors.white,
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          if (selectedStation == station) {
-                                            selectedStation = null;
-                                          } else {
-                                            selectedStation = station;
-                                          }
-                                        });
-                                      },
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        8, 8, 0, 0),
-                                                child: Text(
-                                                    "${station.title} - ID: ${station.id}"),
-                                              ),
-                                              const SizedBox(
-                                                width: 20,
-                                              ),
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  station.injuries = [];
-                                                  globals.selectedStation =
-                                                      station;
-                                                  globals.loadMode = "injuries";
-                                                  Navigator
-                                                      .pushReplacementNamed(
-                                                          context, "/loading");
-                                                },
-                                                child: const Text("Otevřít"),
-                                              ),
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                8, 8, 0, 0),
-                                            child: Text(
-                                                "Číslo: ${station.number}"),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                8, 8, 0, 8),
-                                            child: Text(
-                                              "Typ: ${globals.stationTypes[station.type]}",
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                          const VerticalDivider(),
-                          Column(
-                            children: [
-                              const Text(
-                                "Druhý stupeň",
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              for (globals.Station station in globals
-                                  .selectedCompetition!.stations
-                                  .where((element) => element.tier == 3))
-                                ConstrainedBox(
-                                  constraints: const BoxConstraints(
-                                    minHeight: 80,
-                                    minWidth: 330,
-                                  ),
-                                  child: Card(
-                                    color: selectedStation == station
-                                        ? Colors.red
-                                        : Colors.white,
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          if (selectedStation == station) {
-                                            selectedStation = null;
-                                          } else {
-                                            selectedStation = station;
-                                          }
-                                        });
-                                      },
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        8, 8, 0, 0),
-                                                child: Text(
-                                                    "${station.title} - ID: ${station.id}"),
-                                              ),
-                                              const SizedBox(
-                                                width: 20,
-                                              ),
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  station.injuries = [];
-                                                  globals.selectedStation =
-                                                      station;
-
-                                                  globals.loadMode = "injuries";
-                                                  Navigator
-                                                      .pushReplacementNamed(
-                                                          context, "/loading");
-                                                },
-                                                child: const Text("Otevřít"),
-                                              ),
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                8, 8, 0, 0),
-                                            child: Text(
-                                                "Číslo: ${station.number}"),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                8, 8, 0, 8),
-                                            child: Text(
-                                              "Typ: ${globals.stationTypes[station.type]}",
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ],
                       ),
                   ],
                 ),

@@ -9,6 +9,7 @@ User user = User();
 NavigationDrawer navigationDrawer = NavigationDrawer();
 List<Competition> competitions = [];
 Competition? selectedCompetition;
+Station? selectedStation;
 String? loadMode;
 
 Map competitionTypes = {
@@ -203,7 +204,7 @@ class Injury {
   String situation;
   String diagnosis;
   int maximalPoints;
-  String necessaryThings;
+  String necessaryEquipment;
   String info;
   List<Figurant> figurants = [];
   List<ThreathmentProcedures> threathmentProcedures = [];
@@ -216,9 +217,23 @@ class Injury {
     required this.situation,
     required this.diagnosis,
     required this.maximalPoints,
-    required this.necessaryThings,
+    required this.necessaryEquipment,
     required this.info,
   });
+
+  Map<String, dynamic> get map {
+    return {
+      "id": id,
+      "stationId": stationId,
+      "refereeId": refereeId,
+      "letter": letter,
+      "situation": situation,
+      "diagnosis": diagnosis,
+      "maximalPoints": maximalPoints,
+      "necessaryEquipment": necessaryEquipment,
+      "info": info,
+    };
+  }
 }
 
 class Figurant {

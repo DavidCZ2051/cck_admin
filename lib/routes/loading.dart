@@ -29,7 +29,8 @@ class _LoadingState extends State<Loading> {
   Map description = {
     "competitions": 'Načítání soutěží...',
     "teams": 'Načítání týmů...',
-    "stations": 'Načítání stanovišť...'
+    "stations": 'Načítání stanovišť...',
+    "injuries": 'Načítání zranění...',
   };
 
   handleLoadingStuff() async {
@@ -113,6 +114,33 @@ class _LoadingState extends State<Loading> {
         return;
       }
       Navigator.pushReplacementNamed(context, "/competition");
+    } else if (globals.loadMode == "injuries") {
+      setState(() {
+        loadType = "injuries";
+      });
+      var object = await functions.getInjuries(token: globals.user.token!);
+      if (object.functionCode == globals.FunctionCode.error) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Chyba'),
+                content: Text(
+                    'Nepodařilo se načíst zranění. Chybový kód: ${object.statusCode}'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Zavřít'),
+                  ),
+                ],
+              );
+            });
+        Navigator.pushReplacementNamed(context, "/stations");
+        return;
+      }
+      Navigator.pushReplacementNamed(context, "/injuries");
     }
   }
 

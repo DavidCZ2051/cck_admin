@@ -10,6 +10,7 @@ import 'package:cck_admin/routes/loading.dart';
 import 'package:cck_admin/routes/competition.dart';
 import 'package:cck_admin/routes/teams.dart';
 import 'package:cck_admin/routes/stations.dart';
+import 'package:cck_admin/routes/injuries.dart';
 // files
 import 'package:cck_admin/globals.dart' as globals;
 
@@ -27,6 +28,7 @@ void main() {
         "/competition": (context) => const Competition(),
         "/teams": (context) => const Teams(),
         "/stations": (context) => const Stations(),
+        "/injuries": (context) => const Injuries(),
       },
       title: "ČČK Admin",
       color: Colors.red,
