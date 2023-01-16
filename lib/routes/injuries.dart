@@ -245,15 +245,8 @@ class _InjuriesState extends State<Injuries> {
                                     ),
                                     Padding(
                                       padding:
-                                          const EdgeInsets.fromLTRB(8, 8, 0, 0),
-                                      child: Text("Číslo: ${injury.letter}"),
-                                    ),
-                                    Padding(
-                                      padding:
                                           const EdgeInsets.fromLTRB(8, 8, 0, 8),
-                                      child: Text(
-                                        "Typ: ${globals.stationTypes[injury.diagnosis]}",
-                                      ),
+                                      child: Text("Písmeno: ${injury.letter}"),
                                     ),
                                   ],
                                 ),
@@ -298,75 +291,84 @@ class _InjuriesState extends State<Injuries> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   TextFormField(
-                                                    initialValue: newInjury[
-                                                                    "number"]
-                                                                .toString() ==
-                                                            "null"
-                                                        ? ""
-                                                        : newInjury["number"]
-                                                            .toString(),
+                                                    initialValue:
+                                                        newInjury["situation"],
                                                     keyboardType:
                                                         TextInputType.number,
                                                     decoration:
                                                         const InputDecoration(
-                                                      labelText: "Číslo",
+                                                      labelText: "Situace",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newInjury["number"] =
-                                                            int.tryParse(value);
+                                                        newInjury["situation"] =
+                                                            value;
                                                       });
                                                     },
                                                   ),
                                                   TextFormField(
                                                     initialValue:
-                                                        newInjury["title"],
+                                                        newInjury["diagnosis"],
                                                     decoration:
                                                         const InputDecoration(
-                                                      labelText: "Název",
+                                                      labelText: "Diagnóza",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newInjury["title"] =
+                                                        newInjury["diagnosis"] =
                                                             value;
                                                       });
                                                     },
                                                   ),
-                                                  DropdownButton(
-                                                    hint: const Text(
-                                                        "Typ zranění"),
-                                                    value: newInjury["type"],
-                                                    items: globals
-                                                        .stationTypes.values
-                                                        .map((e) =>
-                                                            DropdownMenuItem(
-                                                              value: e,
-                                                              child: Text(e),
-                                                            ))
-                                                        .toList(),
+                                                  TextFormField(
+                                                    initialValue: newInjury[
+                                                        "necessaryEquipment"],
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      labelText:
+                                                          "Nezbytné vybavení",
+                                                    ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newInjury["type"] =
+                                                        newInjury[
+                                                                "necessaryEquipment"] =
                                                             value;
                                                       });
                                                     },
                                                   ),
-                                                  DropdownButton(
-                                                    hint: const Text(
-                                                        "Druh zranění"),
-                                                    value: newInjury["tier"],
-                                                    items: globals
-                                                        .stationTiers.values
-                                                        .map((e) {
-                                                      return DropdownMenuItem(
-                                                        value: e,
-                                                        child: Text(e),
-                                                      );
-                                                    }).toList(),
+                                                  TextFormField(
+                                                    initialValue:
+                                                        newInjury["info"],
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      labelText: "Informace",
+                                                    ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newInjury["tier"] =
+                                                        newInjury["info"] =
                                                             value;
+                                                      });
+                                                    },
+                                                  ),
+                                                  TextFormField(
+                                                    initialValue: newInjury[
+                                                                    "maximalPoints"]
+                                                                .toString() ==
+                                                            "null"
+                                                        ? ""
+                                                        : newInjury[
+                                                                "maximalPoints"]
+                                                            .toString(),
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      labelText:
+                                                          "Maximální počet bodů",
+                                                    ),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newInjury[
+                                                                "maximalPoints"] =
+                                                            int.tryParse(value);
                                                       });
                                                     },
                                                   ),
