@@ -7,7 +7,7 @@ import Foundation
 
 import bitsdojo_window_macos
 import flutter_secure_storage_macos
-import shared_preferences_macos
+import shared_preferences_foundation
 import window_size
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
