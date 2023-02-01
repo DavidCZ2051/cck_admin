@@ -470,10 +470,6 @@ class _InjuriesState extends State<Injuries> {
                                 ? null
                                 : () {
                                     editInjury = selectedInjury!.map;
-                                    editInjury["tier"] = globals
-                                        .stationTiers[editInjury["tier"]];
-                                    editInjury["type"] = globals
-                                        .stationTypes[editInjury["type"]];
                                     print(editInjury);
                                     showDialog(
                                       barrierDismissible: false,
@@ -497,117 +493,119 @@ class _InjuriesState extends State<Injuries> {
                                                           MainAxisSize.min,
                                                       children: [
                                                         TextFormField(
-                                                          initialValue: editInjury[
-                                                                          "number"]
-                                                                      .toString() ==
-                                                                  "null"
-                                                              ? ""
-                                                              : editInjury[
-                                                                      "number"]
-                                                                  .toString(),
+                                                          initialValue:
+                                                              editInjury[
+                                                                  "situation"],
                                                           keyboardType:
                                                               TextInputType
                                                                   .number,
                                                           decoration:
                                                               const InputDecoration(
-                                                            labelText: "Číslo",
+                                                            labelText:
+                                                                "Situace",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
                                                               editInjury[
-                                                                      "number"] =
-                                                                  int.tryParse(
-                                                                      value);
+                                                                      "situation"] =
+                                                                  value;
                                                             });
                                                           },
                                                         ),
                                                         TextFormField(
                                                           initialValue:
                                                               editInjury[
-                                                                  "title"],
+                                                                  "diagnosis"],
                                                           decoration:
                                                               const InputDecoration(
-                                                            labelText: "Název",
+                                                            labelText:
+                                                                "Diagnóza",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
                                                               editInjury[
-                                                                      "title"] =
+                                                                      "diagnosis"] =
                                                                   value;
                                                             });
                                                           },
                                                         ),
                                                         DropdownButton(
                                                           hint: const Text(
-                                                              "Soutěž"),
+                                                              "Písmeno"),
                                                           value: editInjury[
-                                                              "competitionId"],
-                                                          items: [
-                                                            for (globals
-                                                                    .Competition competition
-                                                                in globals
-                                                                    .competitions)
-                                                              DropdownMenuItem(
-                                                                value:
-                                                                    competition
-                                                                        .id,
-                                                                child: Text(
-                                                                    "${competition.type} (${competition.startDateString} - ${competition.endDateString})"),
-                                                              ),
+                                                              "letter"],
+                                                          items: const [
+                                                            DropdownMenuItem(
+                                                              value: "A",
+                                                              child: Text("A"),
+                                                            ),
+                                                            DropdownMenuItem(
+                                                              value: "B",
+                                                              child: Text("B"),
+                                                            ),
                                                           ],
                                                           onChanged: (value) {
                                                             setState(() {
                                                               editInjury[
-                                                                      "competitionId"] =
+                                                                      "letter"] =
+                                                                  value
+                                                                      .toString();
+                                                            });
+                                                          },
+                                                        ),
+                                                        TextFormField(
+                                                          initialValue: editInjury[
+                                                              "necessaryEquipment"],
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText:
+                                                                "Nezbytné vybavení",
+                                                          ),
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              editInjury[
+                                                                      "necessaryEquipment"] =
                                                                   value;
                                                             });
                                                           },
                                                         ),
-                                                        DropdownButton(
-                                                          hint: const Text(
-                                                              "Typ zranění"),
-                                                          value: editInjury[
-                                                              "type"],
-                                                          items: [
-                                                            for (String value
-                                                                in globals
-                                                                    .stationTypes
-                                                                    .values)
-                                                              DropdownMenuItem(
-                                                                value: value,
-                                                                child:
-                                                                    Text(value),
-                                                              ),
-                                                          ],
+                                                        TextFormField(
+                                                          initialValue:
+                                                              editInjury[
+                                                                  "info"],
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText:
+                                                                "Informace",
+                                                          ),
                                                           onChanged: (value) {
                                                             setState(() {
                                                               editInjury[
-                                                                      "type"] =
+                                                                      "info"] =
                                                                   value;
                                                             });
                                                           },
                                                         ),
-                                                        DropdownButton(
-                                                          hint: const Text(
-                                                              "Druh zranění"),
-                                                          value: editInjury[
-                                                              "tier"],
-                                                          items: [
-                                                            for (String value
-                                                                in globals
-                                                                    .stationTiers
-                                                                    .values)
-                                                              DropdownMenuItem(
-                                                                value: value,
-                                                                child:
-                                                                    Text(value),
-                                                              ),
-                                                          ],
+                                                        TextFormField(
+                                                          initialValue: editInjury[
+                                                                          "maximalPoints"]
+                                                                      .toString() ==
+                                                                  "null"
+                                                              ? ""
+                                                              : editInjury[
+                                                                      "maximalPoints"]
+                                                                  .toString(),
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText:
+                                                                "Maximální počet bodů",
+                                                          ),
                                                           onChanged: (value) {
                                                             setState(() {
                                                               editInjury[
-                                                                      "tier"] =
-                                                                  value;
+                                                                      "maximalPoints"] =
+                                                                  int.tryParse(
+                                                                      value);
                                                             });
                                                           },
                                                         ),
@@ -644,16 +642,23 @@ class _InjuriesState extends State<Injuries> {
                                                   onPressed: loading["edit"] ==
                                                           true
                                                       ? null
-                                                      : (editInjury["title"] !=
+                                                      : (editInjury[
+                                                                      "letter"] !=
                                                                   null &&
                                                               editInjury[
-                                                                      "tier"] !=
+                                                                      "situation"] !=
                                                                   null &&
                                                               editInjury[
-                                                                      "type"] !=
+                                                                      "diagnosis"] !=
                                                                   null &&
                                                               editInjury[
-                                                                      "number"] !=
+                                                                      "necessaryEquipment"] !=
+                                                                  null &&
+                                                              editInjury[
+                                                                      "info"] !=
+                                                                  null &&
+                                                              editInjury[
+                                                                      "maximalPoints"] !=
                                                                   null)
                                                           ? () async {
                                                               await handleInjuryEdit(

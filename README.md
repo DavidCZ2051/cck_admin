@@ -53,7 +53,7 @@ Release bude muset být hotový ke konci února. Oficiální první spuštění 
 
 - [x] GET List Injuries
 - [x] POST Create Injury
-- [ ] PUT Update Injury
+- [x] PUT Update Injury
 - [x] DEL Delete Injury
 
 - [ ] GET List Figurants
