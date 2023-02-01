@@ -52,7 +52,7 @@ Release bude muset být hotový ke konci února. Oficiální první spuštění 
 - [x] DEL Delete Station
 
 - [x] GET List Injuries
-- [ ] POST Create Injury
+- [x] POST Create Injury
 - [ ] PUT Update Injury
 - [x] DEL Delete Injury
 

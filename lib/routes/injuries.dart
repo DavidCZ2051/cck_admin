@@ -71,6 +71,9 @@ class _InjuriesState extends State<Injuries> {
       loading["create"] = true;
     });
 
+    injury["stationId"] = globals.selectedStation!.id;
+    injury["refereeId"] = 2; //TODO: repair
+
     print("Creating injury with data: $injury");
     var object = await functions.createInjury(
       token: token,
@@ -320,6 +323,26 @@ class _InjuriesState extends State<Injuries> {
                                                       });
                                                     },
                                                   ),
+                                                  DropdownButton(
+                                                    hint: const Text("Písmeno"),
+                                                    value: newInjury["letter"],
+                                                    items: const [
+                                                      DropdownMenuItem(
+                                                        value: "A",
+                                                        child: Text("A"),
+                                                      ),
+                                                      DropdownMenuItem(
+                                                        value: "B",
+                                                        child: Text("B"),
+                                                      ),
+                                                    ],
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newInjury["letter"] =
+                                                            value.toString();
+                                                      });
+                                                    },
+                                                  ),
                                                   TextFormField(
                                                     initialValue: newInjury[
                                                         "necessaryEquipment"],
@@ -401,12 +424,21 @@ class _InjuriesState extends State<Injuries> {
                                             ),
                                             onPressed: loading["create"] == true
                                                 ? null
-                                                : (newInjury["title"] != null &&
-                                                        newInjury["tier"] !=
+                                                : (newInjury["letter"] !=
                                                             null &&
-                                                        newInjury["type"] !=
+                                                        newInjury[
+                                                                "situation"] !=
                                                             null &&
-                                                        newInjury["number"] !=
+                                                        newInjury[
+                                                                "diagnosis"] !=
+                                                            null &&
+                                                        newInjury[
+                                                                "necessaryEquipment"] !=
+                                                            null &&
+                                                        newInjury["info"] !=
+                                                            null &&
+                                                        newInjury[
+                                                                "maximalPoints"] !=
                                                             null)
                                                     ? () async {
                                                         await handleInjuryCreate(
