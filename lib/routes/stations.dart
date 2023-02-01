@@ -43,8 +43,6 @@ class _StationsState extends State<Stations> {
       loading["delete"] = false;
     });
     setstate();
-    selectedStation = null;
-
     if (object.functionCode == globals.FunctionCode.success) {
       setState(() {
         globals.selectedCompetition!.stations.removeWhere(
@@ -61,6 +59,7 @@ class _StationsState extends State<Stations> {
             );
           });
     }
+    selectedStation = null;
   }
 
   handleStationCreate({

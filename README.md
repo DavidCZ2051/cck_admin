@@ -39,22 +39,22 @@ Release bude muset být hotový ke konci února. Oficiální první spuštění 
 
 # TODO Endpoints
 
-- [ ] GET Login
+- [x] GET Login
 
-- [ ] GET List Competitions
-- [ ] POST Create Competition
-- [ ] PUT Update Competition
-- [ ] DEL Delete Competition
+- [x] GET List Competitions
+- [x] POST Create Competition
+- [x] PUT Update Competition
+- [x] DEL Delete Competition
 
-- [ ] GET List Stations
-- [ ] POST Create Station
-- [ ] PUT Update Station
-- [ ] DEL Delete Station
+- [x] GET List Stations
+- [x] POST Create Station
+- [x] PUT Update Station
+- [x] DEL Delete Station
 
-- [ ] GET List Injuries
+- [x] GET List Injuries
 - [ ] POST Create Injury
 - [ ] PUT Update Injury
-- [ ] DEL Delete Injury
+- [x] DEL Delete Injury
 
 - [ ] GET List Figurants
 - [ ] POST Create Figurant
