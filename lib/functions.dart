@@ -253,6 +253,36 @@ Future<globals.FunctionObject> deleteTeam(
   }
 }
 
+Future<globals.FunctionObject> editTeam({
+  required String token,
+  required Map<String, dynamic> team,
+}) async {
+  print(team);
+
+  Response response = await put(
+    Uri.parse("${globals.url}/api/teams/${team['id']}"),
+    headers: {
+      'token': token,
+    },
+    body: {
+      'number': team['number'].toString(),
+      'organization': team['organization'],
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
 // Stations
 
 Future<globals.FunctionObject> getStations({required String token}) async {

@@ -14,6 +14,7 @@ class Teams extends StatefulWidget {
 
 class _TeamsState extends State<Teams> {
   Map<String, dynamic> newTeam = {};
+  Map<String, dynamic> editTeam = {};
   globals.Team? selectedTeam;
   Map<String, bool> loading = {
     "delete": false,
@@ -33,10 +34,10 @@ class _TeamsState extends State<Teams> {
       loading["delete"] = true;
     });
     setstate();
-    print("Deleting competition with id: $teamId");
+    print("Deleting team with id: $teamId");
     var object = await functions.deleteTeam(
       token: token,
-      teamId: selectedTeam!.id,
+      teamId: teamId,
     );
     setState(() {
       loading["delete"] = false;
@@ -45,7 +46,7 @@ class _TeamsState extends State<Teams> {
 
     if (object.functionCode == globals.FunctionCode.success) {
       setState(() {
-        globals.competitions.removeWhere(
+        globals.selectedCompetition!.teams.removeWhere(
           (team) => team.id == teamId,
         );
       });
@@ -63,33 +64,96 @@ class _TeamsState extends State<Teams> {
 
   handleTeamCreate({
     required String token,
-    required Map<String, dynamic> competition,
+    required Map<String, dynamic> team,
   }) async {
+    team["competitionId"] = globals.selectedCompetition!.id;
+
     setState(() {
       loading["create"] = true;
     });
-    competition["startDate"] = functions.formatDateTime(
-      dateTime: competition["startDate"],
-    );
-    competition["endDate"] = functions.formatDateTime(
-      dateTime: competition["endDate"],
-    );
-    competition["type"] = globals.getCompetitionTypeId(
-      type: competition["type"],
-    );
-    print("Creating competition with data: $competition");
-    var object = await functions.createCompetition(
+    setstate();
+
+    print("Creating team with data: $team");
+    var object = await functions.createTeam(
       token: token,
-      competition: competition,
+      team: team,
     );
-    setState(() {
-      loading["create"] = false;
-    });
 
     if (object.functionCode == globals.FunctionCode.success) {
-      setState(() {});
-      Navigator.pop(context);
+      globals.selectedCompetition!.teams = [];
+      object = await functions.getTeams(
+        token: token,
+      );
+      setState(() {
+        loading["create"] = false;
+      });
+      setstate();
+      if (object.functionCode == globals.FunctionCode.success) {
+        Navigator.pop(context);
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return widgets.ErrorDialog(
+                statusCode: object.statusCode!,
+              );
+            });
+      }
     } else {
+      setState(() {
+        loading["create"] = false;
+      });
+      setstate();
+      showDialog(
+          context: context,
+          builder: (context) {
+            return widgets.ErrorDialog(
+              statusCode: object.statusCode!,
+            );
+          });
+    }
+  }
+
+  handleTeamEdit({
+    required String token,
+    required Map<String, dynamic> team,
+  }) async {
+    setState(() {
+      loading["edit"] = true;
+    });
+    setstate();
+
+    print("Editing team with data: $team");
+    var object = await functions.editTeam(
+      token: token,
+      team: team,
+    );
+
+    if (object.functionCode == globals.FunctionCode.success) {
+      globals.selectedCompetition!.teams = [];
+      object = await functions.getTeams(
+        token: token,
+      );
+      setState(() {
+        loading["edit"] = false;
+      });
+      setstate();
+      if (object.functionCode == globals.FunctionCode.success) {
+        Navigator.pop(context);
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return widgets.ErrorDialog(
+                statusCode: object.statusCode!,
+              );
+            });
+      }
+    } else {
+      setState(() {
+        loading["edit"] = false;
+      });
+      setstate();
       showDialog(
           context: context,
           builder: (context) {
@@ -224,7 +288,43 @@ class _TeamsState extends State<Teams> {
                                               )
                                             : Column(
                                                 mainAxisSize: MainAxisSize.min,
-                                                children: [],
+                                                children: [
+                                                  TextFormField(
+                                                    initialValue: newTeam[
+                                                                    "number"]
+                                                                .toString() ==
+                                                            "null"
+                                                        ? ""
+                                                        : newTeam["number"]
+                                                            .toString(),
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      labelText: "Číslo",
+                                                    ),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newTeam["number"] =
+                                                            int.tryParse(value);
+                                                      });
+                                                    },
+                                                  ),
+                                                  TextFormField(
+                                                    initialValue:
+                                                        newTeam["organization"],
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      labelText: "Organizace",
+                                                    ),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newTeam["organization"] =
+                                                            value;
+                                                      });
+                                                    },
+                                                  ),
+                                                ],
                                               ),
                                         actions: [
                                           TextButton(
@@ -236,6 +336,7 @@ class _TeamsState extends State<Teams> {
                                             onPressed: loading["create"] == true
                                                 ? null
                                                 : () {
+                                                    newTeam = {};
                                                     Navigator.pop(context);
                                                   },
                                             child: const Text(
@@ -250,10 +351,11 @@ class _TeamsState extends State<Teams> {
                                                   MaterialStateProperty.all(
                                                       Colors.red),
                                             ),
-                                            onPressed: () {},
-                                            /* loading["create"] == true
+                                            onPressed: loading["create"] == true
                                                 ? null
-                                                : (true) // here should be some validation
+                                                : (newTeam["number"] == null ||
+                                                        newTeam["organization"] ==
+                                                            null)
                                                     ? null
                                                     : () async {
                                                         await handleTeamCreate(
@@ -261,7 +363,9 @@ class _TeamsState extends State<Teams> {
                                                               .user.token!,
                                                           team: newTeam,
                                                         );
-                                                      }, */
+
+                                                        newTeam = {};
+                                                      },
                                             child: const Text("Přidat tým"),
                                           ),
                                         ],
@@ -283,54 +387,125 @@ class _TeamsState extends State<Teams> {
                             onPressed: selectedTeam == null
                                 ? null
                                 : () {
-                                    print(globals.competitions);
-                                    showGeneralDialog(
-                                        context: context,
-                                        pageBuilder: (context, animation,
-                                            secondaryAnimation) {
-                                          return AlertDialog(
-                                            title: const Text("Úprava soutěže"),
-                                            content: Column(
-                                              children: [
-                                                Row(
-                                                  children: const [
-                                                    Text("Typ: "),
-                                                    Text("Předkolo"),
-                                                  ],
-                                                )
+                                    editTeam = selectedTeam!.map;
+                                    showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (context) {
+                                        return StatefulBuilder(
+                                          builder: (context, setState) {
+                                            return AlertDialog(
+                                              title: const Text("Úprava týmu"),
+                                              content: loading["edit"] == true
+                                                  ? Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: const [
+                                                        CircularProgressIndicator(),
+                                                      ],
+                                                    )
+                                                  : Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        TextFormField(
+                                                          initialValue: editTeam[
+                                                                          "number"]
+                                                                      .toString() ==
+                                                                  "null"
+                                                              ? ""
+                                                              : editTeam[
+                                                                      "number"]
+                                                                  .toString(),
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .number,
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText: "Číslo",
+                                                          ),
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              editTeam[
+                                                                      "number"] =
+                                                                  int.tryParse(
+                                                                      value);
+                                                            });
+                                                          },
+                                                        ),
+                                                        TextFormField(
+                                                          initialValue: editTeam[
+                                                              "organization"],
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText:
+                                                                "Organizace",
+                                                          ),
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              editTeam[
+                                                                      "organization"] =
+                                                                  value;
+                                                            });
+                                                          },
+                                                        ),
+                                                      ],
+                                                    ),
+                                              actions: [
+                                                TextButton(
+                                                  style: ButtonStyle(
+                                                    overlayColor:
+                                                        MaterialStateProperty
+                                                            .all(
+                                                                Colors.red[50]),
+                                                  ),
+                                                  onPressed:
+                                                      loading["edit"] == true
+                                                          ? null
+                                                          : () {
+                                                              editTeam = {};
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                  child: const Text(
+                                                    "Zrušit",
+                                                    style: TextStyle(
+                                                        color: Colors.red),
+                                                  ),
+                                                ),
+                                                ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all(Colors.red),
+                                                  ),
+                                                  onPressed: loading["edit"] ==
+                                                          true
+                                                      ? null
+                                                      : (editTeam["number"] ==
+                                                                  null ||
+                                                              editTeam[
+                                                                      "organization"] ==
+                                                                  null)
+                                                          ? null
+                                                          : () async {
+                                                              await handleTeamEdit(
+                                                                token: globals
+                                                                    .user
+                                                                    .token!,
+                                                                team: editTeam,
+                                                              );
+                                                              editTeam = {};
+                                                            },
+                                                  child:
+                                                      const Text("Upravit tým"),
+                                                ),
                                               ],
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                style: ButtonStyle(
-                                                  overlayColor:
-                                                      MaterialStateProperty.all(
-                                                          Colors.red[50]),
-                                                ),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: const Text(
-                                                  "Zrušit úpravu",
-                                                  style: TextStyle(
-                                                      color: Colors.red),
-                                                ),
-                                              ),
-                                              ElevatedButton(
-                                                style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          Colors.red),
-                                                ),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: const Text(
-                                                    "Aplikovat změny"),
-                                              ),
-                                            ],
-                                          );
-                                        });
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
                                   },
                             label: const Text("Upravit"),
                           ),
@@ -351,8 +526,7 @@ class _TeamsState extends State<Teams> {
                                         return StatefulBuilder(
                                           builder: (context, setState) {
                                             return AlertDialog(
-                                              title:
-                                                  const Text("Smazání soutěže"),
+                                              title: const Text("Smazání týmu"),
                                               content: loading["delete"] == true
                                                   ? Column(
                                                       mainAxisSize:
@@ -362,7 +536,7 @@ class _TeamsState extends State<Teams> {
                                                       ],
                                                     )
                                                   : const Text(
-                                                      "Opravdu chcete smazat soutěž?"),
+                                                      "Opravdu chcete smazat tým?"),
                                               actions: [
                                                 TextButton(
                                                   onPressed:
@@ -400,8 +574,8 @@ class _TeamsState extends State<Teams> {
                                                                         .id,
                                                               );
                                                             },
-                                                  child: const Text(
-                                                      "Smazat soutěž"),
+                                                  child:
+                                                      const Text("Smazat tým"),
                                                 ),
                                               ],
                                             );

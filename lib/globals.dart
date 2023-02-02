@@ -126,6 +126,16 @@ class Team {
     required this.organization,
     this.points,
   });
+
+  Map<String, dynamic> get map {
+    return {
+      "id": id,
+      "competitionId": competitionId,
+      "number": number,
+      "organization": organization,
+      "points": points,
+    };
+  }
 }
 
 class Station {
