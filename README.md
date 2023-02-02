@@ -56,6 +56,16 @@ Release bude muset být hotový ke konci února. Oficiální první spuštění 
 - [x] PUT Update Injury
 - [x] DEL Delete Injury
 
+- [ ] GET List Teams
+- [ ] POST Create Team
+- [ ] PUT Update Team
+- [ ] DEL Delete Team
+
+- [ ] GET List Team Members
+- [ ] POST Create Team Member
+- [ ] PUT Update Team Member
+- [ ] DEL Delete Team Member
+
 - [ ] GET List Figurants
 - [ ] POST Create Figurant
 - [ ] PUT Update Figurant

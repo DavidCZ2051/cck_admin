@@ -450,10 +450,19 @@ class _TeamsState extends State<Teams> {
                                 children: [
                                   Row(
                                     children: [
-                                      Text("${team.number} - ID: ${team.id}"),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            8, 8, 0, 0),
+                                        child: Text(
+                                            "${team.number} - ID: ${team.id}"),
+                                      ),
                                     ],
                                   ),
-                                  Text(team.organization),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 4, 0, 8),
+                                    child: Text(team.organization),
+                                  ),
                                 ],
                               ),
                             ),
