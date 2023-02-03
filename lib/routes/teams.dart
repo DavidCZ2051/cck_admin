@@ -626,16 +626,30 @@ class _TeamsState extends State<Teams> {
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(
-                                            8, 8, 0, 0),
+                                            8, 8, 0, 2),
                                         child: Text(
                                             "${team.number} - ID: ${team.id}"),
+                                      ),
+                                      const SizedBox(width: 100),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pushReplacementNamed(
+                                              context, "/team");
+                                        },
+                                        child: const Text("Zobrazit členy"),
                                       ),
                                     ],
                                   ),
                                   Padding(
                                     padding:
-                                        const EdgeInsets.fromLTRB(8, 4, 0, 8),
+                                        const EdgeInsets.fromLTRB(8, 0, 0, 2),
                                     child: Text(team.organization),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 0, 0, 8),
+                                    child: Text(
+                                        "Počet členů: ${team.members.length.toString()}"),
                                   ),
                                 ],
                               ),

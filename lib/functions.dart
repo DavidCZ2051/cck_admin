@@ -283,6 +283,70 @@ Future<globals.FunctionObject> editTeam({
   }
 }
 
+// Team Members
+
+Future<globals.FunctionObject> getTeamMembers({required String token}) async {
+  Response response = await get(
+    Uri.parse("${globals.url}/api/teams/members"),
+    headers: {
+      'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    List data = jsonDecode(response.body);
+    for (Map member in data) {
+      for (globals.Competition competition in globals.competitions) {
+        for (globals.Team team in competition.teams) {
+          if (team.id == member['teamId']) {
+            team.members.add(globals.TeamMember(
+              id: member['id'],
+              teamId: member['teamId'],
+              firstName: member['firstName'],
+              lastName: member['lastName'],
+              type: member['type'],
+              phoneNumber: member['phoneNumber'],
+              birthDate: member['birthdate'],
+            ));
+          }
+        }
+      }
+    }
+
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> deleteTeamMember(
+    {required String token, required int teamId}) async {
+  Response response = await delete(
+    Uri.parse("${globals.url}/api/teams/members/$teamId"),
+    headers: {
+      'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
 // Stations
 
 Future<globals.FunctionObject> getStations({required String token}) async {

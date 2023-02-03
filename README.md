@@ -58,10 +58,10 @@ Release bude muset být hotový ke konci února. Oficiální první spuštění 
 
 - [x] GET List Teams
 - [x] POST Create Team
-- [ ] PUT Update Team
+- [?] PUT Update Team
 - [x] DEL Delete Team
 
-- [ ] GET List Team Members
+- [x] GET List Team Members
 - [ ] POST Create Team Member
 - [ ] PUT Update Team Member
 - [ ] DEL Delete Team Member

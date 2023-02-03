@@ -10,6 +10,7 @@ NavigationDrawer navigationDrawer = NavigationDrawer();
 List<Competition> competitions = [];
 Competition? selectedCompetition;
 Station? selectedStation;
+Team? selectedTeam;
 String? loadMode;
 
 Map competitionTypes = {
@@ -118,7 +119,7 @@ class Team {
   int number; // číslo týmu
   String organization; // organizace, ke které tým patří
   int? points; // počet bodů týmu
-  List<TeamMember> teamMembers = []; // členové týmu
+  List<TeamMember> members = []; // členové týmu
   Team({
     required this.id,
     required this.competitionId,
