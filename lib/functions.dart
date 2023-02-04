@@ -326,11 +326,77 @@ Future<globals.FunctionObject> getTeamMembers({required String token}) async {
 }
 
 Future<globals.FunctionObject> deleteTeamMember(
-    {required String token, required int teamId}) async {
+    {required String token, required int teamMemberId}) async {
   Response response = await delete(
-    Uri.parse("${globals.url}/api/teams/members/$teamId"),
+    Uri.parse("${globals.url}/api/teams/members/$teamMemberId"),
     headers: {
       'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> createTeamMember({
+  required String token,
+  required Map<String, dynamic> teamMember,
+}) async {
+  Response response = await post(
+    Uri.parse("${globals.url}/api/teams/members"),
+    headers: {
+      'token': token,
+    },
+    body: {
+      "teamId": teamMember['teamId'].toString(),
+      "firstName": teamMember['firstName'],
+      "lastName": teamMember['lastName'],
+      "type": teamMember['type'],
+      "phoneNumber": teamMember['phoneNumber'],
+      "birthdate": teamMember['birthdate'],
+    },
+  );
+
+  if (response.statusCode == 201) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> editTeamMember({
+  required String token,
+  required Map<String, dynamic> teamMember,
+}) async {
+  print(teamMember);
+
+  Response response = await put(
+    Uri.parse("${globals.url}/api/teams/members/${teamMember['id']}"),
+    headers: {
+      'token': token,
+    },
+    body: {
+      "teamId": teamMember['teamId'].toString(),
+      "firstName": teamMember['firstName'],
+      "lastName": teamMember['lastName'],
+      "type": teamMember['type'],
+      "phoneNumber": teamMember['phoneNumber'],
+      "birthdate": teamMember['birthdate'],
     },
   );
 

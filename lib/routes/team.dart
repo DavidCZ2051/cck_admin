@@ -1,4 +1,6 @@
 // packages
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 // files
 import 'package:cck_admin/globals.dart' as globals;
@@ -63,26 +65,23 @@ class _TeamState extends State<Team> {
     }
   }
 
-  handleInjuryCreate({
+  handleTeamMemberCreate({
     required String token,
-    required Map<String, dynamic> injury,
+    required Map<String, dynamic> teamMember,
   }) async {
     setState(() {
       loading["create"] = true;
     });
 
-    injury["stationId"] = globals.selectedStation!.id;
-    injury["refereeId"] = 2; //TODO: repair
-
-    print("Creating injury with data: $injury");
-    var object = await functions.createInjury(
+    print("Creating team member with data: $teamMember");
+    var object = await functions.createTeamMember(
       token: token,
-      injury: injury,
+      teamMember: teamMember,
     );
 
     if (object.functionCode == globals.FunctionCode.success) {
-      globals.selectedStation!.injuries = [];
-      object = await functions.getInjuries(
+      globals.selectedTeam!.members = [];
+      object = await functions.getTeamMembers(
         token: token,
       );
       setState(() {
@@ -110,24 +109,23 @@ class _TeamState extends State<Team> {
     }
   }
 
-  handleInjuryEdit({
+  handleTeamMemberEdit({
     required String token,
-    required Map<String, dynamic> injury,
+    required Map<String, dynamic> teamMember,
   }) async {
     setState(() {
       loading["edit"] = true;
     });
 
-    print("Editing injury with data: $injury");
-    var object = await functions.editInjury(
+    print("Editing team member with data: $teamMember");
+    var object = await functions.editTeamMember(
       token: token,
-      injury: injury,
-      injuryId: selectedInjury!.id,
+      teamMember: teamMember,
     );
 
     if (object.functionCode == globals.FunctionCode.success) {
-      globals.selectedStation!.injuries = [];
-      object = await functions.getInjuries(
+      globals.selectedTeam!.members = [];
+      object = await functions.getTeamMembers(
         token: token,
       );
       setState(() {
@@ -183,53 +181,46 @@ class _TeamState extends State<Team> {
                                     padding:
                                         const EdgeInsets.fromLTRB(8, 8, 0, 0),
                                     child: Text(
-                                        "${globals.selectedStation!.title} - ID: ${globals.selectedStation!.id}"),
+                                        "${globals.selectedTeam!.organization} - ID: ${globals.selectedTeam!.id}"),
                                   ),
                                   const Spacer(),
                                   ElevatedButton(
                                     onPressed: () {
-                                      globals.selectedStation!.injuries = [];
                                       Navigator.pushReplacementNamed(
-                                          context, "/stations");
+                                          context, "/teams");
                                     },
                                     child: const Text("Zpět"),
                                   ),
                                 ],
                               ),
                               Padding(
-                                padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
-                                child: Text(
-                                  "Číslo: ${globals.selectedStation!.number}",
-                                ),
-                              ),
-                              Padding(
                                 padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
                                 child: Text(
-                                  "Typ: ${globals.stationTypes[globals.selectedStation!.type]}",
+                                  "Číslo: ${globals.selectedTeam!.number}",
                                 ),
                               ),
                             ],
                           ),
                         ),
                         const Divider(),
-                        for (globals.Injury injury
-                            in globals.selectedStation!.injuries)
+                        for (globals.TeamMember teamMember
+                            in globals.selectedTeam!.members)
                           ConstrainedBox(
                             constraints: const BoxConstraints(
-                              minHeight: 80,
+                              minHeight: 60,
                               minWidth: 330,
                             ),
                             child: Card(
-                              color: selectedInjury == injury
+                              color: selectedTeamMember == teamMember
                                   ? Colors.red
                                   : Colors.white,
                               child: InkWell(
                                 onTap: () {
                                   setState(() {
-                                    if (selectedInjury == injury) {
-                                      selectedInjury = null;
+                                    if (selectedTeamMember == teamMember) {
+                                      selectedTeamMember = null;
                                     } else {
-                                      selectedInjury = injury;
+                                      selectedTeamMember = teamMember;
                                     }
                                   });
                                 },
@@ -242,14 +233,9 @@ class _TeamState extends State<Team> {
                                           padding: const EdgeInsets.fromLTRB(
                                               8, 8, 0, 0),
                                           child: Text(
-                                              "${injury.situation} - ID: ${injury.id}"),
+                                              "${teamMember.firstName} ${teamMember.lastName}- ID: ${teamMember.id}"),
                                         ),
                                       ],
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(8, 8, 0, 8),
-                                      child: Text("Písmeno: ${injury.letter}"),
                                     ),
                                   ],
                                 ),
@@ -282,7 +268,7 @@ class _TeamState extends State<Team> {
                                   return StatefulBuilder(
                                     builder: (context, setState) {
                                       return AlertDialog(
-                                        title: const Text("Přidání zranění"),
+                                        title: const Text("Přidání člena týmu"),
                                         content: loading["create"] == true
                                             ? Column(
                                                 mainAxisSize: MainAxisSize.min,
@@ -294,104 +280,78 @@ class _TeamState extends State<Team> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   TextFormField(
-                                                    initialValue:
-                                                        newInjury["situation"],
+                                                    initialValue: newTeamMember[
+                                                        "firstName"],
                                                     keyboardType:
                                                         TextInputType.number,
                                                     decoration:
                                                         const InputDecoration(
-                                                      labelText: "Situace",
+                                                      labelText: "Jméno",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newInjury["situation"] =
+                                                        newTeamMember[
+                                                                "firstName"] =
+                                                            value;
+                                                      });
+                                                    },
+                                                  ),
+                                                  TextFormField(
+                                                    initialValue: newTeamMember[
+                                                        "lastName"],
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      labelText: "Příjmení",
+                                                    ),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newTeamMember[
+                                                            "lastName"] = value;
+                                                      });
+                                                    },
+                                                  ),
+                                                  TextFormField(
+                                                    initialValue: newTeamMember[
+                                                        "phoneNumber"],
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      labelText: "Telefon",
+                                                    ),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newTeamMember[
+                                                                "phoneNumber"] =
+                                                            value;
+                                                      });
+                                                    },
+                                                  ),
+                                                  TextFormField(
+                                                    initialValue: newTeamMember[
+                                                        "birthDate"],
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      labelText:
+                                                          "Datum narození",
+                                                    ),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newTeamMember[
+                                                                "birthDate"] =
                                                             value;
                                                       });
                                                     },
                                                   ),
                                                   TextFormField(
                                                     initialValue:
-                                                        newInjury["diagnosis"],
+                                                        newTeamMember["type"],
                                                     decoration:
                                                         const InputDecoration(
-                                                      labelText: "Diagnóza",
+                                                      labelText: "Typ",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newInjury["diagnosis"] =
-                                                            value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  DropdownButton(
-                                                    hint: const Text("Písmeno"),
-                                                    value: newInjury["letter"],
-                                                    items: const [
-                                                      DropdownMenuItem(
-                                                        value: "A",
-                                                        child: Text("A"),
-                                                      ),
-                                                      DropdownMenuItem(
-                                                        value: "B",
-                                                        child: Text("B"),
-                                                      ),
-                                                    ],
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        newInjury["letter"] =
-                                                            value.toString();
-                                                      });
-                                                    },
-                                                  ),
-                                                  TextFormField(
-                                                    initialValue: newInjury[
-                                                        "necessaryEquipment"],
-                                                    decoration:
-                                                        const InputDecoration(
-                                                      labelText:
-                                                          "Nezbytné vybavení",
-                                                    ),
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        newInjury[
-                                                                "necessaryEquipment"] =
-                                                            value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  TextFormField(
-                                                    initialValue:
-                                                        newInjury["info"],
-                                                    decoration:
-                                                        const InputDecoration(
-                                                      labelText: "Informace",
-                                                    ),
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        newInjury["info"] =
-                                                            value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  TextFormField(
-                                                    initialValue: newInjury[
-                                                                    "maximalPoints"]
-                                                                .toString() ==
-                                                            "null"
-                                                        ? ""
-                                                        : newInjury[
-                                                                "maximalPoints"]
-                                                            .toString(),
-                                                    decoration:
-                                                        const InputDecoration(
-                                                      labelText:
-                                                          "Maximální počet bodů",
-                                                    ),
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        newInjury[
-                                                                "maximalPoints"] =
-                                                            int.tryParse(value);
+                                                        newTeamMember["type"] =
+                                                            int.parse(value);
                                                       });
                                                     },
                                                   ),
@@ -407,7 +367,7 @@ class _TeamState extends State<Team> {
                                             onPressed: loading["create"] == true
                                                 ? null
                                                 : () {
-                                                    newInjury = {};
+                                                    newTeamMember = {};
                                                     Navigator.pop(context);
                                                   },
                                             child: const Text(
@@ -424,31 +384,26 @@ class _TeamState extends State<Team> {
                                             ),
                                             onPressed: loading["create"] == true
                                                 ? null
-                                                : (newInjury["letter"] !=
+                                                : (newTeamMember["firstName"] != null &&
+                                                        newTeamMember[
+                                                                "lastName"] !=
                                                             null &&
-                                                        newInjury[
-                                                                "situation"] !=
+                                                        newTeamMember["type"] !=
                                                             null &&
-                                                        newInjury[
-                                                                "diagnosis"] !=
-                                                            null &&
-                                                        newInjury[
-                                                                "necessaryEquipment"] !=
-                                                            null &&
-                                                        newInjury["info"] !=
-                                                            null &&
-                                                        newInjury[
-                                                                "maximalPoints"] !=
+                                                        newTeamMember[
+                                                                "teamId"] !=
                                                             null)
                                                     ? () async {
-                                                        await handleInjuryCreate(
+                                                        await handleTeamMemberCreate(
                                                           token: globals
                                                               .user.token!,
-                                                          injury: newInjury,
+                                                          teamMember:
+                                                              newTeamMember,
                                                         );
                                                       }
                                                     : null,
-                                            child: const Text("Přidat zranění"),
+                                            child:
+                                                const Text("Přidat člena týmu"),
                                           ),
                                         ],
                                       );
@@ -466,20 +421,20 @@ class _TeamState extends State<Team> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red),
                             ),
-                            onPressed: selectedInjury == null
+                            onPressed: selectedTeamMember == null
                                 ? null
                                 : () {
-                                    editInjury = selectedInjury!.map;
-                                    print(editInjury);
-                                    showDialog(
+                                    editTeamMember = selectedTeamMember!.map;
+                                    print(editTeamMember);
+                                    /* showDialog(
                                       barrierDismissible: false,
                                       context: context,
                                       builder: (context) {
                                         return StatefulBuilder(
                                           builder: (context, setState) {
                                             return AlertDialog(
-                                              title:
-                                                  const Text("Úprava zranění"),
+                                              title: const Text(
+                                                  "Úprava člena týmu"),
                                               content: loading["edit"] == true
                                                   ? Column(
                                                       mainAxisSize:
@@ -678,7 +633,7 @@ class _TeamState extends State<Team> {
                                           },
                                         );
                                       },
-                                    );
+                                    ); */
                                   },
                             label: const Text("Upravit"),
                           ),
@@ -689,7 +644,7 @@ class _TeamState extends State<Team> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red),
                             ),
-                            onPressed: selectedInjury == null
+                            onPressed: selectedTeamMember == null
                                 ? null
                                 : () {
                                     showDialog(
@@ -699,8 +654,8 @@ class _TeamState extends State<Team> {
                                         return StatefulBuilder(
                                           builder: (context, setState) {
                                             return AlertDialog(
-                                              title:
-                                                  const Text("Smazání zranění"),
+                                              title: const Text(
+                                                  "Smazání člena týmu"),
                                               content: loading["delete"] == true
                                                   ? Column(
                                                       mainAxisSize:
@@ -710,7 +665,7 @@ class _TeamState extends State<Team> {
                                                       ],
                                                     )
                                                   : const Text(
-                                                      "Opravdu chcete smazat zranění?"),
+                                                      "Opravdu chcete smazat člena týmu?"),
                                               actions: [
                                                 TextButton(
                                                   onPressed:
@@ -739,17 +694,17 @@ class _TeamState extends State<Team> {
                                                       loading["delete"] == true
                                                           ? null
                                                           : () async {
-                                                              await handleInjuryDelete(
+                                                              await handleTeamMemberDelete(
                                                                 token: globals
                                                                     .user
                                                                     .token!,
-                                                                injuryId:
-                                                                    selectedInjury!
+                                                                teamMemberId:
+                                                                    selectedTeamMember!
                                                                         .id,
                                                               );
                                                             },
                                                   child: const Text(
-                                                      "Smazat zranění"),
+                                                      "Smazat člena týmu"),
                                                 ),
                                               ],
                                             );
@@ -764,7 +719,7 @@ class _TeamState extends State<Team> {
                       ),
                     ),
                     const Divider(),
-                    if (selectedInjury != null)
+                    if (selectedTeamMember != null)
                       Card(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -772,39 +727,26 @@ class _TeamState extends State<Team> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                               child: Text(
-                                  "Diagnóza: ${selectedInjury!.diagnosis}"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                              child: Text("ID: ${selectedInjury!.id}"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                              child: Text("Informace: ${selectedInjury!.info}"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                              child: Text("Písmeno: ${selectedInjury!.letter}"),
+                                  "Jméno: ${selectedTeamMember!.firstName}"),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                               child: Text(
-                                  "Maximální počet bodů: ${selectedInjury!.maximalPoints}"),
+                                  "Příjmení: ${selectedTeamMember!.lastName}"),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                               child: Text(
-                                  "Nezbytné vybavení: ${selectedInjury!.necessaryEquipment}"),
+                                  "Datum narození: ${selectedTeamMember!.birthDate ?? "Není zadáno"}"),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                               child: Text(
-                                  "ID rozhodčího: ${selectedInjury!.refereeId}"),
+                                  "Telefonní číslo: ${selectedTeamMember!.phoneNumber ?? "Není zadáno"}"),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                              child:
-                                  Text("Situace: ${selectedInjury!.situation}"),
+                              child: Text("Typ: ${selectedTeamMember!.type}"),
                             ),
                           ],
                         ),

@@ -15,7 +15,6 @@ class Teams extends StatefulWidget {
 class _TeamsState extends State<Teams> {
   Map<String, dynamic> newTeam = {};
   Map<String, dynamic> editTeam = {};
-  globals.Team? selectedTeam;
   Map<String, bool> loading = {
     "delete": false,
     "create": false,
@@ -384,10 +383,10 @@ class _TeamsState extends State<Teams> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red),
                             ),
-                            onPressed: selectedTeam == null
+                            onPressed: globals.selectedTeam == null
                                 ? null
                                 : () {
-                                    editTeam = selectedTeam!.map;
+                                    editTeam = globals.selectedTeam!.map;
                                     showDialog(
                                       barrierDismissible: false,
                                       context: context,
@@ -516,7 +515,7 @@ class _TeamsState extends State<Teams> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red),
                             ),
-                            onPressed: selectedTeam == null
+                            onPressed: globals.selectedTeam == null
                                 ? null
                                 : () {
                                     showDialog(
@@ -569,9 +568,9 @@ class _TeamsState extends State<Teams> {
                                                                 token: globals
                                                                     .user
                                                                     .token!,
-                                                                teamId:
-                                                                    selectedTeam!
-                                                                        .id,
+                                                                teamId: globals
+                                                                    .selectedTeam!
+                                                                    .id,
                                                               );
                                                             },
                                                   child:
@@ -606,16 +605,16 @@ class _TeamsState extends State<Teams> {
                             minWidth: 330,
                           ),
                           child: Card(
-                            color: selectedTeam == team
+                            color: globals.selectedTeam == team
                                 ? Colors.red
                                 : Colors.white,
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  if (selectedTeam == team) {
-                                    selectedTeam = null;
+                                  if (globals.selectedTeam == team) {
+                                    globals.selectedTeam = null;
                                   } else {
-                                    selectedTeam = team;
+                                    globals.selectedTeam = team;
                                   }
                                 });
                               },
@@ -633,6 +632,7 @@ class _TeamsState extends State<Teams> {
                                       const SizedBox(width: 100),
                                       ElevatedButton(
                                         onPressed: () {
+                                          globals.selectedTeam = team;
                                           Navigator.pushReplacementNamed(
                                               context, "/team");
                                         },

@@ -192,6 +192,18 @@ class TeamMember {
     this.phoneNumber,
     this.birthDate,
   });
+
+  Map<String, dynamic> get map {
+    return {
+      "id": id,
+      "teamId": teamId,
+      "firstName": firstName,
+      "lastName": lastName,
+      "type": type,
+      "phoneNumber": phoneNumber,
+      "birthDate": birthDate,
+    };
+  }
 }
 
 enum FunctionCode {
