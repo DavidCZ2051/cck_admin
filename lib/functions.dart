@@ -360,9 +360,10 @@ Future<globals.FunctionObject> createTeamMember({
       "teamId": teamMember['teamId'].toString(),
       "firstName": teamMember['firstName'],
       "lastName": teamMember['lastName'],
-      "type": teamMember['type'],
-      "phoneNumber": teamMember['phoneNumber'],
-      "birthdate": teamMember['birthdate'],
+      "type": teamMember['type'].toString(),
+      if (teamMember['phoneNumber'] != null)
+        "phoneNumber": teamMember['phoneNumber'],
+      if (teamMember['birthDate'] != null) "birthDate": teamMember['birthDate'],
     },
   );
 
@@ -394,9 +395,10 @@ Future<globals.FunctionObject> editTeamMember({
       "teamId": teamMember['teamId'].toString(),
       "firstName": teamMember['firstName'],
       "lastName": teamMember['lastName'],
-      "type": teamMember['type'],
-      "phoneNumber": teamMember['phoneNumber'],
-      "birthdate": teamMember['birthdate'],
+      "type": teamMember['type'].toString(),
+      if (teamMember['phoneNumber'] != null)
+        "phoneNumber": teamMember['phoneNumber'],
+      if (teamMember['birthDate'] != null) "birthDate": teamMember['birthDate'],
     },
   );
 

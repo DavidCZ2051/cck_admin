@@ -261,6 +261,9 @@ class _TeamState extends State<Team> {
                                   MaterialStateProperty.all(Colors.red),
                             ),
                             onPressed: () {
+                              newTeamMember = {
+                                "teamId": globals.selectedTeam!.id.toString(),
+                              };
                               showDialog(
                                 barrierDismissible: false,
                                 context: context,
@@ -342,8 +345,12 @@ class _TeamState extends State<Team> {
                                                     },
                                                   ),
                                                   TextFormField(
-                                                    initialValue:
-                                                        newTeamMember["type"],
+                                                    initialValue: newTeamMember[
+                                                                "type"] ==
+                                                            null
+                                                        ? ""
+                                                        : newTeamMember["type"]
+                                                            .toString(),
                                                     decoration:
                                                         const InputDecoration(
                                                       labelText: "Typ",
@@ -351,7 +358,7 @@ class _TeamState extends State<Team> {
                                                     onChanged: (value) {
                                                       setState(() {
                                                         newTeamMember["type"] =
-                                                            int.parse(value);
+                                                            int.tryParse(value);
                                                       });
                                                     },
                                                   ),
@@ -426,7 +433,7 @@ class _TeamState extends State<Team> {
                                 : () {
                                     editTeamMember = selectedTeamMember!.map;
                                     print(editTeamMember);
-                                    /* showDialog(
+                                    showDialog(
                                       barrierDismissible: false,
                                       context: context,
                                       builder: (context) {
@@ -449,116 +456,90 @@ class _TeamState extends State<Team> {
                                                       children: [
                                                         TextFormField(
                                                           initialValue:
-                                                              editInjury[
-                                                                  "situation"],
+                                                              editTeamMember[
+                                                                  "firstName"],
                                                           keyboardType:
                                                               TextInputType
                                                                   .number,
                                                           decoration:
                                                               const InputDecoration(
-                                                            labelText:
-                                                                "Situace",
+                                                            labelText: "Jméno",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editInjury[
-                                                                      "situation"] =
+                                                              editTeamMember[
+                                                                      "firstName"] =
                                                                   value;
                                                             });
                                                           },
                                                         ),
                                                         TextFormField(
                                                           initialValue:
-                                                              editInjury[
-                                                                  "diagnosis"],
+                                                              editTeamMember[
+                                                                  "lastName"],
                                                           decoration:
                                                               const InputDecoration(
                                                             labelText:
-                                                                "Diagnóza",
+                                                                "Příjmení",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editInjury[
-                                                                      "diagnosis"] =
-                                                                  value;
-                                                            });
-                                                          },
-                                                        ),
-                                                        DropdownButton(
-                                                          hint: const Text(
-                                                              "Písmeno"),
-                                                          value: editInjury[
-                                                              "letter"],
-                                                          items: const [
-                                                            DropdownMenuItem(
-                                                              value: "A",
-                                                              child: Text("A"),
-                                                            ),
-                                                            DropdownMenuItem(
-                                                              value: "B",
-                                                              child: Text("B"),
-                                                            ),
-                                                          ],
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              editInjury[
-                                                                      "letter"] =
-                                                                  value
-                                                                      .toString();
-                                                            });
-                                                          },
-                                                        ),
-                                                        TextFormField(
-                                                          initialValue: editInjury[
-                                                              "necessaryEquipment"],
-                                                          decoration:
-                                                              const InputDecoration(
-                                                            labelText:
-                                                                "Nezbytné vybavení",
-                                                          ),
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              editInjury[
-                                                                      "necessaryEquipment"] =
+                                                              editTeamMember[
+                                                                      "lastName"] =
                                                                   value;
                                                             });
                                                           },
                                                         ),
                                                         TextFormField(
                                                           initialValue:
-                                                              editInjury[
-                                                                  "info"],
+                                                              editTeamMember[
+                                                                  "phoneNumber"],
                                                           decoration:
                                                               const InputDecoration(
                                                             labelText:
-                                                                "Informace",
+                                                                "Telefon",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editInjury[
-                                                                      "info"] =
+                                                              editTeamMember[
+                                                                      "phoneNumber"] =
                                                                   value;
                                                             });
                                                           },
                                                         ),
                                                         TextFormField(
-                                                          initialValue: editInjury[
-                                                                          "maximalPoints"]
-                                                                      .toString() ==
-                                                                  "null"
+                                                          initialValue:
+                                                              editTeamMember[
+                                                                  "birthDate"],
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText:
+                                                                "Datum narození",
+                                                          ),
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              editTeamMember[
+                                                                      "birthDate"] =
+                                                                  value;
+                                                            });
+                                                          },
+                                                        ),
+                                                        TextFormField(
+                                                          initialValue: editTeamMember[
+                                                                      "type"] ==
+                                                                  null
                                                               ? ""
-                                                              : editInjury[
-                                                                      "maximalPoints"]
+                                                              : editTeamMember[
+                                                                      "type"]
                                                                   .toString(),
                                                           decoration:
                                                               const InputDecoration(
-                                                            labelText:
-                                                                "Maximální počet bodů",
+                                                            labelText: "Typ",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editInjury[
-                                                                      "maximalPoints"] =
+                                                              editTeamMember[
+                                                                      "type"] =
                                                                   int.tryParse(
                                                                       value);
                                                             });
@@ -574,14 +555,14 @@ class _TeamState extends State<Team> {
                                                             .all(
                                                                 Colors.red[50]),
                                                   ),
-                                                  onPressed:
-                                                      loading["edit"] == true
-                                                          ? null
-                                                          : () {
-                                                              editInjury = {};
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
+                                                  onPressed: loading["edit"] ==
+                                                          true
+                                                      ? null
+                                                      : () {
+                                                          editTeamMember = {};
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
                                                   child: const Text(
                                                     "Zrušit",
                                                     style: TextStyle(
@@ -597,43 +578,37 @@ class _TeamState extends State<Team> {
                                                   onPressed: loading["edit"] ==
                                                           true
                                                       ? null
-                                                      : (editInjury[
-                                                                      "letter"] !=
+                                                      : (editTeamMember[
+                                                                      "firstName"] !=
                                                                   null &&
-                                                              editInjury[
-                                                                      "situation"] !=
+                                                              editTeamMember[
+                                                                      "lastName"] !=
                                                                   null &&
-                                                              editInjury[
-                                                                      "diagnosis"] !=
+                                                              editTeamMember[
+                                                                      "type"] !=
                                                                   null &&
-                                                              editInjury[
-                                                                      "necessaryEquipment"] !=
-                                                                  null &&
-                                                              editInjury[
-                                                                      "info"] !=
-                                                                  null &&
-                                                              editInjury[
-                                                                      "maximalPoints"] !=
+                                                              editTeamMember[
+                                                                      "teamId"] !=
                                                                   null)
                                                           ? () async {
-                                                              await handleInjuryEdit(
+                                                              await handleTeamMemberEdit(
                                                                 token: globals
                                                                     .user
                                                                     .token!,
-                                                                injury:
-                                                                    editInjury,
+                                                                teamMember:
+                                                                    editTeamMember,
                                                               );
                                                             }
                                                           : null,
                                                   child: const Text(
-                                                      "Upravit zranění"),
+                                                      "Upravit člena týmu"),
                                                 ),
                                               ],
                                             );
                                           },
                                         );
                                       },
-                                    ); */
+                                    );
                                   },
                             label: const Text("Upravit"),
                           ),

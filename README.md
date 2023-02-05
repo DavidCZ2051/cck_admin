@@ -62,9 +62,9 @@ Release bude muset být hotový ke konci února. Oficiální první spuštění 
 - [x] DEL Delete Team
 
 - [x] GET List Team Members
-- [ ] POST Create Team Member
-- [ ] PUT Update Team Member
-- [ ] DEL Delete Team Member
+- [x] POST Create Team Member
+- [x] PUT Update Team Member
+- [x] DEL Delete Team Member
 
 - [ ] GET List Figurants
 - [ ] POST Create Figurant
