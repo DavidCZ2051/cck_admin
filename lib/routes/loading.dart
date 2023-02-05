@@ -32,6 +32,7 @@ class _LoadingState extends State<Loading> {
     "stations": 'Načítání stanovišť...',
     "injuries": 'Načítání zranění...',
     "teamMembers": 'Načítání členů týmů...',
+    "figurants": 'Načítání figurantů...',
   };
 
   handleLoadingStuff() async {
@@ -172,6 +173,38 @@ class _LoadingState extends State<Loading> {
         return;
       }
       Navigator.pushReplacementNamed(context, "/injuries");
+    } else if (globals.loadMode == "figurants") {
+      setState(() {
+        loadType = "figurants";
+      });
+
+      if (globals.selectedInjury != null) {
+        globals.selectedInjury!.figurants = [];
+      }
+
+      var object = await functions.getFigurants(token: globals.user.token!);
+      if (object.functionCode == globals.FunctionCode.error) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Chyba'),
+                content: Text(
+                    'Nepodařilo se načíst zranění. Chybový kód: ${object.statusCode}'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Zavřít'),
+                  ),
+                ],
+              );
+            });
+        Navigator.pushReplacementNamed(context, "/injury");
+        return;
+      }
+      Navigator.pushReplacementNamed(context, "/figurants");
     }
   }
 

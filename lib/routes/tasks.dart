@@ -5,17 +5,17 @@ import 'package:cck_admin/globals.dart' as globals;
 import 'package:cck_admin/functions.dart' as functions;
 import 'package:cck_admin/widgets.dart' as widgets;
 
-class Figurants extends StatefulWidget {
-  const Figurants({super.key});
+class Tasks extends StatefulWidget {
+  const Tasks({super.key});
 
   @override
-  State<Figurants> createState() => _FigurantsState();
+  State<Tasks> createState() => _TasksState();
 }
 
-class _FigurantsState extends State<Figurants> {
-  Map<String, dynamic> newFigurant = {};
-  Map<String, dynamic> editFigurant = {};
-  globals.Figurant? selectedFigurant;
+class _TasksState extends State<Tasks> {
+  Map<String, dynamic> newTask = {};
+  Map<String, dynamic> editTask = {};
+  globals.Task? selectedTask;
   Map<String, bool> loading = {
     "delete": false,
     "create": false,
@@ -59,7 +59,7 @@ class _FigurantsState extends State<Figurants> {
             );
           });
     }
-    selectedFigurant = null;
+    selectedTask = null;
   }
 
   handleStationCreate({
@@ -210,17 +210,18 @@ class _FigurantsState extends State<Figurants> {
                             Navigator.pushReplacementNamed(context, "/injury");
                           },
                         ),
-                        const ListTile(
-                          leading: Icon(Icons.person),
-                          title: Text("Figuranti"),
-                          selected: true,
-                        ),
                         ListTile(
-                          leading: const Icon(Icons.assignment),
-                          title: const Text("Úlohy"),
+                          leading: const Icon(Icons.person),
+                          title: const Text("Figuranti"),
                           onTap: () {
-                            Navigator.pushReplacementNamed(context, "/tasks");
+                            Navigator.pushReplacementNamed(
+                                context, "/figurants");
                           },
+                        ),
+                        const ListTile(
+                          leading: Icon(Icons.assignment),
+                          title: Text("Úlohy"),
+                          selected: true,
                         ),
                         ListTile(
                           leading: const Icon(Icons.healing),
@@ -235,7 +236,7 @@ class _FigurantsState extends State<Figurants> {
                   ),
                 ),
                 const VerticalDivider(),
-                Column(
+                /* Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
@@ -770,7 +771,7 @@ class _FigurantsState extends State<Figurants> {
                         ],
                       ),
                   ],
-                ),
+                ), */
               ],
             ),
           ),

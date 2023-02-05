@@ -78,21 +78,23 @@ class _InjuryState extends State<Injury> {
                           leading: const Icon(Icons.person),
                           title: const Text("Figuranti"),
                           onTap: () {
-                            Navigator.pushNamed(context, "/figurants");
+                            Navigator.pushReplacementNamed(
+                                context, "/figurants");
                           },
                         ),
                         ListTile(
                           leading: const Icon(Icons.assignment),
                           title: const Text("Úlohy"),
                           onTap: () {
-                            Navigator.pushNamed(context, "/tasks");
+                            Navigator.pushReplacementNamed(context, "/tasks");
                           },
                         ),
                         ListTile(
                           leading: const Icon(Icons.healing),
                           title: const Text("Léčebné procedury"),
                           onTap: () {
-                            Navigator.pushNamed(context, "/treatments");
+                            Navigator.pushReplacementNamed(
+                                context, "/treatments");
                           },
                         ),
                       ],

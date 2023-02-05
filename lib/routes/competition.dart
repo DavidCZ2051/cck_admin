@@ -51,7 +51,7 @@ class _CompetitionState extends State<Competition> {
                                   const Spacer(),
                                   ElevatedButton(
                                     onPressed: () {
-                                      globals.loadMode = "injuries";
+                                      globals.loadMode = "competitions";
                                       Navigator.pushReplacementNamed(
                                           context, "/loading");
                                     },

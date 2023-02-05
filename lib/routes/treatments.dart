@@ -5,14 +5,14 @@ import 'package:cck_admin/globals.dart' as globals;
 import 'package:cck_admin/functions.dart' as functions;
 import 'package:cck_admin/widgets.dart' as widgets;
 
-class Figurants extends StatefulWidget {
-  const Figurants({super.key});
+class Treatments extends StatefulWidget {
+  const Treatments({super.key});
 
   @override
-  State<Figurants> createState() => _FigurantsState();
+  State<Treatments> createState() => _TreatmentsState();
 }
 
-class _FigurantsState extends State<Figurants> {
+class _TreatmentsState extends State<Treatments> {
   Map<String, dynamic> newFigurant = {};
   Map<String, dynamic> editFigurant = {};
   globals.Figurant? selectedFigurant;
@@ -210,10 +210,13 @@ class _FigurantsState extends State<Figurants> {
                             Navigator.pushReplacementNamed(context, "/injury");
                           },
                         ),
-                        const ListTile(
-                          leading: Icon(Icons.person),
-                          title: Text("Figuranti"),
-                          selected: true,
+                        ListTile(
+                          leading: const Icon(Icons.person),
+                          title: const Text("Figuranti"),
+                          onTap: () {
+                            Navigator.pushReplacementNamed(
+                                context, "/figurants");
+                          },
                         ),
                         ListTile(
                           leading: const Icon(Icons.assignment),
@@ -222,13 +225,10 @@ class _FigurantsState extends State<Figurants> {
                             Navigator.pushReplacementNamed(context, "/tasks");
                           },
                         ),
-                        ListTile(
-                          leading: const Icon(Icons.healing),
-                          title: const Text("Léčebné procedury"),
-                          onTap: () {
-                            Navigator.pushReplacementNamed(
-                                context, "/treatments");
-                          },
+                        const ListTile(
+                          leading: Icon(Icons.healing),
+                          title: Text("Léčebné procedury"),
+                          selected: true,
                         ),
                       ],
                     ),

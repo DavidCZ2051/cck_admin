@@ -779,3 +779,32 @@ Future<globals.FunctionObject> deleteFigurant({
     );
   }
 }
+
+Future<globals.FunctionObject> createFigurant({
+  required String token,
+  required Map<String, dynamic> figurant,
+}) async {
+  Response response = await post(
+    Uri.parse("${globals.url}/api/figurants"),
+    headers: {
+      'token': token,
+    },
+    body: {
+      "injurieId": figurant["injuryId"].toString(),
+      "instructions": figurant["instructions"],
+      "makeUp": figurant["makeup"],
+    },
+  );
+
+  if (response.statusCode == 201) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
