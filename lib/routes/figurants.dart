@@ -5,16 +5,17 @@ import 'package:cck_admin/globals.dart' as globals;
 import 'package:cck_admin/functions.dart' as functions;
 import 'package:cck_admin/widgets.dart' as widgets;
 
-class Injuries extends StatefulWidget {
-  const Injuries({super.key});
+class Figurants extends StatefulWidget {
+  const Figurants({super.key});
 
   @override
-  State<Injuries> createState() => _InjuriesState();
+  State<Figurants> createState() => _FigurantsState();
 }
 
-class _InjuriesState extends State<Injuries> {
-  Map<String, dynamic> newInjury = {};
-  Map<String, dynamic> editInjury = {};
+class _FigurantsState extends State<Figurants> {
+  Map<String, dynamic> newFigurant = {};
+  Map<String, dynamic> editFigurant = {};
+  globals.Figurant? selectedFigurant;
   Map<String, bool> loading = {
     "delete": false,
     "create": false,
@@ -25,29 +26,27 @@ class _InjuriesState extends State<Injuries> {
     setState(() {});
   }
 
-  handleInjuryDelete({
+  handleFigurantDelete({
     required String token,
-    required int injuryId,
+    required int figurantId,
   }) async {
     setState(() {
       loading["delete"] = true;
     });
     setstate();
-    print("Deleting injury with id: $injuryId");
-    var object = await functions.deleteInjury(
+    print("Deleting figurant with id: $figurantId");
+    var object = await functions.deleteFigurant(
       token: token,
-      injuryId: globals.selectedInjury!.id,
+      figurantId: figurantId,
     );
     setState(() {
       loading["delete"] = false;
     });
     setstate();
-    globals.selectedInjury = null;
-
     if (object.functionCode == globals.FunctionCode.success) {
       setState(() {
-        globals.selectedStation!.injuries.removeWhere(
-          (injury) => injury.id == injuryId,
+        globals.selectedInjury!.figurants.removeWhere(
+          (figurant) => figurant.id == figurantId,
         );
       });
       Navigator.pop(context);
@@ -60,28 +59,29 @@ class _InjuriesState extends State<Injuries> {
             );
           });
     }
+    selectedFigurant = null;
   }
 
-  handleInjuryCreate({
+  handleStationCreate({
     required String token,
-    required Map<String, dynamic> injury,
+    required Map<String, dynamic> station,
   }) async {
     setState(() {
       loading["create"] = true;
     });
+    station["type"] = globals.getStationTypeId(type: station["type"]);
+    station["tier"] = globals.getStationTierId(tier: station["tier"]);
 
-    injury["stationId"] = globals.selectedStation!.id;
-    injury["refereeId"] = 2; //TODO: repair
-
-    print("Creating injury with data: $injury");
-    var object = await functions.createInjury(
+    print("Creating station with data: $station");
+    var object = await functions.createStation(
       token: token,
-      injury: injury,
+      station: station,
+      competitionId: globals.selectedCompetition!.id,
     );
 
     if (object.functionCode == globals.FunctionCode.success) {
-      globals.selectedStation!.injuries = [];
-      object = await functions.getInjuries(
+      globals.selectedCompetition!.stations = [];
+      object = await functions.getStations(
         token: token,
       );
       setState(() {
@@ -109,24 +109,23 @@ class _InjuriesState extends State<Injuries> {
     }
   }
 
-  handleInjuryEdit({
+  handleFigurantEdit({
     required String token,
-    required Map<String, dynamic> injury,
+    required Map<String, dynamic> figurant,
   }) async {
     setState(() {
       loading["edit"] = true;
     });
 
-    print("Editing injury with data: $injury");
-    var object = await functions.editInjury(
+    print("Editing figurant with data: $figurant");
+    var object = await functions.editFigurant(
       token: token,
-      injury: injury,
-      injuryId: globals.selectedInjury!.id,
+      figurant: figurant,
     );
 
     if (object.functionCode == globals.FunctionCode.success) {
-      globals.selectedStation!.injuries = [];
-      object = await functions.getInjuries(
+      globals.selectedInjury!.figurants = [];
+      object = await functions.getFigurants(
         token: token,
       );
       setState(() {
@@ -179,82 +178,69 @@ class _InjuriesState extends State<Injuries> {
                               Row(
                                 children: [
                                   Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(8, 8, 0, 0),
-                                    child: Text(
-                                        "${globals.selectedStation!.title} - ID: ${globals.selectedStation!.id}"),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child:
+                                        Text(globals.selectedCompetition!.type),
                                   ),
                                   const Spacer(),
                                   ElevatedButton(
                                     onPressed: () {
-                                      globals.selectedStation!.injuries = [];
+                                      globals.loadMode = "competitions";
                                       Navigator.pushReplacementNamed(
-                                          context, "/stations");
+                                          context, "/loading");
                                     },
                                     child: const Text("Zpět"),
                                   ),
                                 ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
-                                child: Text(
-                                  "Číslo: ${globals.selectedStation!.number}",
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
-                                child: Text(
-                                  "Typ: ${globals.stationTypes[globals.selectedStation!.type]}",
-                                ),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      globals
+                                          .selectedCompetition!.startDateString,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 30),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      globals
+                                          .selectedCompetition!.endDateString,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 30),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                        globals.selectedCompetition!.state),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         ),
                         const Divider(),
-                        for (globals.Injury injury
-                            in globals.selectedStation!.injuries)
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(
-                              minHeight: 80,
-                              minWidth: 330,
-                            ),
-                            child: Card(
-                              color: globals.selectedInjury == injury
-                                  ? Colors.red
-                                  : Colors.white,
-                              child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    if (globals.selectedInjury == injury) {
-                                      globals.selectedInjury = null;
-                                    } else {
-                                      globals.selectedInjury = injury;
-                                    }
-                                  });
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              8, 8, 0, 0),
-                                          child: Text(
-                                              "${injury.situation} - ID: ${injury.id}"),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(8, 8, 0, 8),
-                                      child: Text("Písmeno: ${injury.letter}"),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                        ListTile(
+                          leading: const Icon(Icons.home),
+                          title: const Text("Přehled soutěže"),
+                          onTap: () {
+                            Navigator.pushNamed(context, "/competition");
+                          },
+                        ),
+                        const ListTile(
+                          leading: Icon(Icons.room),
+                          title: Text("Stanoviště"),
+                          selected: true,
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.people),
+                          title: const Text("Týmy"),
+                          onTap: () {
+                            Navigator.pushNamed(context, "/teams");
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -281,7 +267,7 @@ class _InjuriesState extends State<Injuries> {
                                   return StatefulBuilder(
                                     builder: (context, setState) {
                                       return AlertDialog(
-                                        title: const Text("Přidání zranění"),
+                                        title: const Text("Přidání stanoviště"),
                                         content: loading["create"] == true
                                             ? Column(
                                                 mainAxisSize: MainAxisSize.min,
@@ -293,104 +279,77 @@ class _InjuriesState extends State<Injuries> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   TextFormField(
-                                                    initialValue:
-                                                        newInjury["situation"],
+                                                    initialValue: newFigurant[
+                                                                    "number"]
+                                                                .toString() ==
+                                                            "null"
+                                                        ? ""
+                                                        : newFigurant["number"]
+                                                            .toString(),
                                                     keyboardType:
                                                         TextInputType.number,
                                                     decoration:
                                                         const InputDecoration(
-                                                      labelText: "Situace",
+                                                      labelText: "Číslo",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newInjury["situation"] =
-                                                            value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  TextFormField(
-                                                    initialValue:
-                                                        newInjury["diagnosis"],
-                                                    decoration:
-                                                        const InputDecoration(
-                                                      labelText: "Diagnóza",
-                                                    ),
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        newInjury["diagnosis"] =
-                                                            value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  DropdownButton(
-                                                    hint: const Text("Písmeno"),
-                                                    value: newInjury["letter"],
-                                                    items: const [
-                                                      DropdownMenuItem(
-                                                        value: "A",
-                                                        child: Text("A"),
-                                                      ),
-                                                      DropdownMenuItem(
-                                                        value: "B",
-                                                        child: Text("B"),
-                                                      ),
-                                                    ],
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        newInjury["letter"] =
-                                                            value.toString();
-                                                      });
-                                                    },
-                                                  ),
-                                                  TextFormField(
-                                                    initialValue: newInjury[
-                                                        "necessaryEquipment"],
-                                                    decoration:
-                                                        const InputDecoration(
-                                                      labelText:
-                                                          "Nezbytné vybavení",
-                                                    ),
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        newInjury[
-                                                                "necessaryEquipment"] =
-                                                            value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  TextFormField(
-                                                    initialValue:
-                                                        newInjury["info"],
-                                                    decoration:
-                                                        const InputDecoration(
-                                                      labelText: "Informace",
-                                                    ),
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        newInjury["info"] =
-                                                            value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  TextFormField(
-                                                    initialValue: newInjury[
-                                                                    "maximalPoints"]
-                                                                .toString() ==
-                                                            "null"
-                                                        ? ""
-                                                        : newInjury[
-                                                                "maximalPoints"]
-                                                            .toString(),
-                                                    decoration:
-                                                        const InputDecoration(
-                                                      labelText:
-                                                          "Maximální počet bodů",
-                                                    ),
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        newInjury[
-                                                                "maximalPoints"] =
+                                                        newFigurant["number"] =
                                                             int.tryParse(value);
+                                                      });
+                                                    },
+                                                  ),
+                                                  TextFormField(
+                                                    initialValue:
+                                                        newFigurant["title"],
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      labelText: "Název",
+                                                    ),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newFigurant["title"] =
+                                                            value;
+                                                      });
+                                                    },
+                                                  ),
+                                                  //station type
+                                                  DropdownButton(
+                                                    hint: const Text(
+                                                        "Typ stanoviště"),
+                                                    value: newFigurant["type"],
+                                                    items: globals
+                                                        .stationTypes.values
+                                                        .map((e) =>
+                                                            DropdownMenuItem(
+                                                              value: e,
+                                                              child: Text(e),
+                                                            ))
+                                                        .toList(),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newFigurant["type"] =
+                                                            value;
+                                                      });
+                                                    },
+                                                  ),
+                                                  //station tier
+                                                  DropdownButton(
+                                                    hint: const Text(
+                                                        "Druh stanoviště"),
+                                                    value: newFigurant["tier"],
+                                                    items: globals
+                                                        .stationTiers.values
+                                                        .map((e) {
+                                                      return DropdownMenuItem(
+                                                        value: e,
+                                                        child: Text(e),
+                                                      );
+                                                    }).toList(),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newFigurant["tier"] =
+                                                            value;
                                                       });
                                                     },
                                                   ),
@@ -406,7 +365,7 @@ class _InjuriesState extends State<Injuries> {
                                             onPressed: loading["create"] == true
                                                 ? null
                                                 : () {
-                                                    newInjury = {};
+                                                    newFigurant = {};
                                                     Navigator.pop(context);
                                                   },
                                             child: const Text(
@@ -423,31 +382,24 @@ class _InjuriesState extends State<Injuries> {
                                             ),
                                             onPressed: loading["create"] == true
                                                 ? null
-                                                : (newInjury["letter"] !=
+                                                : (newFigurant["title"] !=
                                                             null &&
-                                                        newInjury[
-                                                                "situation"] !=
+                                                        newFigurant["tier"] !=
                                                             null &&
-                                                        newInjury[
-                                                                "diagnosis"] !=
+                                                        newFigurant["type"] !=
                                                             null &&
-                                                        newInjury[
-                                                                "necessaryEquipment"] !=
-                                                            null &&
-                                                        newInjury["info"] !=
-                                                            null &&
-                                                        newInjury[
-                                                                "maximalPoints"] !=
+                                                        newFigurant["number"] !=
                                                             null)
                                                     ? () async {
-                                                        await handleInjuryCreate(
+                                                        await handleStationCreate(
                                                           token: globals
                                                               .user.token!,
-                                                          injury: newInjury,
+                                                          station: newFigurant,
                                                         );
                                                       }
                                                     : null,
-                                            child: const Text("Přidat zranění"),
+                                            child:
+                                                const Text("Přidat stanoviště"),
                                           ),
                                         ],
                                       );
@@ -465,11 +417,15 @@ class _InjuriesState extends State<Injuries> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red),
                             ),
-                            onPressed: globals.selectedInjury == null
+                            onPressed: selectedFigurant == null
                                 ? null
                                 : () {
-                                    editInjury = globals.selectedInjury!.map;
-                                    print(editInjury);
+                                    editFigurant = selectedFigurant!.map;
+                                    editFigurant["tier"] = globals
+                                        .stationTiers[editFigurant["tier"]];
+                                    editFigurant["type"] = globals
+                                        .stationTypes[editFigurant["type"]];
+                                    print(editFigurant);
                                     showDialog(
                                       barrierDismissible: false,
                                       context: context,
@@ -477,8 +433,8 @@ class _InjuriesState extends State<Injuries> {
                                         return StatefulBuilder(
                                           builder: (context, setState) {
                                             return AlertDialog(
-                                              title:
-                                                  const Text("Úprava zranění"),
+                                              title: const Text(
+                                                  "Úprava stanoviště"),
                                               content: loading["edit"] == true
                                                   ? Column(
                                                       mainAxisSize:
@@ -492,119 +448,120 @@ class _InjuriesState extends State<Injuries> {
                                                           MainAxisSize.min,
                                                       children: [
                                                         TextFormField(
-                                                          initialValue:
-                                                              editInjury[
-                                                                  "situation"],
+                                                          initialValue: editFigurant[
+                                                                          "number"]
+                                                                      .toString() ==
+                                                                  "null"
+                                                              ? ""
+                                                              : editFigurant[
+                                                                      "number"]
+                                                                  .toString(),
                                                           keyboardType:
                                                               TextInputType
                                                                   .number,
                                                           decoration:
                                                               const InputDecoration(
-                                                            labelText:
-                                                                "Situace",
+                                                            labelText: "Číslo",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editInjury[
-                                                                      "situation"] =
-                                                                  value;
+                                                              editFigurant[
+                                                                      "number"] =
+                                                                  int.tryParse(
+                                                                      value);
                                                             });
                                                           },
                                                         ),
                                                         TextFormField(
                                                           initialValue:
-                                                              editInjury[
-                                                                  "diagnosis"],
+                                                              editFigurant[
+                                                                  "title"],
                                                           decoration:
                                                               const InputDecoration(
-                                                            labelText:
-                                                                "Diagnóza",
+                                                            labelText: "Název",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editInjury[
-                                                                      "diagnosis"] =
+                                                              editFigurant[
+                                                                      "title"] =
                                                                   value;
                                                             });
                                                           },
                                                         ),
+                                                        //station competition
                                                         DropdownButton(
                                                           hint: const Text(
-                                                              "Písmeno"),
-                                                          value: editInjury[
-                                                              "letter"],
-                                                          items: const [
-                                                            DropdownMenuItem(
-                                                              value: "A",
-                                                              child: Text("A"),
-                                                            ),
-                                                            DropdownMenuItem(
-                                                              value: "B",
-                                                              child: Text("B"),
-                                                            ),
+                                                              "Soutěž"),
+                                                          value: editFigurant[
+                                                              "competitionId"],
+                                                          items: [
+                                                            for (globals
+                                                                    .Competition competition
+                                                                in globals
+                                                                    .competitions)
+                                                              DropdownMenuItem(
+                                                                value:
+                                                                    competition
+                                                                        .id,
+                                                                child: Text(
+                                                                    "${competition.type} (${competition.startDateString} - ${competition.endDateString})"),
+                                                              ),
                                                           ],
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editInjury[
-                                                                      "letter"] =
-                                                                  value
-                                                                      .toString();
-                                                            });
-                                                          },
-                                                        ),
-                                                        TextFormField(
-                                                          initialValue: editInjury[
-                                                              "necessaryEquipment"],
-                                                          decoration:
-                                                              const InputDecoration(
-                                                            labelText:
-                                                                "Nezbytné vybavení",
-                                                          ),
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              editInjury[
-                                                                      "necessaryEquipment"] =
+                                                              editFigurant[
+                                                                      "competitionId"] =
                                                                   value;
                                                             });
                                                           },
                                                         ),
-                                                        TextFormField(
-                                                          initialValue:
-                                                              editInjury[
-                                                                  "info"],
-                                                          decoration:
-                                                              const InputDecoration(
-                                                            labelText:
-                                                                "Informace",
-                                                          ),
+                                                        //station type
+                                                        DropdownButton(
+                                                          hint: const Text(
+                                                              "Typ stanoviště"),
+                                                          value: editFigurant[
+                                                              "type"],
+                                                          items: [
+                                                            for (String value
+                                                                in globals
+                                                                    .stationTypes
+                                                                    .values)
+                                                              DropdownMenuItem(
+                                                                value: value,
+                                                                child:
+                                                                    Text(value),
+                                                              ),
+                                                          ],
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editInjury[
-                                                                      "info"] =
+                                                              editFigurant[
+                                                                      "type"] =
                                                                   value;
                                                             });
                                                           },
                                                         ),
-                                                        TextFormField(
-                                                          initialValue: editInjury[
-                                                                          "maximalPoints"]
-                                                                      .toString() ==
-                                                                  "null"
-                                                              ? ""
-                                                              : editInjury[
-                                                                      "maximalPoints"]
-                                                                  .toString(),
-                                                          decoration:
-                                                              const InputDecoration(
-                                                            labelText:
-                                                                "Maximální počet bodů",
-                                                          ),
+                                                        //station tier
+                                                        DropdownButton(
+                                                          hint: const Text(
+                                                              "Druh stanoviště"),
+                                                          value: editFigurant[
+                                                              "tier"],
+                                                          items: [
+                                                            for (String value
+                                                                in globals
+                                                                    .stationTiers
+                                                                    .values)
+                                                              DropdownMenuItem(
+                                                                value: value,
+                                                                child:
+                                                                    Text(value),
+                                                              ),
+                                                          ],
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editInjury[
-                                                                      "maximalPoints"] =
-                                                                  int.tryParse(
-                                                                      value);
+                                                              editFigurant[
+                                                                      "tier"] =
+                                                                  value;
                                                             });
                                                           },
                                                         ),
@@ -622,7 +579,7 @@ class _InjuriesState extends State<Injuries> {
                                                       loading["edit"] == true
                                                           ? null
                                                           : () {
-                                                              editInjury = {};
+                                                              editFigurant = {};
                                                               Navigator.pop(
                                                                   context);
                                                             },
@@ -641,36 +598,30 @@ class _InjuriesState extends State<Injuries> {
                                                   onPressed: loading["edit"] ==
                                                           true
                                                       ? null
-                                                      : (editInjury[
-                                                                      "letter"] !=
+                                                      : (editFigurant[
+                                                                      "title"] !=
                                                                   null &&
-                                                              editInjury[
-                                                                      "situation"] !=
+                                                              editFigurant[
+                                                                      "tier"] !=
                                                                   null &&
-                                                              editInjury[
-                                                                      "diagnosis"] !=
+                                                              editFigurant[
+                                                                      "type"] !=
                                                                   null &&
-                                                              editInjury[
-                                                                      "necessaryEquipment"] !=
-                                                                  null &&
-                                                              editInjury[
-                                                                      "info"] !=
-                                                                  null &&
-                                                              editInjury[
-                                                                      "maximalPoints"] !=
+                                                              editFigurant[
+                                                                      "number"] !=
                                                                   null)
                                                           ? () async {
-                                                              await handleInjuryEdit(
+                                                              await handleFigurantEdit(
                                                                 token: globals
                                                                     .user
                                                                     .token!,
-                                                                injury:
-                                                                    editInjury,
+                                                                figurant:
+                                                                    editFigurant,
                                                               );
                                                             }
                                                           : null,
                                                   child: const Text(
-                                                      "Upravit zranění"),
+                                                      "Upravit stanoviště"),
                                                 ),
                                               ],
                                             );
@@ -688,7 +639,7 @@ class _InjuriesState extends State<Injuries> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red),
                             ),
-                            onPressed: globals.selectedInjury == null
+                            onPressed: selectedFigurant == null
                                 ? null
                                 : () {
                                     showDialog(
@@ -698,8 +649,8 @@ class _InjuriesState extends State<Injuries> {
                                         return StatefulBuilder(
                                           builder: (context, setState) {
                                             return AlertDialog(
-                                              title:
-                                                  const Text("Smazání zranění"),
+                                              title: const Text(
+                                                  "Smazání figuranta"),
                                               content: loading["delete"] == true
                                                   ? Column(
                                                       mainAxisSize:
@@ -709,7 +660,7 @@ class _InjuriesState extends State<Injuries> {
                                                       ],
                                                     )
                                                   : const Text(
-                                                      "Opravdu chcete smazat zranění?"),
+                                                      "Opravdu chcete smazat figuranta?"),
                                               actions: [
                                                 TextButton(
                                                   onPressed:
@@ -738,17 +689,17 @@ class _InjuriesState extends State<Injuries> {
                                                       loading["delete"] == true
                                                           ? null
                                                           : () async {
-                                                              await handleInjuryDelete(
+                                                              await handleFigurantDelete(
                                                                 token: globals
                                                                     .user
                                                                     .token!,
-                                                                injuryId: globals
-                                                                    .selectedInjury!
-                                                                    .id,
+                                                                figurantId:
+                                                                    selectedFigurant!
+                                                                        .id,
                                                               );
                                                             },
                                                   child: const Text(
-                                                      "Smazat zranění"),
+                                                      "Smazat figuranta"),
                                                 ),
                                               ],
                                             );
@@ -763,65 +714,71 @@ class _InjuriesState extends State<Injuries> {
                       ),
                     ),
                     const Divider(),
-                    if (globals.selectedInjury != null)
-                      Card(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                                  child: Text(
-                                      "Diagnóza: ${globals.selectedInjury!.diagnosis}"),
-                                ),
-                                const SizedBox(width: 50),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pushReplacementNamed(
-                                        context, "/injury");
-                                  },
-                                  child: const Text("Otevřít"),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                              child: Text("ID: ${globals.selectedInjury!.id}"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                              child: Text(
-                                  "Informace: ${globals.selectedInjury!.info}"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                              child: Text(
-                                  "Písmeno: ${globals.selectedInjury!.letter}"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                              child: Text(
-                                  "Maximální počet bodů: ${globals.selectedInjury!.maximalPoints}"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                              child: Text(
-                                  "Nezbytné vybavení: ${globals.selectedInjury!.necessaryEquipment}"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                              child: Text(
-                                  "ID rozhodčího: ${globals.selectedInjury!.refereeId}"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                              child: Text(
-                                  "Situace: ${globals.selectedInjury!.situation}"),
-                            ),
-                          ],
+                    if (globals.selectedInjury!.figurants.isEmpty)
+                      const Center(
+                        child: Text(
+                          "Zatím nejsou přidány žádní figuranti.",
+                          style: TextStyle(fontSize: 20),
                         ),
+                      ),
+                    if (globals.selectedCompetition!.stations.isNotEmpty)
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            children: [
+                              for (globals.Figurant figurant
+                                  in globals.selectedInjury!.figurants)
+                                ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    minHeight: 80,
+                                    minWidth: 330,
+                                  ),
+                                  child: Card(
+                                    color: selectedFigurant == figurant
+                                        ? Colors.red
+                                        : Colors.white,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          if (selectedFigurant == figurant) {
+                                            selectedFigurant = null;
+                                          } else {
+                                            selectedFigurant = figurant;
+                                          }
+                                        });
+                                      },
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                8, 8, 0, 0),
+                                            child: Text("ID: ${figurant.id}"),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                8, 8, 0, 0),
+                                            child: Text(
+                                                "Makeup: ${figurant.makeup}"),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                8, 8, 0, 8),
+                                            child: Text(
+                                              "Instrukce: ${figurant.instructions}",
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
                       ),
                   ],
                 ),

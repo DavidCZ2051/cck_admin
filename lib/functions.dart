@@ -683,3 +683,99 @@ Future<globals.FunctionObject> deleteInjury({
     );
   }
 }
+
+// Figurants
+
+Future<globals.FunctionObject> editFigurant({
+  required String token,
+  required Map<String, dynamic> figurant,
+}) async {
+  Response response = await put(
+    Uri.parse("${globals.url}/api/figurants/${figurant['id']}"),
+    headers: {
+      'token': token,
+    },
+    body: {
+      'injurieId': figurant['injuryId'].toString(),
+      'instructions': figurant['instructions'],
+      'makeUp': figurant['makeup'],
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> getFigurants({
+  required String token,
+}) async {
+  Response response = await get(
+    Uri.parse("${globals.url}/api/figurants"),
+    headers: {
+      'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    List figurants = jsonDecode(response.body);
+    for (Map figurant in figurants) {
+      for (globals.Competition competition in globals.competitions) {
+        for (globals.Station station in competition.stations) {
+          for (globals.Injury injury in station.injuries) {
+            if (injury.id == figurant["injurieId"]) {
+              injury.figurants.add(globals.Figurant(
+                id: figurant["id"],
+                injuryId: figurant["injurieId"],
+                instructions: figurant["instructions"],
+                makeup: figurant["makeUp"],
+              ));
+            }
+          }
+        }
+      }
+    }
+
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> deleteFigurant({
+  required String token,
+  required int figurantId,
+}) async {
+  Response response = await delete(
+    Uri.parse("${globals.url}/api/figurants/$figurantId"),
+    headers: {
+      'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}

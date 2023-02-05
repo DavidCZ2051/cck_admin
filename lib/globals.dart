@@ -11,6 +11,7 @@ List<Competition> competitions = [];
 Competition? selectedCompetition;
 Station? selectedStation;
 Team? selectedTeam;
+Injury? selectedInjury;
 String? loadMode;
 
 Map competitionTypes = {
@@ -230,7 +231,7 @@ class Injury {
   String necessaryEquipment;
   String info;
   List<Figurant> figurants = [];
-  List<ThreathmentProcedures> threathmentProcedures = [];
+  List<ThreatmentProcedures> treatmentProcedures = [];
   List<Task> tasks = [];
   Injury({
     required this.id,
@@ -270,14 +271,23 @@ class Figurant {
     required this.instructions,
     required this.makeup,
   });
+
+  Map<String, dynamic> get map {
+    return {
+      "id": id,
+      "injuryId": injuryId,
+      "instructions": instructions,
+      "makeup": makeup,
+    };
+  }
 }
 
-class ThreathmentProcedures {
+class ThreatmentProcedures {
   int id;
   int injuryId;
   String activity;
   int order;
-  ThreathmentProcedures({
+  ThreatmentProcedures({
     required this.id,
     required this.injuryId,
     required this.activity,

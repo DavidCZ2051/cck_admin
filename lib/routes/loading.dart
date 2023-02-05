@@ -144,6 +144,11 @@ class _LoadingState extends State<Loading> {
       setState(() {
         loadType = "injuries";
       });
+
+      if (globals.selectedStation != null) {
+        globals.selectedStation!.injuries = [];
+      }
+
       var object = await functions.getInjuries(token: globals.user.token!);
       if (object.functionCode == globals.FunctionCode.error) {
         showDialog(
