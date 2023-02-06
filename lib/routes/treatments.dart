@@ -13,9 +13,9 @@ class Treatments extends StatefulWidget {
 }
 
 class _TreatmentsState extends State<Treatments> {
-  Map<String, dynamic> newFigurant = {};
-  Map<String, dynamic> editFigurant = {};
-  globals.Figurant? selectedFigurant;
+  Map<String, dynamic> newTreatment = {};
+  Map<String, dynamic> editTreatment = {};
+  globals.TreatmentProcedure? selectedTreatment;
   Map<String, bool> loading = {
     "delete": false,
     "create": false,
@@ -26,18 +26,18 @@ class _TreatmentsState extends State<Treatments> {
     setState(() {});
   }
 
-  handleFigurantDelete({
+  handleTreatmentDelete({
     required String token,
-    required int figurantId,
+    required int treatmentId,
   }) async {
     setState(() {
       loading["delete"] = true;
     });
     setstate();
-    print("Deleting figurant with id: $figurantId");
-    var object = await functions.deleteFigurant(
+    print("Deleting treatment with id: $treatmentId");
+    var object = await functions.deleteTreatmentProcedure(
       token: token,
-      figurantId: figurantId,
+      treatmentProdecureId: treatmentId,
     );
     setState(() {
       loading["delete"] = false;
@@ -45,8 +45,8 @@ class _TreatmentsState extends State<Treatments> {
     setstate();
     if (object.functionCode == globals.FunctionCode.success) {
       setState(() {
-        globals.selectedInjury!.figurants.removeWhere(
-          (figurant) => figurant.id == figurantId,
+        globals.selectedInjury!.treatmentProcedures.removeWhere(
+          (procedure) => procedure.id == treatmentId,
         );
       });
       Navigator.pop(context);
@@ -59,7 +59,7 @@ class _TreatmentsState extends State<Treatments> {
             );
           });
     }
-    selectedFigurant = null;
+    selectedTreatment = null;
   }
 
   handleStationCreate({
@@ -118,7 +118,7 @@ class _TreatmentsState extends State<Treatments> {
     });
 
     print("Editing figurant with data: $figurant");
-    var object = await functions.editFigurant(
+    var object = await functions.editTreatmentProcedure(
       token: token,
       figurant: figurant,
     );
@@ -269,12 +269,12 @@ class _TreatmentsState extends State<Treatments> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   TextFormField(
-                                                    initialValue: newFigurant[
+                                                    initialValue: newTreatment[
                                                                     "number"]
                                                                 .toString() ==
                                                             "null"
                                                         ? ""
-                                                        : newFigurant["number"]
+                                                        : newTreatment["number"]
                                                             .toString(),
                                                     keyboardType:
                                                         TextInputType.number,
@@ -284,21 +284,21 @@ class _TreatmentsState extends State<Treatments> {
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newFigurant["number"] =
+                                                        newTreatment["number"] =
                                                             int.tryParse(value);
                                                       });
                                                     },
                                                   ),
                                                   TextFormField(
                                                     initialValue:
-                                                        newFigurant["title"],
+                                                        newTreatment["title"],
                                                     decoration:
                                                         const InputDecoration(
                                                       labelText: "Název",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newFigurant["title"] =
+                                                        newTreatment["title"] =
                                                             value;
                                                       });
                                                     },
@@ -307,7 +307,7 @@ class _TreatmentsState extends State<Treatments> {
                                                   DropdownButton(
                                                     hint: const Text(
                                                         "Typ stanoviště"),
-                                                    value: newFigurant["type"],
+                                                    value: newTreatment["type"],
                                                     items: globals
                                                         .stationTypes.values
                                                         .map((e) =>
@@ -318,7 +318,7 @@ class _TreatmentsState extends State<Treatments> {
                                                         .toList(),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newFigurant["type"] =
+                                                        newTreatment["type"] =
                                                             value;
                                                       });
                                                     },
@@ -327,7 +327,7 @@ class _TreatmentsState extends State<Treatments> {
                                                   DropdownButton(
                                                     hint: const Text(
                                                         "Druh stanoviště"),
-                                                    value: newFigurant["tier"],
+                                                    value: newTreatment["tier"],
                                                     items: globals
                                                         .stationTiers.values
                                                         .map((e) {
@@ -338,7 +338,7 @@ class _TreatmentsState extends State<Treatments> {
                                                     }).toList(),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newFigurant["tier"] =
+                                                        newTreatment["tier"] =
                                                             value;
                                                       });
                                                     },
@@ -355,7 +355,7 @@ class _TreatmentsState extends State<Treatments> {
                                             onPressed: loading["create"] == true
                                                 ? null
                                                 : () {
-                                                    newFigurant = {};
+                                                    newTreatment = {};
                                                     Navigator.pop(context);
                                                   },
                                             child: const Text(
@@ -372,19 +372,20 @@ class _TreatmentsState extends State<Treatments> {
                                             ),
                                             onPressed: loading["create"] == true
                                                 ? null
-                                                : (newFigurant["title"] !=
+                                                : (newTreatment["title"] !=
                                                             null &&
-                                                        newFigurant["tier"] !=
+                                                        newTreatment["tier"] !=
                                                             null &&
-                                                        newFigurant["type"] !=
+                                                        newTreatment["type"] !=
                                                             null &&
-                                                        newFigurant["number"] !=
+                                                        newTreatment[
+                                                                "number"] !=
                                                             null)
                                                     ? () async {
                                                         await handleStationCreate(
                                                           token: globals
                                                               .user.token!,
-                                                          station: newFigurant,
+                                                          station: newTreatment,
                                                         );
                                                       }
                                                     : null,
@@ -407,15 +408,11 @@ class _TreatmentsState extends State<Treatments> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red),
                             ),
-                            onPressed: selectedFigurant == null
+                            onPressed: selectedTreatment == null
                                 ? null
                                 : () {
-                                    editFigurant = selectedFigurant!.map;
-                                    editFigurant["tier"] = globals
-                                        .stationTiers[editFigurant["tier"]];
-                                    editFigurant["type"] = globals
-                                        .stationTypes[editFigurant["type"]];
-                                    print(editFigurant);
+                                    editTreatment = selectedTreatment!.map;
+                                    print(editTreatment);
                                     showDialog(
                                       barrierDismissible: false,
                                       context: context,
@@ -424,7 +421,7 @@ class _TreatmentsState extends State<Treatments> {
                                           builder: (context, setState) {
                                             return AlertDialog(
                                               title: const Text(
-                                                  "Úprava stanoviště"),
+                                                  "Úprava léčebné procedury"),
                                               content: loading["edit"] == true
                                                   ? Column(
                                                       mainAxisSize:
@@ -438,12 +435,12 @@ class _TreatmentsState extends State<Treatments> {
                                                           MainAxisSize.min,
                                                       children: [
                                                         TextFormField(
-                                                          initialValue: editFigurant[
+                                                          initialValue: editTreatment[
                                                                           "number"]
                                                                       .toString() ==
                                                                   "null"
                                                               ? ""
-                                                              : editFigurant[
+                                                              : editTreatment[
                                                                       "number"]
                                                                   .toString(),
                                                           keyboardType:
@@ -455,7 +452,7 @@ class _TreatmentsState extends State<Treatments> {
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editFigurant[
+                                                              editTreatment[
                                                                       "number"] =
                                                                   int.tryParse(
                                                                       value);
@@ -464,7 +461,7 @@ class _TreatmentsState extends State<Treatments> {
                                                         ),
                                                         TextFormField(
                                                           initialValue:
-                                                              editFigurant[
+                                                              editTreatment[
                                                                   "title"],
                                                           decoration:
                                                               const InputDecoration(
@@ -472,7 +469,7 @@ class _TreatmentsState extends State<Treatments> {
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editFigurant[
+                                                              editTreatment[
                                                                       "title"] =
                                                                   value;
                                                             });
@@ -482,7 +479,7 @@ class _TreatmentsState extends State<Treatments> {
                                                         DropdownButton(
                                                           hint: const Text(
                                                               "Soutěž"),
-                                                          value: editFigurant[
+                                                          value: editTreatment[
                                                               "competitionId"],
                                                           items: [
                                                             for (globals
@@ -499,7 +496,7 @@ class _TreatmentsState extends State<Treatments> {
                                                           ],
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editFigurant[
+                                                              editTreatment[
                                                                       "competitionId"] =
                                                                   value;
                                                             });
@@ -509,7 +506,7 @@ class _TreatmentsState extends State<Treatments> {
                                                         DropdownButton(
                                                           hint: const Text(
                                                               "Typ stanoviště"),
-                                                          value: editFigurant[
+                                                          value: editTreatment[
                                                               "type"],
                                                           items: [
                                                             for (String value
@@ -524,7 +521,7 @@ class _TreatmentsState extends State<Treatments> {
                                                           ],
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editFigurant[
+                                                              editTreatment[
                                                                       "type"] =
                                                                   value;
                                                             });
@@ -534,7 +531,7 @@ class _TreatmentsState extends State<Treatments> {
                                                         DropdownButton(
                                                           hint: const Text(
                                                               "Druh stanoviště"),
-                                                          value: editFigurant[
+                                                          value: editTreatment[
                                                               "tier"],
                                                           items: [
                                                             for (String value
@@ -549,7 +546,7 @@ class _TreatmentsState extends State<Treatments> {
                                                           ],
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editFigurant[
+                                                              editTreatment[
                                                                       "tier"] =
                                                                   value;
                                                             });
@@ -565,14 +562,14 @@ class _TreatmentsState extends State<Treatments> {
                                                             .all(
                                                                 Colors.red[50]),
                                                   ),
-                                                  onPressed:
-                                                      loading["edit"] == true
-                                                          ? null
-                                                          : () {
-                                                              editFigurant = {};
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
+                                                  onPressed: loading["edit"] ==
+                                                          true
+                                                      ? null
+                                                      : () {
+                                                          editTreatment = {};
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
                                                   child: const Text(
                                                     "Zrušit",
                                                     style: TextStyle(
@@ -588,16 +585,16 @@ class _TreatmentsState extends State<Treatments> {
                                                   onPressed: loading["edit"] ==
                                                           true
                                                       ? null
-                                                      : (editFigurant[
+                                                      : (editTreatment[
                                                                       "title"] !=
                                                                   null &&
-                                                              editFigurant[
+                                                              editTreatment[
                                                                       "tier"] !=
                                                                   null &&
-                                                              editFigurant[
+                                                              editTreatment[
                                                                       "type"] !=
                                                                   null &&
-                                                              editFigurant[
+                                                              editTreatment[
                                                                       "number"] !=
                                                                   null)
                                                           ? () async {
@@ -606,7 +603,7 @@ class _TreatmentsState extends State<Treatments> {
                                                                     .user
                                                                     .token!,
                                                                 figurant:
-                                                                    editFigurant,
+                                                                    editTreatment,
                                                               );
                                                             }
                                                           : null,
@@ -629,7 +626,7 @@ class _TreatmentsState extends State<Treatments> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red),
                             ),
-                            onPressed: selectedFigurant == null
+                            onPressed: selectedTreatment == null
                                 ? null
                                 : () {
                                     showDialog(
@@ -684,7 +681,7 @@ class _TreatmentsState extends State<Treatments> {
                                                                     .user
                                                                     .token!,
                                                                 figurantId:
-                                                                    selectedFigurant!
+                                                                    selectedTreatment!
                                                                         .id,
                                                               );
                                                             },
@@ -704,21 +701,21 @@ class _TreatmentsState extends State<Treatments> {
                       ),
                     ),
                     const Divider(),
-                    if (globals.selectedInjury!.figurants.isEmpty)
+                    if (globals.selectedInjury!.treatmentProcedures.isEmpty)
                       const Center(
                         child: Text(
-                          "Zatím nejsou přidány žádní figuranti.",
+                          "Zatím nejsou přidány žádné léčebné procedury.",
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
-                    if (globals.selectedCompetition!.stations.isNotEmpty)
+                    if (globals.selectedInjury!.treatmentProcedures.isNotEmpty)
                       Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Column(
                             children: [
-                              for (globals.Figurant figurant
+                              for (globals.TreatmentProcedure treatment
                                   in globals.selectedInjury!.figurants)
                                 ConstrainedBox(
                                   constraints: const BoxConstraints(
@@ -726,16 +723,16 @@ class _TreatmentsState extends State<Treatments> {
                                     minWidth: 330,
                                   ),
                                   child: Card(
-                                    color: selectedFigurant == figurant
+                                    color: selectedTreatment == figurant
                                         ? Colors.red
                                         : Colors.white,
                                     child: InkWell(
                                       onTap: () {
                                         setState(() {
-                                          if (selectedFigurant == figurant) {
-                                            selectedFigurant = null;
+                                          if (selectedTreatment == figurant) {
+                                            selectedTreatment = null;
                                           } else {
-                                            selectedFigurant = figurant;
+                                            selectedTreatment = figurant;
                                           }
                                         });
                                       },

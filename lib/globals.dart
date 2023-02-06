@@ -231,7 +231,7 @@ class Injury {
   String necessaryEquipment;
   String info;
   List<Figurant> figurants = [];
-  List<ThreatmentProcedures> treatmentProcedures = [];
+  List<TreatmentProcedure> treatmentProcedures = [];
   List<Task> tasks = [];
   Injury({
     required this.id,
@@ -282,17 +282,26 @@ class Figurant {
   }
 }
 
-class ThreatmentProcedures {
+class TreatmentProcedure {
   int id;
   int injuryId;
   String activity;
   int order;
-  ThreatmentProcedures({
+  TreatmentProcedure({
     required this.id,
     required this.injuryId,
     required this.activity,
     required this.order,
   });
+
+  Map<String, dynamic> get map {
+    return {
+      "id": id,
+      "injuryId": injuryId,
+      "activity": activity,
+      "order": order,
+    };
+  }
 }
 
 class Task {
@@ -306,4 +315,13 @@ class Task {
     required this.title,
     required this.maximalMinusPoints,
   });
+
+  Map<String, dynamic> get map {
+    return {
+      "id": id,
+      "injuryId": injuryId,
+      "title": title,
+      "maximalMinusPoints": maximalMinusPoints,
+    };
+  }
 }

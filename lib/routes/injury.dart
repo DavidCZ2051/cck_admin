@@ -163,7 +163,7 @@ class _InjuryState extends State<Injury> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                           child: Text(
-                              "Počet figurantů: ${globals.selectedInjury!.treatmentProcedures.length}"),
+                              "Počet léčebných procedur: ${globals.selectedInjury!.treatmentProcedures.length}"),
                         ),
                       ],
                     ),

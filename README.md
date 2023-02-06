@@ -63,12 +63,12 @@ Při nalezení bugu použijte Github Issues.
 - [x] PUT Update Figurant
 - [x] DEL Delete Figurant
 
-- [ ] GET List Injury Tasks
-- [ ] POST Create Injury Task
-- [ ] PUT Update Injury Task
-- [ ] DEL Delete Injury Task
+- [x] GET List Injury Tasks
+- [x] POST Create Injury Task
+- [?] PUT Update Injury Task
+- [x] DEL Delete Injury Task
 
 - [ ] GET List Treatment Procedures
 - [ ] POST Create Treatment Procedure
 - [ ] PUT Update Treatment Procedure
-- [ ] DEL Delete Treatment Procedure
+- [-] DEL Delete Treatment Procedure

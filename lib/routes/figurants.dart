@@ -564,7 +564,7 @@ class _FigurantsState extends State<Figurants> {
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
-                    if (globals.selectedCompetition!.stations.isNotEmpty)
+                    if (globals.selectedInjury!.figurants.isNotEmpty)
                       Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

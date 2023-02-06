@@ -33,6 +33,7 @@ class _LoadingState extends State<Loading> {
     "injuries": 'Načítání zranění...',
     "teamMembers": 'Načítání členů týmů...',
     "figurants": 'Načítání figurantů...',
+    "injuryTasks": 'Načítání úkolů zranění...',
   };
 
   handleLoadingStuff() async {
@@ -190,7 +191,7 @@ class _LoadingState extends State<Loading> {
               return AlertDialog(
                 title: const Text('Chyba'),
                 content: Text(
-                    'Nepodařilo se načíst zranění. Chybový kód: ${object.statusCode}'),
+                    'Nepodařilo se načíst figuranty. Chybový kód: ${object.statusCode}'),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -204,6 +205,38 @@ class _LoadingState extends State<Loading> {
         Navigator.pushReplacementNamed(context, "/injuries");
         return;
       }
+
+      setState(() {
+        loadType = "injuryTasks";
+      });
+
+      if (globals.selectedInjury != null) {
+        globals.selectedInjury!.tasks = [];
+      }
+
+      object = await functions.getInjuryTasks(token: globals.user.token!);
+      if (object.functionCode == globals.FunctionCode.error) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Chyba'),
+                content: Text(
+                    'Nepodařilo se načíst úlohy zranění. Chybový kód: ${object.statusCode}'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Zavřít'),
+                  ),
+                ],
+              );
+            });
+        Navigator.pushReplacementNamed(context, "/injuries");
+        return;
+      }
+
       Navigator.pushReplacementNamed(context, "/injury");
     }
   }

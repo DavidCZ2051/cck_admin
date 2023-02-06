@@ -26,18 +26,18 @@ class _TasksState extends State<Tasks> {
     setState(() {});
   }
 
-  handleFigurantDelete({
+  handleTaskDelete({
     required String token,
-    required int figurantId,
+    required int injuryTaskId,
   }) async {
     setState(() {
       loading["delete"] = true;
     });
     setstate();
-    print("Deleting figurant with id: $figurantId");
-    var object = await functions.deleteFigurant(
+    print("Deleting task with id: $injuryTaskId");
+    var object = await functions.deleteInjuryTask(
       token: token,
-      figurantId: figurantId,
+      injuryTaskId: injuryTaskId,
     );
     setState(() {
       loading["delete"] = false;
@@ -45,8 +45,8 @@ class _TasksState extends State<Tasks> {
     setstate();
     if (object.functionCode == globals.FunctionCode.success) {
       setState(() {
-        globals.selectedInjury!.figurants.removeWhere(
-          (figurant) => figurant.id == figurantId,
+        globals.selectedInjury!.tasks.removeWhere(
+          (task) => task.id == injuryTaskId,
         );
       });
       Navigator.pop(context);
@@ -62,26 +62,25 @@ class _TasksState extends State<Tasks> {
     selectedTask = null;
   }
 
-  handleStationCreate({
+  handleTaskCreate({
     required String token,
-    required Map<String, dynamic> station,
+    required Map<String, dynamic> task,
   }) async {
     setState(() {
       loading["create"] = true;
     });
-    station["type"] = globals.getStationTypeId(type: station["type"]);
-    station["tier"] = globals.getStationTierId(tier: station["tier"]);
 
-    print("Creating station with data: $station");
-    var object = await functions.createStation(
+    task["injuryId"] = globals.selectedInjury!.id;
+
+    print("Creating task with data: $task");
+    var object = await functions.createInjuryTask(
       token: token,
-      station: station,
-      competitionId: globals.selectedCompetition!.id,
+      task: task,
     );
 
     if (object.functionCode == globals.FunctionCode.success) {
-      globals.selectedCompetition!.stations = [];
-      object = await functions.getStations(
+      globals.selectedInjury!.tasks = [];
+      object = await functions.getInjuryTasks(
         token: token,
       );
       setState(() {
@@ -109,23 +108,23 @@ class _TasksState extends State<Tasks> {
     }
   }
 
-  handleFigurantEdit({
+  handleTaskEdit({
     required String token,
-    required Map<String, dynamic> figurant,
+    required Map<String, dynamic> task,
   }) async {
     setState(() {
       loading["edit"] = true;
     });
 
-    print("Editing figurant with data: $figurant");
-    var object = await functions.editFigurant(
+    print("Editing task with data: $task");
+    var object = await functions.editInjuryTask(
       token: token,
-      figurant: figurant,
+      injuryTask: task,
     );
 
     if (object.functionCode == globals.FunctionCode.success) {
-      globals.selectedInjury!.figurants = [];
-      object = await functions.getFigurants(
+      globals.selectedInjury!.tasks = [];
+      object = await functions.getInjuryTasks(
         token: token,
       );
       setState(() {
@@ -237,7 +236,7 @@ class _TasksState extends State<Tasks> {
                   ),
                 ),
                 const VerticalDivider(),
-                /* Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
@@ -258,7 +257,7 @@ class _TasksState extends State<Tasks> {
                                   return StatefulBuilder(
                                     builder: (context, setState) {
                                       return AlertDialog(
-                                        title: const Text("Přidání stanoviště"),
+                                        title: const Text("Přidání úlohy"),
                                         content: loading["create"] == true
                                             ? Column(
                                                 mainAxisSize: MainAxisSize.min,
@@ -270,76 +269,38 @@ class _TasksState extends State<Tasks> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   TextFormField(
-                                                    initialValue: newFigurant[
-                                                                    "number"]
+                                                    initialValue: newTask[
+                                                                    "maximalMinusPoints"]
                                                                 .toString() ==
                                                             "null"
                                                         ? ""
-                                                        : newFigurant["number"]
+                                                        : newTask[
+                                                                "maximalMinusPoints"]
                                                             .toString(),
                                                     keyboardType:
                                                         TextInputType.number,
                                                     decoration:
                                                         const InputDecoration(
-                                                      labelText: "Číslo",
+                                                      labelText:
+                                                          "Maximální počet mínusových bodů",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newFigurant["number"] =
+                                                        newTask["maximalMinusPoints"] =
                                                             int.tryParse(value);
                                                       });
                                                     },
                                                   ),
                                                   TextFormField(
                                                     initialValue:
-                                                        newFigurant["title"],
+                                                        newTask["title"],
                                                     decoration:
                                                         const InputDecoration(
                                                       labelText: "Název",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newFigurant["title"] =
-                                                            value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  //station type
-                                                  DropdownButton(
-                                                    hint: const Text(
-                                                        "Typ stanoviště"),
-                                                    value: newFigurant["type"],
-                                                    items: globals
-                                                        .stationTypes.values
-                                                        .map((e) =>
-                                                            DropdownMenuItem(
-                                                              value: e,
-                                                              child: Text(e),
-                                                            ))
-                                                        .toList(),
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        newFigurant["type"] =
-                                                            value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  //station tier
-                                                  DropdownButton(
-                                                    hint: const Text(
-                                                        "Druh stanoviště"),
-                                                    value: newFigurant["tier"],
-                                                    items: globals
-                                                        .stationTiers.values
-                                                        .map((e) {
-                                                      return DropdownMenuItem(
-                                                        value: e,
-                                                        child: Text(e),
-                                                      );
-                                                    }).toList(),
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        newFigurant["tier"] =
+                                                        newTask["title"] =
                                                             value;
                                                       });
                                                     },
@@ -356,7 +317,7 @@ class _TasksState extends State<Tasks> {
                                             onPressed: loading["create"] == true
                                                 ? null
                                                 : () {
-                                                    newFigurant = {};
+                                                    newTask = {};
                                                     Navigator.pop(context);
                                                   },
                                             child: const Text(
@@ -373,24 +334,18 @@ class _TasksState extends State<Tasks> {
                                             ),
                                             onPressed: loading["create"] == true
                                                 ? null
-                                                : (newFigurant["title"] !=
-                                                            null &&
-                                                        newFigurant["tier"] !=
-                                                            null &&
-                                                        newFigurant["type"] !=
-                                                            null &&
-                                                        newFigurant["number"] !=
+                                                : (newTask["title"] != null &&
+                                                        newTask["maximalMinusPoints"] !=
                                                             null)
                                                     ? () async {
-                                                        await handleStationCreate(
+                                                        await handleTaskCreate(
                                                           token: globals
                                                               .user.token!,
-                                                          station: newFigurant,
+                                                          task: newTask,
                                                         );
                                                       }
                                                     : null,
-                                            child:
-                                                const Text("Přidat stanoviště"),
+                                            child: const Text("Přidat úlohu"),
                                           ),
                                         ],
                                       );
@@ -408,15 +363,11 @@ class _TasksState extends State<Tasks> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red),
                             ),
-                            onPressed: selectedFigurant == null
+                            onPressed: selectedTask == null
                                 ? null
                                 : () {
-                                    editFigurant = selectedFigurant!.map;
-                                    editFigurant["tier"] = globals
-                                        .stationTiers[editFigurant["tier"]];
-                                    editFigurant["type"] = globals
-                                        .stationTypes[editFigurant["type"]];
-                                    print(editFigurant);
+                                    editTask = selectedTask!.map;
+                                    print(editTask);
                                     showDialog(
                                       barrierDismissible: false,
                                       context: context,
@@ -424,8 +375,7 @@ class _TasksState extends State<Tasks> {
                                         return StatefulBuilder(
                                           builder: (context, setState) {
                                             return AlertDialog(
-                                              title: const Text(
-                                                  "Úprava stanoviště"),
+                                              title: const Text("Úprava úlohy"),
                                               content: loading["edit"] == true
                                                   ? Column(
                                                       mainAxisSize:
@@ -439,25 +389,26 @@ class _TasksState extends State<Tasks> {
                                                           MainAxisSize.min,
                                                       children: [
                                                         TextFormField(
-                                                          initialValue: editFigurant[
-                                                                          "number"]
+                                                          initialValue: editTask[
+                                                                          "maximalMinusPoints"]
                                                                       .toString() ==
                                                                   "null"
                                                               ? ""
-                                                              : editFigurant[
-                                                                      "number"]
+                                                              : editTask[
+                                                                      "maximalMinusPoints"]
                                                                   .toString(),
                                                           keyboardType:
                                                               TextInputType
                                                                   .number,
                                                           decoration:
                                                               const InputDecoration(
-                                                            labelText: "Číslo",
+                                                            labelText:
+                                                                "Maximální počet mínusových bodů",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editFigurant[
-                                                                      "number"] =
+                                                              editTask[
+                                                                      "maximalMinusPoints"] =
                                                                   int.tryParse(
                                                                       value);
                                                             });
@@ -465,93 +416,15 @@ class _TasksState extends State<Tasks> {
                                                         ),
                                                         TextFormField(
                                                           initialValue:
-                                                              editFigurant[
-                                                                  "title"],
+                                                              editTask["title"],
                                                           decoration:
                                                               const InputDecoration(
                                                             labelText: "Název",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
-                                                              editFigurant[
+                                                              editTask[
                                                                       "title"] =
-                                                                  value;
-                                                            });
-                                                          },
-                                                        ),
-                                                        //station competition
-                                                        DropdownButton(
-                                                          hint: const Text(
-                                                              "Soutěž"),
-                                                          value: editFigurant[
-                                                              "competitionId"],
-                                                          items: [
-                                                            for (globals
-                                                                    .Competition competition
-                                                                in globals
-                                                                    .competitions)
-                                                              DropdownMenuItem(
-                                                                value:
-                                                                    competition
-                                                                        .id,
-                                                                child: Text(
-                                                                    "${competition.type} (${competition.startDateString} - ${competition.endDateString})"),
-                                                              ),
-                                                          ],
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              editFigurant[
-                                                                      "competitionId"] =
-                                                                  value;
-                                                            });
-                                                          },
-                                                        ),
-                                                        //station type
-                                                        DropdownButton(
-                                                          hint: const Text(
-                                                              "Typ stanoviště"),
-                                                          value: editFigurant[
-                                                              "type"],
-                                                          items: [
-                                                            for (String value
-                                                                in globals
-                                                                    .stationTypes
-                                                                    .values)
-                                                              DropdownMenuItem(
-                                                                value: value,
-                                                                child:
-                                                                    Text(value),
-                                                              ),
-                                                          ],
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              editFigurant[
-                                                                      "type"] =
-                                                                  value;
-                                                            });
-                                                          },
-                                                        ),
-                                                        //station tier
-                                                        DropdownButton(
-                                                          hint: const Text(
-                                                              "Druh stanoviště"),
-                                                          value: editFigurant[
-                                                              "tier"],
-                                                          items: [
-                                                            for (String value
-                                                                in globals
-                                                                    .stationTiers
-                                                                    .values)
-                                                              DropdownMenuItem(
-                                                                value: value,
-                                                                child:
-                                                                    Text(value),
-                                                              ),
-                                                          ],
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              editFigurant[
-                                                                      "tier"] =
                                                                   value;
                                                             });
                                                           },
@@ -570,7 +443,7 @@ class _TasksState extends State<Tasks> {
                                                       loading["edit"] == true
                                                           ? null
                                                           : () {
-                                                              editFigurant = {};
+                                                              editTask = {};
                                                               Navigator.pop(
                                                                   context);
                                                             },
@@ -589,30 +462,22 @@ class _TasksState extends State<Tasks> {
                                                   onPressed: loading["edit"] ==
                                                           true
                                                       ? null
-                                                      : (editFigurant[
-                                                                      "title"] !=
+                                                      : (editTask["title"] !=
                                                                   null &&
-                                                              editFigurant[
-                                                                      "tier"] !=
-                                                                  null &&
-                                                              editFigurant[
-                                                                      "type"] !=
-                                                                  null &&
-                                                              editFigurant[
-                                                                      "number"] !=
+                                                              editTask[
+                                                                      "maximalMinusPoints"] !=
                                                                   null)
                                                           ? () async {
-                                                              await handleFigurantEdit(
+                                                              await handleTaskEdit(
                                                                 token: globals
                                                                     .user
                                                                     .token!,
-                                                                figurant:
-                                                                    editFigurant,
+                                                                task: editTask,
                                                               );
                                                             }
                                                           : null,
                                                   child: const Text(
-                                                      "Upravit stanoviště"),
+                                                      "Upravit úlohy"),
                                                 ),
                                               ],
                                             );
@@ -630,7 +495,7 @@ class _TasksState extends State<Tasks> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red),
                             ),
-                            onPressed: selectedFigurant == null
+                            onPressed: selectedTask == null
                                 ? null
                                 : () {
                                     showDialog(
@@ -640,8 +505,8 @@ class _TasksState extends State<Tasks> {
                                         return StatefulBuilder(
                                           builder: (context, setState) {
                                             return AlertDialog(
-                                              title: const Text(
-                                                  "Smazání figuranta"),
+                                              title:
+                                                  const Text("Smazání úlohy"),
                                               content: loading["delete"] == true
                                                   ? Column(
                                                       mainAxisSize:
@@ -651,7 +516,7 @@ class _TasksState extends State<Tasks> {
                                                       ],
                                                     )
                                                   : const Text(
-                                                      "Opravdu chcete smazat figuranta?"),
+                                                      "Opravdu chcete smazat úlohu?"),
                                               actions: [
                                                 TextButton(
                                                   onPressed:
@@ -680,17 +545,17 @@ class _TasksState extends State<Tasks> {
                                                       loading["delete"] == true
                                                           ? null
                                                           : () async {
-                                                              await handleFigurantDelete(
+                                                              await handleTaskDelete(
                                                                 token: globals
                                                                     .user
                                                                     .token!,
-                                                                figurantId:
-                                                                    selectedFigurant!
+                                                                injuryTaskId:
+                                                                    selectedTask!
                                                                         .id,
                                                               );
                                                             },
                                                   child: const Text(
-                                                      "Smazat figuranta"),
+                                                      "Smazat úlohu"),
                                                 ),
                                               ],
                                             );
@@ -700,43 +565,43 @@ class _TasksState extends State<Tasks> {
                                     );
                                   },
                             label: const Text("Smazat"),
-                          )
+                          ),
                         ],
                       ),
                     ),
                     const Divider(),
-                    if (globals.selectedInjury!.figurants.isEmpty)
+                    if (globals.selectedInjury!.tasks.isEmpty)
                       const Center(
                         child: Text(
-                          "Zatím nejsou přidány žádní figuranti.",
+                          "Zatím nejsou přidány žádné úlohy.",
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
-                    if (globals.selectedCompetition!.stations.isNotEmpty)
+                    if (globals.selectedInjury!.tasks.isNotEmpty)
                       Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Column(
                             children: [
-                              for (globals.Figurant figurant
-                                  in globals.selectedInjury!.figurants)
+                              for (globals.Task task
+                                  in globals.selectedInjury!.tasks)
                                 ConstrainedBox(
                                   constraints: const BoxConstraints(
                                     minHeight: 80,
                                     minWidth: 330,
                                   ),
                                   child: Card(
-                                    color: selectedFigurant == figurant
+                                    color: selectedTask == task
                                         ? Colors.red
                                         : Colors.white,
                                     child: InkWell(
                                       onTap: () {
                                         setState(() {
-                                          if (selectedFigurant == figurant) {
-                                            selectedFigurant = null;
+                                          if (selectedTask == task) {
+                                            selectedTask = null;
                                           } else {
-                                            selectedFigurant = figurant;
+                                            selectedTask = task;
                                           }
                                         });
                                       },
@@ -747,19 +612,18 @@ class _TasksState extends State<Tasks> {
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 8, 8, 0, 0),
-                                            child: Text("ID: ${figurant.id}"),
+                                            child: Text("ID: ${task.id}"),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 8, 8, 0, 0),
-                                            child: Text(
-                                                "Makeup: ${figurant.makeup}"),
+                                            child: Text("Název: ${task.title}"),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 8, 8, 0, 8),
                                             child: Text(
-                                              "Instrukce: ${figurant.instructions}",
+                                              "Maximální počet mínusových bodů: ${task.maximalMinusPoints}",
                                             ),
                                           ),
                                         ],
@@ -772,7 +636,7 @@ class _TasksState extends State<Tasks> {
                         ],
                       ),
                   ],
-                ), */
+                ),
               ],
             ),
           ),

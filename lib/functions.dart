@@ -808,3 +808,154 @@ Future<globals.FunctionObject> createFigurant({
     );
   }
 }
+
+// Injury Tasks
+
+Future<globals.FunctionObject> deleteInjuryTask({
+  required String token,
+  required int injuryTaskId,
+}) async {
+  Response response = await delete(
+    Uri.parse("${globals.url}/api/injurietasks/$injuryTaskId"),
+    headers: {
+      'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> getInjuryTasks({
+  required String token,
+}) async {
+  Response response = await get(
+    Uri.parse("${globals.url}/api/injurietasks"),
+    headers: {
+      'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    List injuryTasks = jsonDecode(response.body);
+    for (Map injuryTask in injuryTasks) {
+      for (globals.Competition competition in globals.competitions) {
+        for (globals.Station station in competition.stations) {
+          for (globals.Injury injury in station.injuries) {
+            if (injury.id == injuryTask["injurieId"]) {
+              injury.tasks.add(globals.Task(
+                id: injuryTask["id"],
+                injuryId: injuryTask["injurieId"],
+                maximalMinusPoints: injuryTask["maximalMinusPoints"],
+                title: injuryTask["title"],
+              ));
+            }
+          }
+        }
+      }
+    }
+
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> createInjuryTask({
+  required String token,
+  required Map<String, dynamic> task,
+}) async {
+  Response response = await post(
+    Uri.parse("${globals.url}/api/injurietasks"),
+    headers: {
+      'token': token,
+    },
+    body: {
+      "injurieId": task["injuryId"].toString(),
+      "title": task["title"],
+      "maximalMinusPoints": task["maximalMinusPoints"].toString(),
+    },
+  );
+
+  if (response.statusCode == 201) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> editInjuryTask({
+  required String token,
+  required Map<String, dynamic> injuryTask,
+}) async {
+  Response response = await put(
+    Uri.parse("${globals.url}/api/injurietasks/${injuryTask['id']}"),
+    headers: {
+      'token': token,
+    },
+    body: {
+      "injurieId": injuryTask["injuryId"].toString(),
+      "title": injuryTask["title"],
+      "maximalMinusPoints": injuryTask["maximalMinusPoints"].toString(),
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+// Treatment Procedures
+
+Future<globals.FunctionObject> deleteTreatmentProcedure({
+  required String token,
+  required int treatmentProdecureId,
+}) async {
+  Response response = await delete(
+    Uri.parse("${globals.url}/api/treathment/$treatmentProdecureId"),
+    headers: {
+      'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
