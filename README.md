@@ -60,7 +60,7 @@ Při nalezení bugu použijte Github Issues.
 
 - [x] GET List Figurants
 - [x] POST Create Figurant
-- [-] PUT Update Figurant
+- [x] PUT Update Figurant
 - [x] DEL Delete Figurant
 
 - [ ] GET List Injury Tasks
