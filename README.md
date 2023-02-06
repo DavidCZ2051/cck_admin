@@ -1,17 +1,12 @@
 # Roadmap
 
-Roadmapa projektu CCK
+Roadmapa projektu cck_admin
 
-# Beta
+## Beta
 
-Beta bude muset být dokončena do konce roku.
+- Funkční aplikace pro administraci soutěží
 
-## TODO
-
-- CCK Admin
-- CCK Referee
-
-## Bugs
+### Bugs
 
 Při nalezení bugu použijte Github Issues.
 
@@ -19,25 +14,22 @@ Při nalezení bugu použijte Github Issues.
   - Competitions - nelze použít tlačítko "vytvořit" 2x
   - Stations - přetečení obsahu -> přidat scrollbar
 
-# Pre-release
+## Pre-release
 
-Ke konci ledna.
+- Funkční a vizuálně dobrá aplikace pro administraci soutěží
 
-# Release
+## Release
 
-Release bude muset být hotový ke konci února. Oficiální první spuštění aplikace proběhne v dubnu.
+- Funkční a vizuálně výborná aplikace pro administraci soutěží
 
 ## TODO
 
-- CCK Admin:
-  - Date picker
-  - Vizuální styl
-  - Chybové hlášky
-  - Načítání
-- CCK Referee:
-  - Intuitivnost
+- Date picker
+- Vizuální styl
+- Chybové hlášky
+- Načítání
 
-# TODO Endpoints
+## Endpoints Progress
 
 - [x] GET Login
 
@@ -66,8 +58,8 @@ Release bude muset být hotový ke konci února. Oficiální první spuštění 
 - [?] PUT Update Team Member
 - [x] DEL Delete Team Member
 
-- [-] GET List Figurants
-- [-] POST Create Figurant
+- [x] GET List Figurants
+- [x] POST Create Figurant
 - [-] PUT Update Figurant
 - [x] DEL Delete Figurant
 

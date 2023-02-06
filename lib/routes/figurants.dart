@@ -62,26 +62,25 @@ class _FigurantsState extends State<Figurants> {
     selectedFigurant = null;
   }
 
-  handleStationCreate({
+  handleFigurantCreate({
     required String token,
-    required Map<String, dynamic> station,
+    required Map<String, dynamic> figurant,
   }) async {
     setState(() {
       loading["create"] = true;
     });
-    station["type"] = globals.getStationTypeId(type: station["type"]);
-    station["tier"] = globals.getStationTierId(tier: station["tier"]);
 
-    print("Creating station with data: $station");
-    var object = await functions.createStation(
+    figurant["injuryId"] = globals.selectedInjury!.id;
+
+    print("Creating figurant with data: $figurant");
+    var object = await functions.createFigurant(
       token: token,
-      station: station,
-      competitionId: globals.selectedCompetition!.id,
+      figurant: figurant,
     );
 
     if (object.functionCode == globals.FunctionCode.success) {
-      globals.selectedCompetition!.stations = [];
-      object = await functions.getStations(
+      globals.selectedInjury!.figurants = [];
+      object = await functions.getFigurants(
         token: token,
       );
       setState(() {
@@ -179,13 +178,14 @@ class _FigurantsState extends State<Figurants> {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child:
-                                        Text(globals.selectedInjury!.situation),
+                                    child: Text(
+                                        "${globals.selectedInjury!.situation} - ID: ${globals.selectedInjury!.id}"),
                                   ),
                                   const Spacer(),
                                   ElevatedButton(
                                     onPressed: () {
                                       globals.loadMode = "injuries";
+                                      globals.selectedInjury = null;
                                       Navigator.pushReplacementNamed(
                                           context, "/loading");
                                     },
@@ -256,7 +256,7 @@ class _FigurantsState extends State<Figurants> {
                                   return StatefulBuilder(
                                     builder: (context, setState) {
                                       return AlertDialog(
-                                        title: const Text("Přidání stanoviště"),
+                                        title: const Text("Přidání figuranta"),
                                         content: loading["create"] == true
                                             ? Column(
                                                 mainAxisSize: MainAxisSize.min,
@@ -269,75 +269,29 @@ class _FigurantsState extends State<Figurants> {
                                                 children: [
                                                   TextFormField(
                                                     initialValue: newFigurant[
-                                                                    "number"]
-                                                                .toString() ==
-                                                            "null"
-                                                        ? ""
-                                                        : newFigurant["number"]
-                                                            .toString(),
-                                                    keyboardType:
-                                                        TextInputType.number,
+                                                        "instructions"],
                                                     decoration:
                                                         const InputDecoration(
-                                                      labelText: "Číslo",
+                                                      labelText: "Instrukce",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newFigurant["number"] =
-                                                            int.tryParse(value);
+                                                        newFigurant[
+                                                                "instructions"] =
+                                                            value;
                                                       });
                                                     },
                                                   ),
                                                   TextFormField(
                                                     initialValue:
-                                                        newFigurant["title"],
+                                                        newFigurant["makeup"],
                                                     decoration:
                                                         const InputDecoration(
-                                                      labelText: "Název",
+                                                      labelText: "Makeup",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newFigurant["title"] =
-                                                            value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  //station type
-                                                  DropdownButton(
-                                                    hint: const Text(
-                                                        "Typ stanoviště"),
-                                                    value: newFigurant["type"],
-                                                    items: globals
-                                                        .stationTypes.values
-                                                        .map((e) =>
-                                                            DropdownMenuItem(
-                                                              value: e,
-                                                              child: Text(e),
-                                                            ))
-                                                        .toList(),
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        newFigurant["type"] =
-                                                            value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  //station tier
-                                                  DropdownButton(
-                                                    hint: const Text(
-                                                        "Druh stanoviště"),
-                                                    value: newFigurant["tier"],
-                                                    items: globals
-                                                        .stationTiers.values
-                                                        .map((e) {
-                                                      return DropdownMenuItem(
-                                                        value: e,
-                                                        child: Text(e),
-                                                      );
-                                                    }).toList(),
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        newFigurant["tier"] =
+                                                        newFigurant["makeup"] =
                                                             value;
                                                       });
                                                     },
@@ -371,24 +325,20 @@ class _FigurantsState extends State<Figurants> {
                                             ),
                                             onPressed: loading["create"] == true
                                                 ? null
-                                                : (newFigurant["title"] !=
+                                                : (newFigurant["instructions"] !=
                                                             null &&
-                                                        newFigurant["tier"] !=
-                                                            null &&
-                                                        newFigurant["type"] !=
-                                                            null &&
-                                                        newFigurant["number"] !=
+                                                        newFigurant["makeup"] !=
                                                             null)
                                                     ? () async {
-                                                        await handleStationCreate(
-                                                          token: globals
-                                                              .user.token!,
-                                                          station: newFigurant,
-                                                        );
+                                                        await handleFigurantCreate(
+                                                            token: globals
+                                                                .user.token!,
+                                                            figurant:
+                                                                newFigurant);
                                                       }
                                                     : null,
                                             child:
-                                                const Text("Přidat stanoviště"),
+                                                const Text("Přidat figuranta"),
                                           ),
                                         ],
                                       );
@@ -410,10 +360,6 @@ class _FigurantsState extends State<Figurants> {
                                 ? null
                                 : () {
                                     editFigurant = selectedFigurant!.map;
-                                    editFigurant["tier"] = globals
-                                        .stationTiers[editFigurant["tier"]];
-                                    editFigurant["type"] = globals
-                                        .stationTypes[editFigurant["type"]];
                                     print(editFigurant);
                                     showDialog(
                                       barrierDismissible: false,
@@ -423,7 +369,7 @@ class _FigurantsState extends State<Figurants> {
                                           builder: (context, setState) {
                                             return AlertDialog(
                                               title: const Text(
-                                                  "Úprava stanoviště"),
+                                                  "Úprava figuranta"),
                                               content: loading["edit"] == true
                                                   ? Column(
                                                       mainAxisSize:
@@ -437,119 +383,34 @@ class _FigurantsState extends State<Figurants> {
                                                           MainAxisSize.min,
                                                       children: [
                                                         TextFormField(
-                                                          initialValue: editFigurant[
-                                                                          "number"]
-                                                                      .toString() ==
-                                                                  "null"
-                                                              ? ""
-                                                              : editFigurant[
-                                                                      "number"]
-                                                                  .toString(),
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
+                                                          initialValue:
+                                                              editFigurant[
+                                                                  "instructions"],
                                                           decoration:
                                                               const InputDecoration(
-                                                            labelText: "Číslo",
+                                                            labelText:
+                                                                "Instrukce",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
                                                               editFigurant[
-                                                                      "number"] =
-                                                                  int.tryParse(
-                                                                      value);
+                                                                      "instructions"] =
+                                                                  value;
                                                             });
                                                           },
                                                         ),
                                                         TextFormField(
                                                           initialValue:
                                                               editFigurant[
-                                                                  "title"],
+                                                                  "makeup"],
                                                           decoration:
                                                               const InputDecoration(
-                                                            labelText: "Název",
+                                                            labelText: "Makeup",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
                                                               editFigurant[
-                                                                      "title"] =
-                                                                  value;
-                                                            });
-                                                          },
-                                                        ),
-                                                        //station competition
-                                                        DropdownButton(
-                                                          hint: const Text(
-                                                              "Soutěž"),
-                                                          value: editFigurant[
-                                                              "competitionId"],
-                                                          items: [
-                                                            for (globals
-                                                                    .Competition competition
-                                                                in globals
-                                                                    .competitions)
-                                                              DropdownMenuItem(
-                                                                value:
-                                                                    competition
-                                                                        .id,
-                                                                child: Text(
-                                                                    "${competition.type} (${competition.startDateString} - ${competition.endDateString})"),
-                                                              ),
-                                                          ],
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              editFigurant[
-                                                                      "competitionId"] =
-                                                                  value;
-                                                            });
-                                                          },
-                                                        ),
-                                                        //station type
-                                                        DropdownButton(
-                                                          hint: const Text(
-                                                              "Typ stanoviště"),
-                                                          value: editFigurant[
-                                                              "type"],
-                                                          items: [
-                                                            for (String value
-                                                                in globals
-                                                                    .stationTypes
-                                                                    .values)
-                                                              DropdownMenuItem(
-                                                                value: value,
-                                                                child:
-                                                                    Text(value),
-                                                              ),
-                                                          ],
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              editFigurant[
-                                                                      "type"] =
-                                                                  value;
-                                                            });
-                                                          },
-                                                        ),
-                                                        //station tier
-                                                        DropdownButton(
-                                                          hint: const Text(
-                                                              "Druh stanoviště"),
-                                                          value: editFigurant[
-                                                              "tier"],
-                                                          items: [
-                                                            for (String value
-                                                                in globals
-                                                                    .stationTiers
-                                                                    .values)
-                                                              DropdownMenuItem(
-                                                                value: value,
-                                                                child:
-                                                                    Text(value),
-                                                              ),
-                                                          ],
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              editFigurant[
-                                                                      "tier"] =
+                                                                      "makeup"] =
                                                                   value;
                                                             });
                                                           },
@@ -587,17 +448,10 @@ class _FigurantsState extends State<Figurants> {
                                                   onPressed: loading["edit"] ==
                                                           true
                                                       ? null
-                                                      : (editFigurant[
-                                                                      "title"] !=
+                                                      : (editFigurant["instructions"] !=
                                                                   null &&
                                                               editFigurant[
-                                                                      "tier"] !=
-                                                                  null &&
-                                                              editFigurant[
-                                                                      "type"] !=
-                                                                  null &&
-                                                              editFigurant[
-                                                                      "number"] !=
+                                                                      "makeup"] !=
                                                                   null)
                                                           ? () async {
                                                               await handleFigurantEdit(
@@ -610,7 +464,7 @@ class _FigurantsState extends State<Figurants> {
                                                             }
                                                           : null,
                                                   child: const Text(
-                                                      "Upravit stanoviště"),
+                                                      "Upravit figuranta"),
                                                 ),
                                               ],
                                             );

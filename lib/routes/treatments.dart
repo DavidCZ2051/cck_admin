@@ -186,6 +186,7 @@ class _TreatmentsState extends State<Treatments> {
                                   ElevatedButton(
                                     onPressed: () {
                                       globals.loadMode = "injuries";
+                                      globals.selectedInjury = null;
                                       Navigator.pushReplacementNamed(
                                           context, "/loading");
                                     },

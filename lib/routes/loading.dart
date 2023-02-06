@@ -173,7 +173,7 @@ class _LoadingState extends State<Loading> {
         return;
       }
       Navigator.pushReplacementNamed(context, "/injuries");
-    } else if (globals.loadMode == "figurants") {
+    } else if (globals.loadMode == "injury") {
       setState(() {
         loadType = "figurants";
       });
@@ -201,10 +201,10 @@ class _LoadingState extends State<Loading> {
                 ],
               );
             });
-        Navigator.pushReplacementNamed(context, "/injury");
+        Navigator.pushReplacementNamed(context, "/injuries");
         return;
       }
-      Navigator.pushReplacementNamed(context, "/figurants");
+      Navigator.pushReplacementNamed(context, "/injury");
     }
   }
 

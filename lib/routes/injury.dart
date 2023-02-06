@@ -52,6 +52,7 @@ class _InjuryState extends State<Injury> {
                                   ElevatedButton(
                                     onPressed: () {
                                       globals.loadMode = "injuries";
+                                      globals.selectedInjury = null;
                                       Navigator.pushReplacementNamed(
                                           context, "/loading");
                                     },

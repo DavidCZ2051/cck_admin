@@ -779,8 +779,9 @@ class _InjuriesState extends State<Injuries> {
                                 const SizedBox(width: 50),
                                 ElevatedButton(
                                   onPressed: () {
+                                    globals.loadMode = "injury";
                                     Navigator.pushReplacementNamed(
-                                        context, "/injury");
+                                        context, "/loading");
                                   },
                                   child: const Text("Otevřít"),
                                 ),
