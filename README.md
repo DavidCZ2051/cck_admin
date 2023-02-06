@@ -65,10 +65,10 @@ Při nalezení bugu použijte Github Issues.
 
 - [x] GET List Injury Tasks
 - [x] POST Create Injury Task
-- [?] PUT Update Injury Task
+- [x] PUT Update Injury Task
 - [x] DEL Delete Injury Task
 
-- [ ] GET List Treatment Procedures
-- [ ] POST Create Treatment Procedure
-- [ ] PUT Update Treatment Procedure
-- [-] DEL Delete Treatment Procedure
+- [x] GET List Treatment Procedures
+- [x] POST Create Treatment Procedure
+- [-] PUT Update Treatment Procedure
+- [x] DEL Delete Treatment Procedure

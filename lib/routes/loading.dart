@@ -34,6 +34,7 @@ class _LoadingState extends State<Loading> {
     "teamMembers": 'Načítání členů týmů...',
     "figurants": 'Načítání figurantů...',
     "injuryTasks": 'Načítání úkolů zranění...',
+    "treatmentProcedures": "Načítání léčebných postupů...",
   };
 
   handleLoadingStuff() async {
@@ -223,6 +224,38 @@ class _LoadingState extends State<Loading> {
                 title: const Text('Chyba'),
                 content: Text(
                     'Nepodařilo se načíst úlohy zranění. Chybový kód: ${object.statusCode}'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Zavřít'),
+                  ),
+                ],
+              );
+            });
+        Navigator.pushReplacementNamed(context, "/injuries");
+        return;
+      }
+
+      setState(() {
+        loadType = "treatmentProcedures";
+      });
+
+      if (globals.selectedInjury != null) {
+        globals.selectedInjury!.treatmentProcedures = [];
+      }
+
+      object =
+          await functions.getTreatmentProcedures(token: globals.user.token!);
+      if (object.functionCode == globals.FunctionCode.error) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Chyba'),
+                content: Text(
+                    'Nepodařilo se načíst léčebné postupy. Chybový kód: ${object.statusCode}'),
                 actions: [
                   TextButton(
                     onPressed: () {

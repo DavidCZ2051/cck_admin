@@ -62,26 +62,25 @@ class _TreatmentsState extends State<Treatments> {
     selectedTreatment = null;
   }
 
-  handleStationCreate({
+  handleTreatmentCreate({
     required String token,
-    required Map<String, dynamic> station,
+    required Map<String, dynamic> treatment,
   }) async {
     setState(() {
       loading["create"] = true;
     });
-    station["type"] = globals.getStationTypeId(type: station["type"]);
-    station["tier"] = globals.getStationTierId(tier: station["tier"]);
 
-    print("Creating station with data: $station");
-    var object = await functions.createStation(
+    treatment["injuryId"] = globals.selectedInjury!.id;
+
+    print("Creating treatment with data: $treatment");
+    var object = await functions.createTreatmentProcedure(
       token: token,
-      station: station,
-      competitionId: globals.selectedCompetition!.id,
+      treatmentProcedure: treatment,
     );
 
     if (object.functionCode == globals.FunctionCode.success) {
-      globals.selectedCompetition!.stations = [];
-      object = await functions.getStations(
+      globals.selectedInjury!.treatmentProcedures = [];
+      object = await functions.getTreatmentProcedures(
         token: token,
       );
       setState(() {
@@ -109,23 +108,23 @@ class _TreatmentsState extends State<Treatments> {
     }
   }
 
-  handleFigurantEdit({
+  handleTreatmentEdit({
     required String token,
-    required Map<String, dynamic> figurant,
+    required Map<String, dynamic> treatment,
   }) async {
     setState(() {
       loading["edit"] = true;
     });
 
-    print("Editing figurant with data: $figurant");
+    print("Editing treatment with data: $treatment");
     var object = await functions.editTreatmentProcedure(
       token: token,
-      figurant: figurant,
+      treatmentProcedure: treatment,
     );
 
     if (object.functionCode == globals.FunctionCode.success) {
-      globals.selectedInjury!.figurants = [];
-      object = await functions.getFigurants(
+      globals.selectedInjury!.treatmentProcedures = [];
+      object = await functions.getTreatmentProcedures(
         token: token,
       );
       setState(() {
@@ -228,7 +227,7 @@ class _TreatmentsState extends State<Treatments> {
                         ),
                         const ListTile(
                           leading: Icon(Icons.healing),
-                          title: Text("Léčebné procedury"),
+                          title: Text("Léčebné postupy"),
                           selected: true,
                         ),
                       ],
@@ -257,7 +256,8 @@ class _TreatmentsState extends State<Treatments> {
                                   return StatefulBuilder(
                                     builder: (context, setState) {
                                       return AlertDialog(
-                                        title: const Text("Přidání stanoviště"),
+                                        title: const Text(
+                                            "Přidání léčebného postupu"),
                                         content: loading["create"] == true
                                             ? Column(
                                                 mainAxisSize: MainAxisSize.min,
@@ -270,76 +270,36 @@ class _TreatmentsState extends State<Treatments> {
                                                 children: [
                                                   TextFormField(
                                                     initialValue: newTreatment[
-                                                                    "number"]
+                                                                    "order"]
                                                                 .toString() ==
                                                             "null"
                                                         ? ""
-                                                        : newTreatment["number"]
+                                                        : newTreatment["order"]
                                                             .toString(),
                                                     keyboardType:
                                                         TextInputType.number,
                                                     decoration:
                                                         const InputDecoration(
-                                                      labelText: "Číslo",
+                                                      labelText: "Pořadí",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newTreatment["number"] =
+                                                        newTreatment["order"] =
                                                             int.tryParse(value);
                                                       });
                                                     },
                                                   ),
                                                   TextFormField(
-                                                    initialValue:
-                                                        newTreatment["title"],
+                                                    initialValue: newTreatment[
+                                                        "activity"],
                                                     decoration:
                                                         const InputDecoration(
-                                                      labelText: "Název",
+                                                      labelText: "Činnost",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        newTreatment["title"] =
-                                                            value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  //station type
-                                                  DropdownButton(
-                                                    hint: const Text(
-                                                        "Typ stanoviště"),
-                                                    value: newTreatment["type"],
-                                                    items: globals
-                                                        .stationTypes.values
-                                                        .map((e) =>
-                                                            DropdownMenuItem(
-                                                              value: e,
-                                                              child: Text(e),
-                                                            ))
-                                                        .toList(),
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        newTreatment["type"] =
-                                                            value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  //station tier
-                                                  DropdownButton(
-                                                    hint: const Text(
-                                                        "Druh stanoviště"),
-                                                    value: newTreatment["tier"],
-                                                    items: globals
-                                                        .stationTiers.values
-                                                        .map((e) {
-                                                      return DropdownMenuItem(
-                                                        value: e,
-                                                        child: Text(e),
-                                                      );
-                                                    }).toList(),
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        newTreatment["tier"] =
-                                                            value;
+                                                        newTreatment[
+                                                            "activity"] = value;
                                                       });
                                                     },
                                                   ),
@@ -372,25 +332,22 @@ class _TreatmentsState extends State<Treatments> {
                                             ),
                                             onPressed: loading["create"] == true
                                                 ? null
-                                                : (newTreatment["title"] !=
-                                                            null &&
-                                                        newTreatment["tier"] !=
-                                                            null &&
-                                                        newTreatment["type"] !=
+                                                : (newTreatment["order"] !=
                                                             null &&
                                                         newTreatment[
-                                                                "number"] !=
+                                                                "activity"] !=
                                                             null)
                                                     ? () async {
-                                                        await handleStationCreate(
+                                                        await handleTreatmentCreate(
                                                           token: globals
                                                               .user.token!,
-                                                          station: newTreatment,
+                                                          treatment:
+                                                              newTreatment,
                                                         );
                                                       }
                                                     : null,
-                                            child:
-                                                const Text("Přidat stanoviště"),
+                                            child: const Text(
+                                                "Přidat léčebný postup"),
                                           ),
                                         ],
                                       );
@@ -421,7 +378,7 @@ class _TreatmentsState extends State<Treatments> {
                                           builder: (context, setState) {
                                             return AlertDialog(
                                               title: const Text(
-                                                  "Úprava léčebné procedury"),
+                                                  "Úprava léčebného postupu"),
                                               content: loading["edit"] == true
                                                   ? Column(
                                                       mainAxisSize:
@@ -436,24 +393,24 @@ class _TreatmentsState extends State<Treatments> {
                                                       children: [
                                                         TextFormField(
                                                           initialValue: editTreatment[
-                                                                          "number"]
+                                                                          "order"]
                                                                       .toString() ==
                                                                   "null"
                                                               ? ""
                                                               : editTreatment[
-                                                                      "number"]
+                                                                      "order"]
                                                                   .toString(),
                                                           keyboardType:
                                                               TextInputType
                                                                   .number,
                                                           decoration:
                                                               const InputDecoration(
-                                                            labelText: "Číslo",
+                                                            labelText: "Pořadí",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
                                                               editTreatment[
-                                                                      "number"] =
+                                                                      "order"] =
                                                                   int.tryParse(
                                                                       value);
                                                             });
@@ -462,92 +419,16 @@ class _TreatmentsState extends State<Treatments> {
                                                         TextFormField(
                                                           initialValue:
                                                               editTreatment[
-                                                                  "title"],
+                                                                  "activity"],
                                                           decoration:
                                                               const InputDecoration(
-                                                            labelText: "Název",
+                                                            labelText:
+                                                                "Činnost",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
                                                               editTreatment[
-                                                                      "title"] =
-                                                                  value;
-                                                            });
-                                                          },
-                                                        ),
-                                                        //station competition
-                                                        DropdownButton(
-                                                          hint: const Text(
-                                                              "Soutěž"),
-                                                          value: editTreatment[
-                                                              "competitionId"],
-                                                          items: [
-                                                            for (globals
-                                                                    .Competition competition
-                                                                in globals
-                                                                    .competitions)
-                                                              DropdownMenuItem(
-                                                                value:
-                                                                    competition
-                                                                        .id,
-                                                                child: Text(
-                                                                    "${competition.type} (${competition.startDateString} - ${competition.endDateString})"),
-                                                              ),
-                                                          ],
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              editTreatment[
-                                                                      "competitionId"] =
-                                                                  value;
-                                                            });
-                                                          },
-                                                        ),
-                                                        //station type
-                                                        DropdownButton(
-                                                          hint: const Text(
-                                                              "Typ stanoviště"),
-                                                          value: editTreatment[
-                                                              "type"],
-                                                          items: [
-                                                            for (String value
-                                                                in globals
-                                                                    .stationTypes
-                                                                    .values)
-                                                              DropdownMenuItem(
-                                                                value: value,
-                                                                child:
-                                                                    Text(value),
-                                                              ),
-                                                          ],
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              editTreatment[
-                                                                      "type"] =
-                                                                  value;
-                                                            });
-                                                          },
-                                                        ),
-                                                        //station tier
-                                                        DropdownButton(
-                                                          hint: const Text(
-                                                              "Druh stanoviště"),
-                                                          value: editTreatment[
-                                                              "tier"],
-                                                          items: [
-                                                            for (String value
-                                                                in globals
-                                                                    .stationTiers
-                                                                    .values)
-                                                              DropdownMenuItem(
-                                                                value: value,
-                                                                child:
-                                                                    Text(value),
-                                                              ),
-                                                          ],
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              editTreatment[
-                                                                      "tier"] =
+                                                                      "activity"] =
                                                                   value;
                                                             });
                                                           },
@@ -586,29 +467,23 @@ class _TreatmentsState extends State<Treatments> {
                                                           true
                                                       ? null
                                                       : (editTreatment[
-                                                                      "title"] !=
+                                                                      "order"] !=
                                                                   null &&
                                                               editTreatment[
-                                                                      "tier"] !=
-                                                                  null &&
-                                                              editTreatment[
-                                                                      "type"] !=
-                                                                  null &&
-                                                              editTreatment[
-                                                                      "number"] !=
+                                                                      "activity"] !=
                                                                   null)
                                                           ? () async {
-                                                              await handleFigurantEdit(
+                                                              await handleTreatmentEdit(
                                                                 token: globals
                                                                     .user
                                                                     .token!,
-                                                                figurant:
+                                                                treatment:
                                                                     editTreatment,
                                                               );
                                                             }
                                                           : null,
                                                   child: const Text(
-                                                      "Upravit stanoviště"),
+                                                      "Upravit léčebného postupu"),
                                                 ),
                                               ],
                                             );
@@ -637,7 +512,7 @@ class _TreatmentsState extends State<Treatments> {
                                           builder: (context, setState) {
                                             return AlertDialog(
                                               title: const Text(
-                                                  "Smazání figuranta"),
+                                                  "Smazání léčebného postupu"),
                                               content: loading["delete"] == true
                                                   ? Column(
                                                       mainAxisSize:
@@ -647,7 +522,7 @@ class _TreatmentsState extends State<Treatments> {
                                                       ],
                                                     )
                                                   : const Text(
-                                                      "Opravdu chcete smazat figuranta?"),
+                                                      "Opravdu chcete smazat léčebný postup?"),
                                               actions: [
                                                 TextButton(
                                                   onPressed:
@@ -676,17 +551,17 @@ class _TreatmentsState extends State<Treatments> {
                                                       loading["delete"] == true
                                                           ? null
                                                           : () async {
-                                                              await handleFigurantDelete(
+                                                              await handleTreatmentDelete(
                                                                 token: globals
                                                                     .user
                                                                     .token!,
-                                                                figurantId:
+                                                                treatmentId:
                                                                     selectedTreatment!
                                                                         .id,
                                                               );
                                                             },
                                                   child: const Text(
-                                                      "Smazat figuranta"),
+                                                      "Smazat léčebný postup"),
                                                 ),
                                               ],
                                             );
@@ -716,23 +591,24 @@ class _TreatmentsState extends State<Treatments> {
                           Column(
                             children: [
                               for (globals.TreatmentProcedure treatment
-                                  in globals.selectedInjury!.figurants)
+                                  in globals
+                                      .selectedInjury!.treatmentProcedures)
                                 ConstrainedBox(
                                   constraints: const BoxConstraints(
                                     minHeight: 80,
                                     minWidth: 330,
                                   ),
                                   child: Card(
-                                    color: selectedTreatment == figurant
+                                    color: selectedTreatment == treatment
                                         ? Colors.red
                                         : Colors.white,
                                     child: InkWell(
                                       onTap: () {
                                         setState(() {
-                                          if (selectedTreatment == figurant) {
+                                          if (selectedTreatment == treatment) {
                                             selectedTreatment = null;
                                           } else {
-                                            selectedTreatment = figurant;
+                                            selectedTreatment = treatment;
                                           }
                                         });
                                       },
@@ -743,19 +619,19 @@ class _TreatmentsState extends State<Treatments> {
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 8, 8, 0, 0),
-                                            child: Text("ID: ${figurant.id}"),
+                                            child: Text("ID: ${treatment.id}"),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 8, 8, 0, 0),
                                             child: Text(
-                                                "Makeup: ${figurant.makeup}"),
+                                                "Činnost: ${treatment.activity}"),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 8, 8, 0, 8),
                                             child: Text(
-                                              "Instrukce: ${figurant.instructions}",
+                                              "Pořadí: ${treatment.order}",
                                             ),
                                           ),
                                         ],

@@ -959,3 +959,102 @@ Future<globals.FunctionObject> deleteTreatmentProcedure({
     );
   }
 }
+
+Future<globals.FunctionObject> createTreatmentProcedure({
+  required String token,
+  required Map<String, dynamic> treatmentProcedure,
+}) async {
+  Response response = await post(
+    Uri.parse("${globals.url}/api/treathment"),
+    headers: {
+      'token': token,
+    },
+    body: {
+      "injurieId": treatmentProcedure["injuryId"].toString(),
+      "order": treatmentProcedure["order"].toString(),
+      "activity": treatmentProcedure["activity"],
+    },
+  );
+
+  if (response.statusCode == 201) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> getTreatmentProcedures({
+  required String token,
+}) async {
+  Response response = await get(
+    Uri.parse("${globals.url}/api/treathment"),
+    headers: {
+      'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    List treatmentProcedures = jsonDecode(response.body);
+    for (Map treatmentProcedure in treatmentProcedures) {
+      for (globals.Competition competition in globals.competitions) {
+        for (globals.Station station in competition.stations) {
+          for (globals.Injury injury in station.injuries) {
+            if (injury.id == treatmentProcedure["injurieId"]) {
+              injury.treatmentProcedures.add(globals.TreatmentProcedure(
+                id: treatmentProcedure["id"],
+                activity: treatmentProcedure["activity"],
+                injuryId: treatmentProcedure["injurieId"],
+                order: treatmentProcedure["order"],
+              ));
+            }
+          }
+        }
+      }
+    }
+
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
+
+Future<globals.FunctionObject> editTreatmentProcedure({
+  required String token,
+  required Map<String, dynamic> treatmentProcedure,
+}) async {
+  Response response = await put(
+    Uri.parse("${globals.url}/api/treathment/${treatmentProcedure["id"]}"),
+    headers: {
+      'token': token,
+    },
+    body: {
+      "injurieId": treatmentProcedure["injuryId"].toString(),
+      "order": treatmentProcedure["order"].toString(),
+      "activity": treatmentProcedure["activity"],
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}
