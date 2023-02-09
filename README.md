@@ -70,5 +70,5 @@ Při nalezení bugu použijte Github Issues.
 
 - [x] GET List Treatment Procedures
 - [x] POST Create Treatment Procedure
-- [-] PUT Update Treatment Procedure
+- [x] PUT Update Treatment Procedure
 - [x] DEL Delete Treatment Procedure
