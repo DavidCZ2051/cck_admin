@@ -43,6 +43,7 @@ dependencies:
   shared_preferences: ^2.0.15
   flutter_secure_storage: ^6.0.0
   bitsdojo_window: ^0.1.5
+  qr_flutter: ^4.0.0
 
 dev_dependencies:
   flutter_test:
