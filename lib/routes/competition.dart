@@ -50,6 +50,9 @@ class _CompetitionState extends State<Competition> {
                                   ),
                                   const Spacer(),
                                   ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                    ),
                                     onPressed: () {
                                       globals.loadMode = "competitions";
                                       Navigator.pushReplacementNamed(
@@ -89,8 +92,16 @@ class _CompetitionState extends State<Competition> {
                         ),
                         const Divider(),
                         const ListTile(
-                          leading: Icon(Icons.home),
-                          title: Text("Přehled soutěže"),
+                          leading: Icon(
+                            Icons.home,
+                            color: Colors.red,
+                          ),
+                          title: Text(
+                            "Přehled soutěže",
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
                           selected: true,
                         ),
                         ListTile(
@@ -115,15 +126,22 @@ class _CompetitionState extends State<Competition> {
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: Card(
-                    child: Column(
-                      children: [
-                        Text(
-                            "Popis soutěže: ${globals.selectedCompetition!.description}"),
-                        Text(
-                            "Počet týmů: ${globals.selectedCompetition!.teams.length}"),
-                        Text(
-                            "Počet stanovišť: ${globals.selectedCompetition!.stations.length}"),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              "Popis soutěže: ${globals.selectedCompetition!.description}"),
+                          Text(
+                              "Počet týmů: ${globals.selectedCompetition!.teams.length}"),
+                          Text(
+                              "Počet stanovišť: ${globals.selectedCompetition!.stations.length}"),
+                          Text(
+                              "Druh soutěže: ${globals.selectedCompetition!.type}"),
+                        ],
+                      ),
                     ),
                   ),
                 )

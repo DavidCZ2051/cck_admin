@@ -186,6 +186,9 @@ class _TeamState extends State<Team> {
                                   ),
                                   const Spacer(),
                                   ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                    ),
                                     onPressed: () {
                                       Navigator.pushReplacementNamed(
                                           context, "/teams");
@@ -284,12 +287,22 @@ class _TeamState extends State<Team> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   TextFormField(
+                                                    cursorColor: Colors.red,
                                                     initialValue: newTeamMember[
                                                         "firstName"],
                                                     keyboardType:
                                                         TextInputType.number,
                                                     decoration:
                                                         const InputDecoration(
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                        color: Colors.red,
+                                                      )),
                                                       labelText: "Jméno",
                                                     ),
                                                     onChanged: (value) {
@@ -301,10 +314,20 @@ class _TeamState extends State<Team> {
                                                     },
                                                   ),
                                                   TextFormField(
+                                                    cursorColor: Colors.red,
                                                     initialValue: newTeamMember[
                                                         "lastName"],
                                                     decoration:
                                                         const InputDecoration(
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                        color: Colors.red,
+                                                      )),
                                                       labelText: "Příjmení",
                                                     ),
                                                     onChanged: (value) {
@@ -315,11 +338,22 @@ class _TeamState extends State<Team> {
                                                     },
                                                   ),
                                                   TextFormField(
+                                                    cursorColor: Colors.red,
                                                     initialValue: newTeamMember[
                                                         "phoneNumber"],
                                                     decoration:
                                                         const InputDecoration(
-                                                      labelText: "Telefon",
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                        color: Colors.red,
+                                                      )),
+                                                      labelText:
+                                                          "Telefon (nepovinné)",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
@@ -330,12 +364,22 @@ class _TeamState extends State<Team> {
                                                     },
                                                   ),
                                                   TextFormField(
+                                                    cursorColor: Colors.red,
                                                     initialValue: newTeamMember[
                                                         "birthDate"],
                                                     decoration:
                                                         const InputDecoration(
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                        color: Colors.red,
+                                                      )),
                                                       labelText:
-                                                          "Datum narození",
+                                                          "Datum narození (nepovinné)",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
@@ -346,6 +390,7 @@ class _TeamState extends State<Team> {
                                                     },
                                                   ),
                                                   TextFormField(
+                                                    cursorColor: Colors.red,
                                                     initialValue: newTeamMember[
                                                                 "type"] ==
                                                             null
@@ -354,7 +399,16 @@ class _TeamState extends State<Team> {
                                                             .toString(),
                                                     decoration:
                                                         const InputDecoration(
-                                                      labelText: "Typ",
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                        color: Colors.red,
+                                                      )),
+                                                      labelText: "Typ (číslo)",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
@@ -456,6 +510,8 @@ class _TeamState extends State<Team> {
                                                           MainAxisSize.min,
                                                       children: [
                                                         TextFormField(
+                                                          cursorColor:
+                                                              Colors.red,
                                                           initialValue:
                                                               editTeamMember[
                                                                   "firstName"],
@@ -464,6 +520,16 @@ class _TeamState extends State<Team> {
                                                                   .number,
                                                           decoration:
                                                               const InputDecoration(
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                              color: Colors.red,
+                                                            )),
                                                             labelText: "Jméno",
                                                           ),
                                                           onChanged: (value) {
@@ -475,11 +541,23 @@ class _TeamState extends State<Team> {
                                                           },
                                                         ),
                                                         TextFormField(
+                                                          cursorColor:
+                                                              Colors.red,
                                                           initialValue:
                                                               editTeamMember[
                                                                   "lastName"],
                                                           decoration:
                                                               const InputDecoration(
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                              color: Colors.red,
+                                                            )),
                                                             labelText:
                                                                 "Příjmení",
                                                           ),
@@ -492,13 +570,25 @@ class _TeamState extends State<Team> {
                                                           },
                                                         ),
                                                         TextFormField(
+                                                          cursorColor:
+                                                              Colors.red,
                                                           initialValue:
                                                               editTeamMember[
                                                                   "phoneNumber"],
                                                           decoration:
                                                               const InputDecoration(
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                              color: Colors.red,
+                                                            )),
                                                             labelText:
-                                                                "Telefon",
+                                                                "Telefon (nepovinné)",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
@@ -509,13 +599,25 @@ class _TeamState extends State<Team> {
                                                           },
                                                         ),
                                                         TextFormField(
+                                                          cursorColor:
+                                                              Colors.red,
                                                           initialValue:
                                                               editTeamMember[
                                                                   "birthDate"],
                                                           decoration:
                                                               const InputDecoration(
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                              color: Colors.red,
+                                                            )),
                                                             labelText:
-                                                                "Datum narození",
+                                                                "Datum narození (nepovinné)",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
@@ -526,6 +628,8 @@ class _TeamState extends State<Team> {
                                                           },
                                                         ),
                                                         TextFormField(
+                                                          cursorColor:
+                                                              Colors.red,
                                                           initialValue: editTeamMember[
                                                                       "type"] ==
                                                                   null
@@ -535,7 +639,18 @@ class _TeamState extends State<Team> {
                                                                   .toString(),
                                                           decoration:
                                                               const InputDecoration(
-                                                            labelText: "Typ",
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                              color: Colors.red,
+                                                            )),
+                                                            labelText:
+                                                                "Typ (číslo)",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
@@ -709,7 +824,7 @@ class _TeamState extends State<Team> {
                                       "Jméno: ${selectedTeamMember!.firstName}"),
                                 ),
                                 const SizedBox(width: 40),
-                                IconButton(
+                                /* IconButton(
                                   onPressed: () {
                                     showDialog(
                                         context: context,
@@ -739,7 +854,7 @@ class _TeamState extends State<Team> {
                                         });
                                   },
                                   icon: const Icon(Icons.qr_code),
-                                ),
+                                ), */
                               ],
                             ),
                             Padding(

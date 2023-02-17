@@ -194,6 +194,9 @@ class _TeamsState extends State<Teams> {
                                   ),
                                   const Spacer(),
                                   ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                    ),
                                     onPressed: () {
                                       globals.loadMode = "competitions";
                                       Navigator.pushReplacementNamed(
@@ -247,8 +250,16 @@ class _TeamsState extends State<Teams> {
                           },
                         ),
                         const ListTile(
-                          leading: const Icon(Icons.people),
-                          title: const Text("Týmy"),
+                          leading: Icon(
+                            Icons.people,
+                            color: Colors.red,
+                          ),
+                          title: Text(
+                            "Týmy",
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
                           selected: true,
                         ),
                       ],
@@ -289,6 +300,7 @@ class _TeamsState extends State<Teams> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   TextFormField(
+                                                    cursorColor: Colors.red,
                                                     initialValue: newTeam[
                                                                     "number"]
                                                                 .toString() ==
@@ -300,7 +312,17 @@ class _TeamsState extends State<Teams> {
                                                         TextInputType.number,
                                                     decoration:
                                                         const InputDecoration(
-                                                      labelText: "Číslo",
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                      labelText:
+                                                          "Číslo (číslo)",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
@@ -310,11 +332,21 @@ class _TeamsState extends State<Teams> {
                                                     },
                                                   ),
                                                   TextFormField(
+                                                    cursorColor: Colors.red,
                                                     initialValue:
                                                         newTeam["organization"],
                                                     decoration:
                                                         const InputDecoration(
                                                       labelText: "Organizace",
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
@@ -408,6 +440,8 @@ class _TeamsState extends State<Teams> {
                                                           MainAxisSize.min,
                                                       children: [
                                                         TextFormField(
+                                                          cursorColor:
+                                                              Colors.red,
                                                           initialValue: editTeam[
                                                                           "number"]
                                                                       .toString() ==
@@ -421,7 +455,20 @@ class _TeamsState extends State<Teams> {
                                                                   .number,
                                                           decoration:
                                                               const InputDecoration(
-                                                            labelText: "Číslo",
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                            labelText:
+                                                                "Číslo (číslo)",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
@@ -433,10 +480,24 @@ class _TeamsState extends State<Teams> {
                                                           },
                                                         ),
                                                         TextFormField(
+                                                          cursorColor:
+                                                              Colors.red,
                                                           initialValue: editTeam[
                                                               "organization"],
                                                           decoration:
                                                               const InputDecoration(
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
                                                             labelText:
                                                                 "Organizace",
                                                           ),
@@ -631,6 +692,12 @@ class _TeamsState extends State<Teams> {
                                       ),
                                       const SizedBox(width: 100),
                                       ElevatedButton(
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                            Colors.red,
+                                          ),
+                                        ),
                                         onPressed: () {
                                           globals.selectedTeam = team;
                                           Navigator.pushReplacementNamed(

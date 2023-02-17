@@ -188,6 +188,9 @@ class _StationsState extends State<Stations> {
                                   ),
                                   const Spacer(),
                                   ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                    ),
                                     onPressed: () {
                                       globals.loadMode = "competitions";
                                       Navigator.pushReplacementNamed(
@@ -234,8 +237,16 @@ class _StationsState extends State<Stations> {
                           },
                         ),
                         const ListTile(
-                          leading: Icon(Icons.room),
-                          title: Text("Stanoviště"),
+                          leading: Icon(
+                            Icons.room,
+                            color: Colors.red,
+                          ),
+                          title: Text(
+                            "Stanoviště",
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
                           selected: true,
                         ),
                         ListTile(
@@ -283,6 +294,7 @@ class _StationsState extends State<Stations> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   TextFormField(
+                                                    cursorColor: Colors.red,
                                                     initialValue: newStation[
                                                                     "number"]
                                                                 .toString() ==
@@ -294,7 +306,17 @@ class _StationsState extends State<Stations> {
                                                         TextInputType.number,
                                                     decoration:
                                                         const InputDecoration(
-                                                      labelText: "Číslo",
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                      labelText:
+                                                          "Číslo (číslo)",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
@@ -304,10 +326,20 @@ class _StationsState extends State<Stations> {
                                                     },
                                                   ),
                                                   TextFormField(
+                                                    cursorColor: Colors.red,
                                                     initialValue:
                                                         newStation["title"],
                                                     decoration:
                                                         const InputDecoration(
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
                                                       labelText: "Název",
                                                     ),
                                                     onChanged: (value) {
@@ -452,6 +484,8 @@ class _StationsState extends State<Stations> {
                                                           MainAxisSize.min,
                                                       children: [
                                                         TextFormField(
+                                                          cursorColor:
+                                                              Colors.red,
                                                           initialValue: editStation[
                                                                           "number"]
                                                                       .toString() ==
@@ -465,7 +499,20 @@ class _StationsState extends State<Stations> {
                                                                   .number,
                                                           decoration:
                                                               const InputDecoration(
-                                                            labelText: "Číslo",
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                            labelText:
+                                                                "Číslo (číslo)",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
@@ -477,11 +524,25 @@ class _StationsState extends State<Stations> {
                                                           },
                                                         ),
                                                         TextFormField(
+                                                          cursorColor:
+                                                              Colors.red,
                                                           initialValue:
                                                               editStation[
                                                                   "title"],
                                                           decoration:
                                                               const InputDecoration(
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
                                                             labelText: "Název",
                                                           ),
                                                           onChanged: (value) {
@@ -775,6 +836,9 @@ class _StationsState extends State<Stations> {
                                                 width: 20,
                                               ),
                                               ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: Colors.red,
+                                                ),
                                                 onPressed: () {
                                                   station.injuries = [];
                                                   globals.selectedStation =
@@ -854,6 +918,9 @@ class _StationsState extends State<Stations> {
                                                 width: 20,
                                               ),
                                               ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: Colors.red,
+                                                ),
                                                 onPressed: () {
                                                   station.injuries = [];
                                                   globals.selectedStation =

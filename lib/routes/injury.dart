@@ -41,15 +41,28 @@ class _InjuryState extends State<Injury> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(
+                                    maxLines: 4,
+                                    softWrap: true,
+                                    overflow: TextOverflow.ellipsis,
+                                    "${globals.selectedInjury!.situation} - ID: ${globals.selectedInjury!.id}"),
+                              ),
                               Row(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child:
-                                        Text(globals.selectedInjury!.situation),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 0, 0, 8),
+                                    child: Text(
+                                      "Písmeno: ${globals.selectedInjury!.letter}",
+                                    ),
                                   ),
                                   const Spacer(),
                                   ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                    ),
                                     onPressed: () {
                                       globals.loadMode = "injuries";
                                       globals.selectedInjury = null;
@@ -60,19 +73,21 @@ class _InjuryState extends State<Injury> {
                                   ),
                                 ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  globals.selectedInjury!.letter,
-                                ),
-                              ),
                             ],
                           ),
                         ),
                         const Divider(),
                         const ListTile(
-                          leading: Icon(Icons.home),
-                          title: Text("Přehled zranění"),
+                          leading: Icon(
+                            Icons.home,
+                            color: Colors.red,
+                          ),
+                          title: Text(
+                            "Přehled zranění",
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
                           selected: true,
                         ),
                         ListTile(

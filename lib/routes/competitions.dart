@@ -262,6 +262,9 @@ class _CompetitionsState extends State<Competitions> {
                                             "${competition.type} - ID: ${competition.id}"),
                                       ),
                                       ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                        ),
                                         onPressed: () {
                                           selectedCompetition = competition;
                                           globals.selectedCompetition =
@@ -381,6 +384,7 @@ class _CompetitionsState extends State<Competitions> {
                                                             8.0),
                                                     child: TextField(
                                                       // competition description
+                                                      cursorColor: Colors.red,
                                                       onChanged: (value) {
                                                         setState(() {
                                                           newCompetition[
@@ -391,8 +395,19 @@ class _CompetitionsState extends State<Competitions> {
                                                       },
                                                       decoration:
                                                           const InputDecoration(
+                                                        focusedBorder:
+                                                            UnderlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: Colors.red,
+                                                          ),
+                                                        ),
                                                         labelText:
                                                             "Popis soutěže",
+                                                        floatingLabelStyle:
+                                                            TextStyle(
+                                                          color: Colors.red,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -411,9 +426,23 @@ class _CompetitionsState extends State<Competitions> {
                                                           ),
                                                         ),
                                                         ElevatedButton(
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            backgroundColor:
+                                                                Colors.red,
+                                                          ),
                                                           onPressed: () async {
                                                             DateTime? date =
                                                                 await showDatePicker(
+                                                              cancelText:
+                                                                  "Zrušit",
+                                                              confirmText: "OK",
+                                                              helpText:
+                                                                  "Vyberte datum",
+                                                              errorFormatText:
+                                                                  "Nesprávný formát (mm/dd/rrrr)",
+                                                              errorInvalidText:
+                                                                  "Nesprávné datum",
                                                               context: context,
                                                               initialDate:
                                                                   DateTime
@@ -465,9 +494,23 @@ class _CompetitionsState extends State<Competitions> {
                                                           ),
                                                         ),
                                                         ElevatedButton(
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            backgroundColor:
+                                                                Colors.red,
+                                                          ),
                                                           onPressed: () async {
                                                             DateTime? date =
                                                                 await showDatePicker(
+                                                              cancelText:
+                                                                  "Zrušit",
+                                                              confirmText: "OK",
+                                                              helpText:
+                                                                  "Vyberte datum",
+                                                              errorFormatText:
+                                                                  "Nesprávný formát (mm/dd/rrrr)",
+                                                              errorInvalidText:
+                                                                  "Nesprávné datum",
                                                               context: context,
                                                               initialDate:
                                                                   DateTime
@@ -516,6 +559,7 @@ class _CompetitionsState extends State<Competitions> {
                                             onPressed: loading["create"] == true
                                                 ? null
                                                 : () {
+                                                    newCompetition = {};
                                                     Navigator.pop(context);
                                                   },
                                             child: const Text(
@@ -655,6 +699,8 @@ class _CompetitionsState extends State<Competitions> {
                                                               const EdgeInsets
                                                                   .all(8.0),
                                                           child: TextFormField(
+                                                            cursorColor:
+                                                                Colors.red,
                                                             initialValue:
                                                                 editCompetition[
                                                                     "description"],
@@ -669,6 +715,19 @@ class _CompetitionsState extends State<Competitions> {
                                                             },
                                                             decoration:
                                                                 const InputDecoration(
+                                                              focusedBorder:
+                                                                  UnderlineInputBorder(
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                  color: Colors
+                                                                      .red,
+                                                                ),
+                                                              ),
+                                                              labelStyle:
+                                                                  TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
                                                               labelText:
                                                                   "Popis soutěže",
                                                             ),
@@ -691,11 +750,27 @@ class _CompetitionsState extends State<Competitions> {
                                                                 ),
                                                               ),
                                                               ElevatedButton(
+                                                                style: ElevatedButton
+                                                                    .styleFrom(
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .red,
+                                                                ),
                                                                 onPressed:
                                                                     () async {
                                                                   DateTime?
                                                                       date =
                                                                       await showDatePicker(
+                                                                    cancelText:
+                                                                        "Zrušit",
+                                                                    confirmText:
+                                                                        "OK",
+                                                                    helpText:
+                                                                        "Vyberte datum",
+                                                                    errorFormatText:
+                                                                        "Nesprávný formát (mm/dd/rrrr)",
+                                                                    errorInvalidText:
+                                                                        "Nesprávné datum",
                                                                     context:
                                                                         context,
                                                                     initialDate:
@@ -751,11 +826,27 @@ class _CompetitionsState extends State<Competitions> {
                                                                 ),
                                                               ),
                                                               ElevatedButton(
+                                                                style: ElevatedButton
+                                                                    .styleFrom(
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .red,
+                                                                ),
                                                                 onPressed:
                                                                     () async {
                                                                   DateTime?
                                                                       date =
                                                                       await showDatePicker(
+                                                                    cancelText:
+                                                                        "Zrušit",
+                                                                    confirmText:
+                                                                        "OK",
+                                                                    helpText:
+                                                                        "Vyberte datum",
+                                                                    errorFormatText:
+                                                                        "Nesprávný formát (mm/dd/rrrr)",
+                                                                    errorInvalidText:
+                                                                        "Nesprávné datum",
                                                                     context:
                                                                         context,
                                                                     initialDate:

@@ -174,15 +174,28 @@ class _TasksState extends State<Tasks> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(
+                                    maxLines: 4,
+                                    softWrap: true,
+                                    overflow: TextOverflow.ellipsis,
+                                    "${globals.selectedInjury!.situation} - ID: ${globals.selectedInjury!.id}"),
+                              ),
                               Row(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child:
-                                        Text(globals.selectedInjury!.situation),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 0, 0, 8),
+                                    child: Text(
+                                      "Písmeno: ${globals.selectedInjury!.letter}",
+                                    ),
                                   ),
                                   const Spacer(),
                                   ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                    ),
                                     onPressed: () {
                                       globals.loadMode = "injuries";
                                       globals.selectedInjury = null;
@@ -192,12 +205,6 @@ class _TasksState extends State<Tasks> {
                                     child: const Text("Zpět"),
                                   ),
                                 ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  globals.selectedInjury!.letter,
-                                ),
                               ),
                             ],
                           ),
@@ -219,8 +226,16 @@ class _TasksState extends State<Tasks> {
                           },
                         ),
                         const ListTile(
-                          leading: Icon(Icons.assignment),
-                          title: Text("Úlohy"),
+                          leading: Icon(
+                            Icons.assignment,
+                            color: Colors.red,
+                          ),
+                          title: Text(
+                            "Úlohy",
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
                           selected: true,
                         ),
                         ListTile(
@@ -269,6 +284,7 @@ class _TasksState extends State<Tasks> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   TextFormField(
+                                                    cursorColor: Colors.red,
                                                     initialValue: newTask[
                                                                     "maximalMinusPoints"]
                                                                 .toString() ==
@@ -281,8 +297,17 @@ class _TasksState extends State<Tasks> {
                                                         TextInputType.number,
                                                     decoration:
                                                         const InputDecoration(
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
                                                       labelText:
-                                                          "Maximální počet mínusových bodů",
+                                                          "Maximální počet mínusových bodů (číslo)",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
@@ -292,10 +317,22 @@ class _TasksState extends State<Tasks> {
                                                     },
                                                   ),
                                                   TextFormField(
+                                                    minLines: 1,
+                                                    maxLines: 5,
+                                                    cursorColor: Colors.red,
                                                     initialValue:
                                                         newTask["title"],
                                                     decoration:
                                                         const InputDecoration(
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
                                                       labelText: "Název",
                                                     ),
                                                     onChanged: (value) {
@@ -389,6 +426,8 @@ class _TasksState extends State<Tasks> {
                                                           MainAxisSize.min,
                                                       children: [
                                                         TextFormField(
+                                                          cursorColor:
+                                                              Colors.red,
                                                           initialValue: editTask[
                                                                           "maximalMinusPoints"]
                                                                       .toString() ==
@@ -402,8 +441,20 @@ class _TasksState extends State<Tasks> {
                                                                   .number,
                                                           decoration:
                                                               const InputDecoration(
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
                                                             labelText:
-                                                                "Maximální počet mínusových bodů",
+                                                                "Maximální počet mínusových bodů (číslo)",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
@@ -415,10 +466,26 @@ class _TasksState extends State<Tasks> {
                                                           },
                                                         ),
                                                         TextFormField(
+                                                          minLines: 1,
+                                                          maxLines: 5,
+                                                          cursorColor:
+                                                              Colors.red,
                                                           initialValue:
                                                               editTask["title"],
                                                           decoration:
                                                               const InputDecoration(
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
                                                             labelText: "Název",
                                                           ),
                                                           onChanged: (value) {

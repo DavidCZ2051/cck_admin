@@ -608,7 +608,7 @@ Future<globals.FunctionObject> createInjury({
       'diagnose': injury['diagnosis'],
       'maximalPoints': injury['maximalPoints'].toString(),
       'neccesseryEquipment': injury['necessaryEquipment'],
-      'info': injury['info'],
+      'info': injury['info'] ?? '',
     },
   );
 

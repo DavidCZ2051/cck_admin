@@ -186,6 +186,9 @@ class _InjuriesState extends State<Injuries> {
                                   ),
                                   const Spacer(),
                                   ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                    ),
                                     onPressed: () {
                                       globals.selectedStation!.injuries = [];
                                       Navigator.pushReplacementNamed(
@@ -235,15 +238,14 @@ class _InjuriesState extends State<Injuries> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              8, 8, 0, 0),
-                                          child: Text(
-                                              "${injury.situation} - ID: ${injury.id}"),
-                                        ),
-                                      ],
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(8, 8, 0, 0),
+                                      child: Text(
+                                          maxLines: 4,
+                                          softWrap: true,
+                                          overflow: TextOverflow.ellipsis,
+                                          "${injury.situation} - ID: ${injury.id}"),
                                     ),
                                     Padding(
                                       padding:
@@ -293,12 +295,24 @@ class _InjuriesState extends State<Injuries> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   TextFormField(
+                                                    minLines: 1,
+                                                    maxLines: 5,
+                                                    cursorColor: Colors.red,
                                                     initialValue:
                                                         newInjury["situation"],
                                                     keyboardType:
                                                         TextInputType.number,
                                                     decoration:
                                                         const InputDecoration(
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
                                                       labelText: "Situace",
                                                     ),
                                                     onChanged: (value) {
@@ -309,10 +323,22 @@ class _InjuriesState extends State<Injuries> {
                                                     },
                                                   ),
                                                   TextFormField(
+                                                    minLines: 1,
+                                                    maxLines: 5,
+                                                    cursorColor: Colors.red,
                                                     initialValue:
                                                         newInjury["diagnosis"],
                                                     decoration:
                                                         const InputDecoration(
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
                                                       labelText: "Diagnóza",
                                                     ),
                                                     onChanged: (value) {
@@ -343,10 +369,22 @@ class _InjuriesState extends State<Injuries> {
                                                     },
                                                   ),
                                                   TextFormField(
+                                                    minLines: 1,
+                                                    maxLines: 5,
+                                                    cursorColor: Colors.red,
                                                     initialValue: newInjury[
                                                         "necessaryEquipment"],
                                                     decoration:
                                                         const InputDecoration(
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
                                                       labelText:
                                                           "Nezbytné vybavení",
                                                     ),
@@ -359,11 +397,24 @@ class _InjuriesState extends State<Injuries> {
                                                     },
                                                   ),
                                                   TextFormField(
+                                                    minLines: 1,
+                                                    maxLines: 5,
+                                                    cursorColor: Colors.red,
                                                     initialValue:
                                                         newInjury["info"],
                                                     decoration:
                                                         const InputDecoration(
-                                                      labelText: "Informace",
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                      labelText:
+                                                          "Informace (nepovinné)",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
@@ -373,6 +424,7 @@ class _InjuriesState extends State<Injuries> {
                                                     },
                                                   ),
                                                   TextFormField(
+                                                    cursorColor: Colors.red,
                                                     initialValue: newInjury[
                                                                     "maximalPoints"]
                                                                 .toString() ==
@@ -383,8 +435,17 @@ class _InjuriesState extends State<Injuries> {
                                                             .toString(),
                                                     decoration:
                                                         const InputDecoration(
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
                                                       labelText:
-                                                          "Maximální počet bodů",
+                                                          "Maximální počet bodů (číslo)",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
@@ -433,8 +494,6 @@ class _InjuriesState extends State<Injuries> {
                                                             null &&
                                                         newInjury[
                                                                 "necessaryEquipment"] !=
-                                                            null &&
-                                                        newInjury["info"] !=
                                                             null &&
                                                         newInjury[
                                                                 "maximalPoints"] !=
@@ -492,6 +551,10 @@ class _InjuriesState extends State<Injuries> {
                                                           MainAxisSize.min,
                                                       children: [
                                                         TextFormField(
+                                                          cursorColor:
+                                                              Colors.red,
+                                                          minLines: 1,
+                                                          maxLines: 5,
                                                           initialValue:
                                                               editInjury[
                                                                   "situation"],
@@ -500,6 +563,18 @@ class _InjuriesState extends State<Injuries> {
                                                                   .number,
                                                           decoration:
                                                               const InputDecoration(
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
                                                             labelText:
                                                                 "Situace",
                                                           ),
@@ -512,11 +587,27 @@ class _InjuriesState extends State<Injuries> {
                                                           },
                                                         ),
                                                         TextFormField(
+                                                          cursorColor:
+                                                              Colors.red,
+                                                          minLines: 1,
+                                                          maxLines: 5,
                                                           initialValue:
                                                               editInjury[
                                                                   "diagnosis"],
                                                           decoration:
                                                               const InputDecoration(
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
                                                             labelText:
                                                                 "Diagnóza",
                                                           ),
@@ -553,10 +644,26 @@ class _InjuriesState extends State<Injuries> {
                                                           },
                                                         ),
                                                         TextFormField(
+                                                          cursorColor:
+                                                              Colors.red,
+                                                          minLines: 1,
+                                                          maxLines: 5,
                                                           initialValue: editInjury[
                                                               "necessaryEquipment"],
                                                           decoration:
                                                               const InputDecoration(
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
                                                             labelText:
                                                                 "Nezbytné vybavení",
                                                           ),
@@ -569,13 +676,29 @@ class _InjuriesState extends State<Injuries> {
                                                           },
                                                         ),
                                                         TextFormField(
+                                                          cursorColor:
+                                                              Colors.red,
+                                                          minLines: 1,
+                                                          maxLines: 5,
                                                           initialValue:
                                                               editInjury[
                                                                   "info"],
                                                           decoration:
                                                               const InputDecoration(
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
                                                             labelText:
-                                                                "Informace",
+                                                                "Informace (nepovinné)",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
@@ -586,6 +709,8 @@ class _InjuriesState extends State<Injuries> {
                                                           },
                                                         ),
                                                         TextFormField(
+                                                          cursorColor:
+                                                              Colors.red,
                                                           initialValue: editInjury[
                                                                           "maximalPoints"]
                                                                       .toString() ==
@@ -596,8 +721,20 @@ class _InjuriesState extends State<Injuries> {
                                                                   .toString(),
                                                           decoration:
                                                               const InputDecoration(
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
                                                             labelText:
-                                                                "Maximální počet bodů",
+                                                                "Maximální počet bodů (číslo)",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
@@ -652,9 +789,6 @@ class _InjuriesState extends State<Injuries> {
                                                                   null &&
                                                               editInjury[
                                                                       "necessaryEquipment"] !=
-                                                                  null &&
-                                                              editInjury[
-                                                                      "info"] !=
                                                                   null &&
                                                               editInjury[
                                                                       "maximalPoints"] !=
@@ -778,6 +912,9 @@ class _InjuriesState extends State<Injuries> {
                                 ),
                                 const SizedBox(width: 50),
                                 ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                  ),
                                   onPressed: () {
                                     globals.loadMode = "injury";
                                     Navigator.pushReplacementNamed(

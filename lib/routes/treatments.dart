@@ -174,15 +174,28 @@ class _TreatmentsState extends State<Treatments> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(
+                                    maxLines: 4,
+                                    softWrap: true,
+                                    overflow: TextOverflow.ellipsis,
+                                    "${globals.selectedInjury!.situation} - ID: ${globals.selectedInjury!.id}"),
+                              ),
                               Row(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child:
-                                        Text(globals.selectedInjury!.situation),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 0, 0, 8),
+                                    child: Text(
+                                      "Písmeno: ${globals.selectedInjury!.letter}",
+                                    ),
                                   ),
                                   const Spacer(),
                                   ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                    ),
                                     onPressed: () {
                                       globals.loadMode = "injuries";
                                       globals.selectedInjury = null;
@@ -192,12 +205,6 @@ class _TreatmentsState extends State<Treatments> {
                                     child: const Text("Zpět"),
                                   ),
                                 ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  globals.selectedInjury!.letter,
-                                ),
                               ),
                             ],
                           ),
@@ -226,8 +233,16 @@ class _TreatmentsState extends State<Treatments> {
                           },
                         ),
                         const ListTile(
-                          leading: Icon(Icons.healing),
-                          title: Text("Léčebné postupy"),
+                          leading: Icon(
+                            Icons.healing,
+                            color: Colors.red,
+                          ),
+                          title: Text(
+                            "Léčebné postupy",
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
                           selected: true,
                         ),
                       ],
@@ -269,6 +284,7 @@ class _TreatmentsState extends State<Treatments> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   TextFormField(
+                                                    cursorColor: Colors.red,
                                                     initialValue: newTreatment[
                                                                     "order"]
                                                                 .toString() ==
@@ -280,7 +296,17 @@ class _TreatmentsState extends State<Treatments> {
                                                         TextInputType.number,
                                                     decoration:
                                                         const InputDecoration(
-                                                      labelText: "Pořadí",
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                      labelText:
+                                                          "Pořadí (číslo)",
                                                     ),
                                                     onChanged: (value) {
                                                       setState(() {
@@ -290,10 +316,22 @@ class _TreatmentsState extends State<Treatments> {
                                                     },
                                                   ),
                                                   TextFormField(
+                                                    minLines: 1,
+                                                    maxLines: 5,
+                                                    cursorColor: Colors.red,
                                                     initialValue: newTreatment[
                                                         "activity"],
                                                     decoration:
                                                         const InputDecoration(
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
                                                       labelText: "Činnost",
                                                     ),
                                                     onChanged: (value) {
@@ -392,6 +430,8 @@ class _TreatmentsState extends State<Treatments> {
                                                           MainAxisSize.min,
                                                       children: [
                                                         TextFormField(
+                                                          cursorColor:
+                                                              Colors.red,
                                                           initialValue: editTreatment[
                                                                           "order"]
                                                                       .toString() ==
@@ -405,7 +445,20 @@ class _TreatmentsState extends State<Treatments> {
                                                                   .number,
                                                           decoration:
                                                               const InputDecoration(
-                                                            labelText: "Pořadí",
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                            labelText:
+                                                                "Pořadí (číslo)",
                                                           ),
                                                           onChanged: (value) {
                                                             setState(() {
@@ -417,11 +470,27 @@ class _TreatmentsState extends State<Treatments> {
                                                           },
                                                         ),
                                                         TextFormField(
+                                                          minLines: 1,
+                                                          maxLines: 5,
+                                                          cursorColor:
+                                                              Colors.red,
                                                           initialValue:
                                                               editTreatment[
                                                                   "activity"],
                                                           decoration:
                                                               const InputDecoration(
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
                                                             labelText:
                                                                 "Činnost",
                                                           ),

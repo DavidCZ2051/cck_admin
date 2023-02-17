@@ -174,15 +174,28 @@ class _FigurantsState extends State<Figurants> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(
+                                    maxLines: 4,
+                                    softWrap: true,
+                                    overflow: TextOverflow.ellipsis,
+                                    "${globals.selectedInjury!.situation} - ID: ${globals.selectedInjury!.id}"),
+                              ),
                               Row(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 0, 0, 8),
                                     child: Text(
-                                        "${globals.selectedInjury!.situation} - ID: ${globals.selectedInjury!.id}"),
+                                      "Písmeno: ${globals.selectedInjury!.letter}",
+                                    ),
                                   ),
                                   const Spacer(),
                                   ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                    ),
                                     onPressed: () {
                                       globals.loadMode = "injuries";
                                       globals.selectedInjury = null;
@@ -192,12 +205,6 @@ class _FigurantsState extends State<Figurants> {
                                     child: const Text("Zpět"),
                                   ),
                                 ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  globals.selectedInjury!.letter,
-                                ),
                               ),
                             ],
                           ),
@@ -211,8 +218,16 @@ class _FigurantsState extends State<Figurants> {
                           },
                         ),
                         const ListTile(
-                          leading: Icon(Icons.person),
-                          title: Text("Figuranti"),
+                          leading: Icon(
+                            Icons.person,
+                            color: Colors.red,
+                          ),
+                          title: Text(
+                            "Figuranti",
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
                           selected: true,
                         ),
                         ListTile(
@@ -268,10 +283,22 @@ class _FigurantsState extends State<Figurants> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   TextFormField(
+                                                    minLines: 1,
+                                                    maxLines: 5,
+                                                    cursorColor: Colors.red,
                                                     initialValue: newFigurant[
                                                         "instructions"],
                                                     decoration:
                                                         const InputDecoration(
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
                                                       labelText: "Instrukce",
                                                     ),
                                                     onChanged: (value) {
@@ -283,10 +310,22 @@ class _FigurantsState extends State<Figurants> {
                                                     },
                                                   ),
                                                   TextFormField(
+                                                    minLines: 1,
+                                                    maxLines: 5,
+                                                    cursorColor: Colors.red,
                                                     initialValue:
                                                         newFigurant["makeup"],
                                                     decoration:
                                                         const InputDecoration(
+                                                      labelStyle: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
                                                       labelText: "Makeup",
                                                     ),
                                                     onChanged: (value) {
@@ -383,11 +422,27 @@ class _FigurantsState extends State<Figurants> {
                                                           MainAxisSize.min,
                                                       children: [
                                                         TextFormField(
+                                                          minLines: 1,
+                                                          maxLines: 5,
+                                                          cursorColor:
+                                                              Colors.red,
                                                           initialValue:
                                                               editFigurant[
                                                                   "instructions"],
                                                           decoration:
                                                               const InputDecoration(
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
                                                             labelText:
                                                                 "Instrukce",
                                                           ),
@@ -400,11 +455,27 @@ class _FigurantsState extends State<Figurants> {
                                                           },
                                                         ),
                                                         TextFormField(
+                                                          minLines: 1,
+                                                          maxLines: 5,
+                                                          cursorColor:
+                                                              Colors.red,
                                                           initialValue:
                                                               editFigurant[
                                                                   "makeup"],
                                                           decoration:
                                                               const InputDecoration(
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
+                                                            labelStyle:
+                                                                TextStyle(
+                                                              color: Colors.red,
+                                                            ),
                                                             labelText: "Makeup",
                                                           ),
                                                           onChanged: (value) {
