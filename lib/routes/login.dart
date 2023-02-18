@@ -126,7 +126,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       body: Column(
         children: [
-          const widgets.WindowsStuff(),
+          const widgets.WindowsStuff(path: ""),
           Center(
             child: SingleChildScrollView(
               child: Column(

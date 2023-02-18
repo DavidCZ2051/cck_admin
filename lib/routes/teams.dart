@@ -168,7 +168,7 @@ class _TeamsState extends State<Teams> {
     return Scaffold(
       body: Column(
         children: [
-          const widgets.WindowsStuff(),
+          const widgets.WindowsStuff(path: "Soutěž > Týmy"),
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,

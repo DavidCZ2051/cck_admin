@@ -157,7 +157,7 @@ class _FigurantsState extends State<Figurants> {
     return Scaffold(
       body: Column(
         children: [
-          const widgets.WindowsStuff(),
+          const widgets.WindowsStuff(path: "Soutěž > Zranění > Figuranti"),
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,

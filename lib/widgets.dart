@@ -74,7 +74,9 @@ class _ErrorDialogState extends State<ErrorDialog> {
 }
 
 class WindowsStuff extends StatelessWidget {
-  const WindowsStuff({super.key});
+  const WindowsStuff({super.key, required this.path});
+
+  final String path;
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +85,10 @@ class WindowsStuff extends StatelessWidget {
         children: [
           Expanded(
             child: MoveWindow(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
+                child: Text(path),
+              ),
               onDoubleTap: () {
                 appWindow.maximizeOrRestore();
               },

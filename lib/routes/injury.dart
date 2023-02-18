@@ -24,7 +24,8 @@ class _InjuryState extends State<Injury> {
     return Scaffold(
       body: Column(
         children: [
-          const widgets.WindowsStuff(),
+          const widgets.WindowsStuff(
+              path: "Soutěž > Zranění > Přehled zranění"),
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,

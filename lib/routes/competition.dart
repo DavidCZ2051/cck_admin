@@ -24,7 +24,7 @@ class _CompetitionState extends State<Competition> {
     return Scaffold(
       body: Column(
         children: [
-          const widgets.WindowsStuff(),
+          const widgets.WindowsStuff(path: "Soutěž > Přehled soutěže"),
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,

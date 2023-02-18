@@ -279,7 +279,7 @@ class _LoadingState extends State<Loading> {
     return Scaffold(
       body: Column(
         children: [
-          const widgets.WindowsStuff(),
+          const widgets.WindowsStuff(path: ""),
           const Spacer(),
           ConstrainedBox(
             constraints: const BoxConstraints(minHeight: 50, minWidth: 50),

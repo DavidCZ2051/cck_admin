@@ -162,7 +162,7 @@ class _StationsState extends State<Stations> {
     return Scaffold(
       body: Column(
         children: [
-          const widgets.WindowsStuff(),
+          const widgets.WindowsStuff(path: "Soutěž > Stanoviště"),
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
