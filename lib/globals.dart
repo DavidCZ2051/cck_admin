@@ -51,6 +51,17 @@ int getStationTierId({required String tier}) {
       .firstWhere((k) => stationTiers[k] == tier, orElse: () => 0);
 }
 
+Map teamMemberTypes = {
+  1: 'Člen',
+  2: 'Velitel',
+  3: 'Doprovod',
+};
+
+int getTeamMemberTypeId({required String type}) {
+  return teamMemberTypes.keys
+      .firstWhere((k) => teamMemberTypes[k] == type, orElse: () => 0);
+}
+
 class NavigationDrawer {
   bool expanded = false;
   int index = 0;
@@ -184,6 +195,7 @@ class TeamMember {
   int type;
   String? phoneNumber;
   String? birthDate;
+  String? signature;
   TeamMember({
     required this.id,
     required this.teamId,
@@ -192,6 +204,7 @@ class TeamMember {
     required this.type,
     this.phoneNumber,
     this.birthDate,
+    this.signature,
   });
 
   Map<String, dynamic> get map {
@@ -204,6 +217,10 @@ class TeamMember {
       "phoneNumber": phoneNumber,
       "birthDate": birthDate,
     };
+  }
+
+  String get qrJson {
+    return '{"id":$id,"signature":"$signature"}';
   }
 }
 

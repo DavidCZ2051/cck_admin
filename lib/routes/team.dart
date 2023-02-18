@@ -1,6 +1,6 @@
 // packages
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 // files
 import 'package:cck_admin/globals.dart' as globals;
 import 'package:cck_admin/functions.dart' as functions;
@@ -22,8 +22,6 @@ class _TeamState extends State<Team> {
     "create": false,
     "edit": false,
   };
-
-  String json = '{"id": 7, "token": "546545dca654f415b"}';
 
   setstate() {
     setState(() {});
@@ -824,23 +822,15 @@ class _TeamState extends State<Team> {
                                       "Jméno: ${selectedTeamMember!.firstName}"),
                                 ),
                                 const SizedBox(width: 40),
-                                /* IconButton(
+                                IconButton(
                                   onPressed: () {
                                     showDialog(
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
                                             title: const Text("QR kód"),
-                                            content: ConstrainedBox(
-                                              constraints: const BoxConstraints(
-                                                maxHeight: 200,
-                                                maxWidth: 200,
-                                              ),
-                                              child: QrImage(
-                                                data: "d",
-                                                version: QrVersions.auto,
-                                                size: 20,
-                                              ),
+                                            content: PrettyQr(
+                                              data: selectedTeamMember!.qrJson,
                                             ),
                                             actions: [
                                               TextButton(
@@ -854,7 +844,7 @@ class _TeamState extends State<Team> {
                                         });
                                   },
                                   icon: const Icon(Icons.qr_code),
-                                ), */
+                                ),
                               ],
                             ),
                             Padding(
