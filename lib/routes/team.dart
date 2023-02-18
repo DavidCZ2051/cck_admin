@@ -229,7 +229,6 @@ class _TeamState extends State<Team> {
                                 child: Row(
                                   children: [
                                     Padding(
-                                      // teamMember.types: 1 = member, 2 = leader, 3 = accompaniment
                                       padding: const EdgeInsets.all(8.0),
                                       child: Icon(
                                         teamMember.type == 1
@@ -390,33 +389,29 @@ class _TeamState extends State<Team> {
                                                       });
                                                     },
                                                   ),
-                                                  TextFormField(
-                                                    cursorColor: Colors.red,
-                                                    initialValue: newTeamMember[
-                                                                "type"] ==
-                                                            null
-                                                        ? ""
-                                                        : newTeamMember["type"]
-                                                            .toString(),
-                                                    decoration:
-                                                        const InputDecoration(
-                                                      labelStyle: TextStyle(
-                                                        color: Colors.red,
+                                                  DropdownButton(
+                                                    items: const [
+                                                      DropdownMenuItem(
+                                                        value: 1,
+                                                        child: Text("Člen"),
                                                       ),
-                                                      focusedBorder:
-                                                          UnderlineInputBorder(
-                                                              borderSide:
-                                                                  BorderSide(
-                                                        color: Colors.red,
-                                                      )),
-                                                      labelText: "Typ (číslo)",
-                                                    ),
+                                                      DropdownMenuItem(
+                                                        value: 2,
+                                                        child: Text("Velitel"),
+                                                      ),
+                                                      DropdownMenuItem(
+                                                        value: 3,
+                                                        child: Text("Doprovod"),
+                                                      ),
+                                                    ],
                                                     onChanged: (value) {
                                                       setState(() {
                                                         newTeamMember["type"] =
-                                                            int.tryParse(value);
+                                                            value;
                                                       });
                                                     },
+                                                    value:
+                                                        newTeamMember["type"],
                                                   ),
                                                 ],
                                               ),
@@ -628,39 +623,33 @@ class _TeamState extends State<Team> {
                                                             });
                                                           },
                                                         ),
-                                                        TextFormField(
-                                                          cursorColor:
-                                                              Colors.red,
-                                                          initialValue: editTeamMember[
-                                                                      "type"] ==
-                                                                  null
-                                                              ? ""
-                                                              : editTeamMember[
-                                                                      "type"]
-                                                                  .toString(),
-                                                          decoration:
-                                                              const InputDecoration(
-                                                            labelStyle:
-                                                                TextStyle(
-                                                              color: Colors.red,
+                                                        DropdownButton(
+                                                          items: const [
+                                                            DropdownMenuItem(
+                                                              value: 1,
+                                                              child:
+                                                                  Text("Člen"),
                                                             ),
-                                                            focusedBorder:
-                                                                UnderlineInputBorder(
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                              color: Colors.red,
-                                                            )),
-                                                            labelText:
-                                                                "Typ (číslo)",
-                                                          ),
+                                                            DropdownMenuItem(
+                                                              value: 2,
+                                                              child: Text(
+                                                                  "Velitel"),
+                                                            ),
+                                                            DropdownMenuItem(
+                                                              value: 3,
+                                                              child: Text(
+                                                                  "Doprovod"),
+                                                            ),
+                                                          ],
                                                           onChanged: (value) {
                                                             setState(() {
                                                               editTeamMember[
                                                                       "type"] =
-                                                                  int.tryParse(
-                                                                      value);
+                                                                  value;
                                                             });
                                                           },
+                                                          value: editTeamMember[
+                                                              "type"],
                                                         ),
                                                       ],
                                                     ),
