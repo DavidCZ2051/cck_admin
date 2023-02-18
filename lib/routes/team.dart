@@ -226,19 +226,22 @@ class _TeamState extends State<Team> {
                                     }
                                   });
                                 },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                child: Row(
                                   children: [
-                                    Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              8, 8, 0, 0),
-                                          child: Text(
-                                              "${teamMember.firstName} ${teamMember.lastName}- ID: ${teamMember.id}"),
-                                        ),
-                                      ],
+                                    Padding(
+                                      // teamMember.types: 1 = member, 2 = leader, 3 = accompaniment
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        teamMember.type == 1
+                                            ? Icons.person
+                                            : teamMember.type == 2
+                                                ? Icons.person_add_alt_1
+                                                : Icons.group,
+                                        size: 30,
+                                      ),
                                     ),
+                                    Text(
+                                        "${teamMember.firstName} ${teamMember.lastName}- ID: ${teamMember.id}"),
                                   ],
                                 ),
                               ),
@@ -822,29 +825,37 @@ class _TeamState extends State<Team> {
                                       "Jméno: ${selectedTeamMember!.firstName}"),
                                 ),
                                 const SizedBox(width: 40),
-                                IconButton(
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            title: const Text("QR kód"),
-                                            content: PrettyQr(
-                                              data: selectedTeamMember!.qrJson,
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: const Text("Zavřít"),
+                                if (selectedTeamMember!.type == 2)
+                                  IconButton(
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: const Text("QR kód"),
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  PrettyQr(
+                                                    data: selectedTeamMember!
+                                                        .qrJson,
+                                                    size: 225,
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          );
-                                        });
-                                  },
-                                  icon: const Icon(Icons.qr_code),
-                                ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: const Text("Zavřít"),
+                                                ),
+                                              ],
+                                            );
+                                          });
+                                    },
+                                    icon: const Icon(Icons.qr_code),
+                                  ),
                               ],
                             ),
                             Padding(
@@ -864,18 +875,14 @@ class _TeamState extends State<Team> {
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                              child: Text("Typ: ${selectedTeamMember!.type}"),
+                              child: Text(
+                                  "Typ: ${globals.teamMemberTypes[selectedTeamMember!.type]}"),
                             ),
                           ],
                         ),
                       ),
                   ],
                 ),
-                /* QrImage(
-                  data: json,
-                  version: QrVersions.auto,
-                  size: 200,
-                ), */
               ],
             ),
           ),
