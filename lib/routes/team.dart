@@ -817,6 +817,7 @@ class _TeamState extends State<Team> {
                                 if (selectedTeamMember!.type == 2)
                                   IconButton(
                                     onPressed: () {
+                                      print(selectedTeamMember!.qrJson);
                                       showDialog(
                                           context: context,
                                           builder: (context) {
