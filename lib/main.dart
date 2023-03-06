@@ -46,6 +46,7 @@ void main() {
   );
 
   doWhenWindowReady(() {
+    appWindow.hide();
     appWindow.minSize = const Size(1030, 650);
     appWindow.size = const Size(1030, 650);
     appWindow.alignment = Alignment.center;

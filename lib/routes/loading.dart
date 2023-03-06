@@ -35,6 +35,7 @@ class _LoadingState extends State<Loading> {
     "figurants": 'Načítání figurantů...',
     "injuryTasks": 'Načítání úkolů zranění...',
     "treatmentProcedures": "Načítání léčebných postupů...",
+    "qrCodes": "Načítání QR kódů...",
   };
 
   handleLoadingStuff() async {
@@ -104,6 +105,31 @@ class _LoadingState extends State<Loading> {
                 title: const Text('Chyba'),
                 content: Text(
                     'Nepodařilo se načíst členy týmu. Chybový kód: ${object.statusCode}'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Zavřít'),
+                  ),
+                ],
+              );
+            });
+        Navigator.pushReplacementNamed(context, "/competitions");
+        return;
+      }
+      setState(() {
+        loadType = "qrCodes";
+      });
+      object = await functions.getQrCodes(token: globals.user.token!);
+      if (object.functionCode == globals.FunctionCode.error) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Chyba'),
+                content: Text(
+                    'Nepodařilo se načíst QR kódy. Chybový kód: ${object.statusCode}'),
                 actions: [
                   TextButton(
                     onPressed: () {

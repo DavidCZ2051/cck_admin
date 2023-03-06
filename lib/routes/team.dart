@@ -83,6 +83,9 @@ class _TeamState extends State<Team> {
       object = await functions.getTeamMembers(
         token: token,
       );
+      object = await functions.getQrCodes(
+        token: token,
+      );
       setState(() {
         loading["create"] = false;
       });
@@ -223,6 +226,7 @@ class _TeamState extends State<Team> {
                                       selectedTeamMember = null;
                                     } else {
                                       selectedTeamMember = teamMember;
+                                      print(selectedTeamMember!.type);
                                     }
                                   });
                                 },
@@ -232,10 +236,10 @@ class _TeamState extends State<Team> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Icon(
                                         teamMember.type == 1
-                                            ? Icons.person
+                                            ? Icons.person_add_alt_1
                                             : teamMember.type == 2
-                                                ? Icons.person_add_alt_1
-                                                : Icons.group,
+                                                ? Icons.group
+                                                : Icons.person,
                                         size: 30,
                                       ),
                                     ),
@@ -392,15 +396,15 @@ class _TeamState extends State<Team> {
                                                   DropdownButton(
                                                     items: const [
                                                       DropdownMenuItem(
-                                                        value: 1,
+                                                        value: 3,
                                                         child: Text("Člen"),
                                                       ),
                                                       DropdownMenuItem(
-                                                        value: 2,
+                                                        value: 1,
                                                         child: Text("Velitel"),
                                                       ),
                                                       DropdownMenuItem(
-                                                        value: 3,
+                                                        value: 2,
                                                         child: Text("Doprovod"),
                                                       ),
                                                     ],
@@ -626,17 +630,17 @@ class _TeamState extends State<Team> {
                                                         DropdownButton(
                                                           items: const [
                                                             DropdownMenuItem(
-                                                              value: 1,
+                                                              value: 3,
                                                               child:
                                                                   Text("Člen"),
                                                             ),
                                                             DropdownMenuItem(
-                                                              value: 2,
+                                                              value: 1,
                                                               child: Text(
                                                                   "Velitel"),
                                                             ),
                                                             DropdownMenuItem(
-                                                              value: 3,
+                                                              value: 2,
                                                               child: Text(
                                                                   "Doprovod"),
                                                             ),
@@ -814,7 +818,7 @@ class _TeamState extends State<Team> {
                                       "Jméno: ${selectedTeamMember!.firstName}"),
                                 ),
                                 const SizedBox(width: 40),
-                                if (selectedTeamMember!.type == 2)
+                                if (selectedTeamMember!.type == 1)
                                   IconButton(
                                     onPressed: () {
                                       print(selectedTeamMember!.qrJson);

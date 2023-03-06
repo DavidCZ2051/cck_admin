@@ -52,9 +52,9 @@ int getStationTierId({required String tier}) {
 }
 
 Map teamMemberTypes = {
-  1: 'Člen',
-  2: 'Velitel',
-  3: 'Doprovod',
+  1: 'Velitel',
+  2: 'Doprovod',
+  3: 'Člen',
 };
 
 int getTeamMemberTypeId({required String type}) {
@@ -192,7 +192,7 @@ class TeamMember {
   int teamId;
   String firstName;
   String lastName;
-  int type;
+  int type; // 1 - velitel, 2 - doprovod, 3 - člen
   String? phoneNumber;
   String? birthDate;
   String? signature;

@@ -1058,3 +1058,33 @@ Future<globals.FunctionObject> editTreatmentProcedure({
     );
   }
 }
+
+// QR Codes
+Future<globals.FunctionObject> getQrCodes({required String token}) async {
+  for (globals.Competition competition in globals.competitions) {
+    for (globals.Team team in competition.teams) {
+      for (globals.TeamMember teamMember in team.members) {
+        if (teamMember.type == 1) {
+          final response = await get(
+            Uri.parse("${globals.url}/api/qrcode/leader/${teamMember.id}"),
+            headers: {
+              'token': token,
+            },
+          );
+          if (response.statusCode == 200) {
+            teamMember.signature = jsonDecode(response.body)["signature"];
+          } else {
+            return globals.FunctionObject(
+              functionCode: globals.FunctionCode.error,
+              statusCode: response.statusCode,
+            );
+          }
+        }
+      }
+    }
+  }
+  return globals.FunctionObject(
+    functionCode: globals.FunctionCode.success,
+    statusCode: 200,
+  );
+}
