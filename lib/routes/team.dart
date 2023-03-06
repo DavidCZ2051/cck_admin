@@ -1,6 +1,9 @@
 // packages
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:widgets_to_image/widgets_to_image.dart';
+import 'package:path_provider/path_provider.dart';
 // files
 import 'package:cck_admin/globals.dart' as globals;
 import 'package:cck_admin/functions.dart' as functions;
@@ -14,6 +17,7 @@ class Team extends StatefulWidget {
 }
 
 class _TeamState extends State<Team> {
+  WidgetsToImageController imageController = WidgetsToImageController();
   Map<String, dynamic> newTeamMember = {};
   Map<String, dynamic> editTeamMember = {};
   globals.TeamMember? selectedTeamMember;
@@ -22,6 +26,25 @@ class _TeamState extends State<Team> {
     "create": false,
     "edit": false,
   };
+
+  void makeImage() {
+    imageController.capture().then((capturedImage) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        final directory = await getApplicationDocumentsDirectory();
+        final path = directory.path;
+        final file = File(
+          '$path\\qrcode_${selectedTeamMember!.id}.png',
+        );
+        file.writeAsBytes(capturedImage!);
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("QR kód uložen do $path"),
+          ),
+        );
+      });
+    });
+  }
 
   setstate() {
     setState(() {});
@@ -226,7 +249,6 @@ class _TeamState extends State<Team> {
                                       selectedTeamMember = null;
                                     } else {
                                       selectedTeamMember = teamMember;
-                                      print(selectedTeamMember!.type);
                                     }
                                   });
                                 },
@@ -827,17 +849,40 @@ class _TeamState extends State<Team> {
                                           builder: (context) {
                                             return AlertDialog(
                                               title: const Text("QR kód"),
-                                              content: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  PrettyQr(
-                                                    data: selectedTeamMember!
-                                                        .qrJson,
-                                                    size: 225,
+                                              content: WidgetsToImage(
+                                                controller: imageController,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Text(
+                                                        "${selectedTeamMember!.firstName} ${selectedTeamMember!.lastName}",
+                                                        style: const TextStyle(
+                                                          fontSize: 36,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 15),
+                                                      PrettyQr(
+                                                        data:
+                                                            selectedTeamMember!
+                                                                .qrJson,
+                                                        size: 225,
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
+                                                ),
                                               ),
                                               actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    makeImage();
+                                                  },
+                                                  child: const Text("Uložit"),
+                                                ),
                                                 TextButton(
                                                   onPressed: () {
                                                     Navigator.pop(context);
