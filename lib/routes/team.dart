@@ -1,9 +1,8 @@
 // packages
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:file_saver/file_saver.dart';
 // files
 import 'package:cck_admin/globals.dart' as globals;
 import 'package:cck_admin/functions.dart' as functions;
@@ -30,16 +29,15 @@ class _TeamState extends State<Team> {
   void makeImage() {
     imageController.capture().then((capturedImage) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        final directory = await getApplicationDocumentsDirectory();
-        final path = directory.path;
-        final file = File(
-          '$path\\qrcode_${selectedTeamMember!.id}.png',
+        await FileSaver.instance.saveFile(
+          "qr_${selectedTeamMember!.id}",
+          capturedImage!,
+          "png",
         );
-        file.writeAsBytes(capturedImage!);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("QR kód uložen do $path"),
+          const SnackBar(
+            content: Text("QR kód uložen do stažených souborů!"),
           ),
         );
       });
@@ -854,25 +852,10 @@ class _TeamState extends State<Team> {
                                                 child: Padding(
                                                   padding:
                                                       const EdgeInsets.all(8.0),
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Text(
-                                                        "${selectedTeamMember!.firstName} ${selectedTeamMember!.lastName}",
-                                                        style: const TextStyle(
-                                                          fontSize: 36,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 15),
-                                                      PrettyQr(
-                                                        data:
-                                                            selectedTeamMember!
-                                                                .qrJson,
-                                                        size: 225,
-                                                      ),
-                                                    ],
+                                                  child: PrettyQr(
+                                                    data: selectedTeamMember!
+                                                        .qrJson,
+                                                    size: 225,
                                                   ),
                                                 ),
                                               ),

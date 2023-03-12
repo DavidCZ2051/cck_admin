@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 const String url = "https://localhost:7041";
-const String appVersion = "1.0.3-BETA";
+const String appVersion = "1.0.4-BETA";
 const bool debug = false; //debug variable
 
 User user = User();
