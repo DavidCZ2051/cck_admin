@@ -67,6 +67,8 @@ class _TeamsState extends State<Teams> {
   }) async {
     team["competitionId"] = globals.selectedCompetition!.id;
 
+    print("Creating team with data: $team");
+
     setState(() {
       loading["create"] = true;
     });
@@ -355,6 +357,26 @@ class _TeamsState extends State<Teams> {
                                                       });
                                                     },
                                                   ),
+                                                  DropdownButton(
+                                                    hint:
+                                                        const Text("Druh týmu"),
+                                                    value: newTeam["tier"],
+                                                    items: globals
+                                                        .stationTiers.values
+                                                        .map((e) {
+                                                      return DropdownMenuItem(
+                                                        value: globals
+                                                            .getStationTierId(
+                                                                tier: e),
+                                                        child: Text(e),
+                                                      );
+                                                    }).toList(),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newTeam["tier"] = value;
+                                                      });
+                                                    },
+                                                  ),
                                                 ],
                                               ),
                                         actions: [
@@ -509,6 +531,30 @@ class _TeamsState extends State<Teams> {
                                                             });
                                                           },
                                                         ),
+                                                        DropdownButton(
+                                                          hint: const Text(
+                                                              "Druh týmu"),
+                                                          value:
+                                                              editTeam["tier"],
+                                                          items: const [
+                                                            DropdownMenuItem(
+                                                              value: 2,
+                                                              child: Text(
+                                                                  "První stupeň"),
+                                                            ),
+                                                            DropdownMenuItem(
+                                                              value: 3,
+                                                              child: Text(
+                                                                  "Druhý stupeň"),
+                                                            ),
+                                                          ],
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              editTeam["tier"] =
+                                                                  value;
+                                                            });
+                                                          },
+                                                        ),
                                                       ],
                                                     ),
                                               actions: [
@@ -658,71 +704,90 @@ class _TeamsState extends State<Teams> {
                         ),
                       ),
                     if (globals.selectedCompetition!.teams.isNotEmpty)
-                      for (globals.Team team
-                          in globals.selectedCompetition!.teams)
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            minHeight: 80,
-                            minWidth: 330,
-                          ),
-                          child: Card(
-                            color: globals.selectedTeam == team
-                                ? Colors.red
-                                : Colors.white,
-                            child: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (globals.selectedTeam == team) {
-                                    globals.selectedTeam = null;
-                                  } else {
-                                    globals.selectedTeam = team;
-                                  }
-                                });
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            8, 8, 0, 2),
-                                        child: Text(
-                                            "${team.number} - ID: ${team.id}"),
-                                      ),
-                                      const SizedBox(width: 100),
-                                      ElevatedButton(
-                                        style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                            Colors.red,
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              for (globals.Team team
+                                  in globals.selectedCompetition!.teams)
+                                ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    minHeight: 80,
+                                    minWidth: 330,
+                                  ),
+                                  child: Card(
+                                    color: globals.selectedTeam == team
+                                        ? Colors.red
+                                        : Colors.white,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          if (globals.selectedTeam == team) {
+                                            globals.selectedTeam = null;
+                                          } else {
+                                            globals.selectedTeam = team;
+                                          }
+                                        });
+                                      },
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        8, 8, 0, 2),
+                                                child: Text(
+                                                    "${team.number} - ID: ${team.id}"),
+                                              ),
+                                              const SizedBox(width: 100),
+                                              ElevatedButton(
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                    Colors.red,
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  globals.selectedTeam = team;
+                                                  Navigator
+                                                      .pushReplacementNamed(
+                                                          context, "/team");
+                                                },
+                                                child: const Text(
+                                                    "Zobrazit členy"),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        onPressed: () {
-                                          globals.selectedTeam = team;
-                                          Navigator.pushReplacementNamed(
-                                              context, "/team");
-                                        },
-                                        child: const Text("Zobrazit členy"),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                8, 0, 0, 2),
+                                            child: Text(team.organization),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                8, 0, 0, 2),
+                                            child: Text(
+                                              globals.stationTiers[team.tier],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                8, 0, 0, 8),
+                                            child: Text(
+                                                "Počet členů: ${team.members.length.toString()}"),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(8, 0, 0, 2),
-                                    child: Text(team.organization),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(8, 0, 0, 8),
-                                    child: Text(
-                                        "Počet členů: ${team.members.length.toString()}"),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                ),
+                            ],
                           ),
                         ),
+                      ),
                   ],
                 ),
               ],

@@ -181,6 +181,7 @@ Future<globals.FunctionObject> getTeams({required String token}) async {
         if (competition.id == team['competitionId']) {
           competition.teams.add(globals.Team(
             id: team['id'],
+            tier: team['tier'],
             competitionId: team['competitionId'],
             number: team['number'],
             organization: team['organization'],
@@ -215,6 +216,7 @@ Future<globals.FunctionObject> createTeam({
       'competitionId': team['competitionId'].toString(),
       'number': team['number'].toString(),
       'organization': team['organization'],
+      'tier': team['tier'].toString(),
     },
   );
 
@@ -266,7 +268,9 @@ Future<globals.FunctionObject> editTeam({
     },
     body: {
       'number': team['number'].toString(),
+      'competitionId': team['competitionId'].toString(),
       'organization': team['organization'],
+      'tier': team['tier'].toString(),
     },
   );
 

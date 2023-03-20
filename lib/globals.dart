@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 const String url = "https://localhost:7041";
-const String appVersion = "1.0.4-BETA";
+const String appVersion = "1.0.5-BETA";
 const bool debug = false; //debug variable
 
 User user = User();
@@ -131,12 +131,14 @@ class Team {
   int number; // číslo týmu
   String organization; // organizace, ke které tým patří
   int? points; // počet bodů týmu
+  int tier;
   List<TeamMember> members = []; // členové týmu
   Team({
     required this.id,
     required this.competitionId,
     required this.number,
     required this.organization,
+    required this.tier,
     this.points,
   });
 
@@ -147,6 +149,7 @@ class Team {
       "number": number,
       "organization": organization,
       "points": points,
+      "tier": tier,
     };
   }
 }
