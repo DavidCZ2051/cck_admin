@@ -25,7 +25,7 @@ class _InjuryState extends State<Injury> {
       body: Column(
         children: [
           const widgets.WindowsStuff(
-              path: "Soutěž > Zranění > Přehled zranění"),
+              path: "Soutěž > Stanoviště > Zranění > Přehled zranění"),
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,

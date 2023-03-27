@@ -28,6 +28,7 @@ class _LoadingState extends State<Loading> {
 
   Map description = {
     "competitions": 'Načítání soutěží...',
+    "referees": 'Načítání rozhodčích...',
     "teams": 'Načítání týmů...',
     "stations": 'Načítání stanovišť...',
     "injuries": 'Načítání zranění...',
@@ -53,6 +54,32 @@ class _LoadingState extends State<Loading> {
                 title: const Text('Chyba'),
                 content: Text(
                     'Nepodařilo se načíst soutěže. Chybový kód: ${object.statusCode}'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Zavřít'),
+                  ),
+                ],
+              );
+            });
+        Navigator.pushReplacementNamed(context, "/login");
+        return;
+      }
+      setState(() {
+        loadType = "referees";
+      });
+      globals.referees = [];
+      object = await functions.getReferees(token: globals.user.token!);
+      if (object.functionCode == globals.FunctionCode.error) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Chyba'),
+                content: Text(
+                    'Nepodařilo se načíst rozhodčí. Chybový kód: ${object.statusCode}'),
                 actions: [
                   TextButton(
                     onPressed: () {

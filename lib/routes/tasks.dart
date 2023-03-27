@@ -157,7 +157,8 @@ class _TasksState extends State<Tasks> {
     return Scaffold(
       body: Column(
         children: [
-          const widgets.WindowsStuff(path: "Soutěž > Zranění > Úkoly"),
+          const widgets.WindowsStuff(
+              path: "Soutěž > Stanoviště > Zranění > Úkoly"),
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,

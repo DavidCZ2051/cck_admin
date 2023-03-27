@@ -71,7 +71,6 @@ class _InjuriesState extends State<Injuries> {
     });
 
     injury["stationId"] = globals.selectedStation!.id;
-    injury["refereeId"] = 2; //TODO: repair
 
     print("Creating injury with data: $injury");
     var object = await functions.createInjury(
@@ -159,7 +158,7 @@ class _InjuriesState extends State<Injuries> {
     return Scaffold(
       body: Column(
         children: [
-          const widgets.WindowsStuff(path: "Soutěž > Zranění"),
+          const widgets.WindowsStuff(path: "Soutěž > Stanoviště > Zranění"),
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,6 +190,7 @@ class _InjuriesState extends State<Injuries> {
                                     ),
                                     onPressed: () {
                                       globals.selectedStation!.injuries = [];
+                                      globals.selectedInjury = null;
                                       Navigator.pushReplacementNamed(
                                           context, "/stations");
                                     },
@@ -360,6 +360,14 @@ class _InjuriesState extends State<Injuries> {
                                                         value: "B",
                                                         child: Text("B"),
                                                       ),
+                                                      DropdownMenuItem(
+                                                        value: "C",
+                                                        child: Text("C"),
+                                                      ),
+                                                      DropdownMenuItem(
+                                                        value: "D",
+                                                        child: Text("D"),
+                                                      ),
                                                     ],
                                                     onChanged: (value) {
                                                       setState(() {
@@ -455,6 +463,26 @@ class _InjuriesState extends State<Injuries> {
                                                       });
                                                     },
                                                   ),
+                                                  DropdownButton(
+                                                    hint: const Text(
+                                                        "Přidělený rozhodčí"),
+                                                    value:
+                                                        newInjury["refereeId"],
+                                                    items: globals.referees
+                                                        .map((e) {
+                                                      return DropdownMenuItem(
+                                                        value: e.userID,
+                                                        child: Text(
+                                                            "${e.firstName} ${e.lastName} (ID: ${e.userID})"),
+                                                      );
+                                                    }).toList(),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newInjury["refereeId"] =
+                                                            value;
+                                                      });
+                                                    },
+                                                  ),
                                                 ],
                                               ),
                                         actions: [
@@ -497,6 +525,9 @@ class _InjuriesState extends State<Injuries> {
                                                             null &&
                                                         newInjury[
                                                                 "maximalPoints"] !=
+                                                            null &&
+                                                        newInjury[
+                                                                "refereeId"] !=
                                                             null)
                                                     ? () async {
                                                         await handleInjuryCreate(
@@ -633,6 +664,14 @@ class _InjuriesState extends State<Injuries> {
                                                               value: "B",
                                                               child: Text("B"),
                                                             ),
+                                                            DropdownMenuItem(
+                                                              value: "C",
+                                                              child: Text("C"),
+                                                            ),
+                                                            DropdownMenuItem(
+                                                              value: "D",
+                                                              child: Text("D"),
+                                                            ),
                                                           ],
                                                           onChanged: (value) {
                                                             setState(() {
@@ -745,6 +784,28 @@ class _InjuriesState extends State<Injuries> {
                                                             });
                                                           },
                                                         ),
+                                                        DropdownButton(
+                                                          hint: const Text(
+                                                              "Přidělený rozhodčí"),
+                                                          value: editInjury[
+                                                              "refereeId"],
+                                                          items: globals
+                                                              .referees
+                                                              .map((e) {
+                                                            return DropdownMenuItem(
+                                                              value: e.userID,
+                                                              child: Text(
+                                                                  "${e.firstName} ${e.lastName} (ID: ${e.userID})"),
+                                                            );
+                                                          }).toList(),
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              editInjury[
+                                                                      "refereeId"] =
+                                                                  value;
+                                                            });
+                                                          },
+                                                        ),
                                                       ],
                                                     ),
                                               actions: [
@@ -792,6 +853,9 @@ class _InjuriesState extends State<Injuries> {
                                                                   null &&
                                                               editInjury[
                                                                       "maximalPoints"] !=
+                                                                  null &&
+                                                              editInjury[
+                                                                      "refereeId"] !=
                                                                   null)
                                                           ? () async {
                                                               await handleInjuryEdit(
@@ -951,7 +1015,7 @@ class _InjuriesState extends State<Injuries> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                               child: Text(
-                                  "ID rozhodčího: ${globals.selectedInjury!.refereeId}"),
+                                  "Přiřazený rozhodčí: ${globals.referees.firstWhere((referee) => referee.userID == globals.selectedInjury!.refereeId).nameString}"),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),

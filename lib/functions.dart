@@ -1064,6 +1064,7 @@ Future<globals.FunctionObject> editTreatmentProcedure({
 }
 
 // QR Codes
+
 Future<globals.FunctionObject> getQrCodes({required String token}) async {
   for (globals.Competition competition in globals.competitions) {
     for (globals.Team team in competition.teams) {
@@ -1091,4 +1092,35 @@ Future<globals.FunctionObject> getQrCodes({required String token}) async {
     functionCode: globals.FunctionCode.success,
     statusCode: 200,
   );
+}
+
+// Referees
+
+Future<globals.FunctionObject> getReferees({required String token}) async {
+  final response = await get(
+    Uri.parse("${globals.url}/api/users/referee"),
+    headers: {
+      'token': token,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    List referees = jsonDecode(response.body);
+    for (Map referee in referees) {
+      globals.referees.add(globals.User(
+        userID: referee["id"],
+        firstName: referee["firstName"],
+        lastName: referee["lastName"],
+      ));
+    }
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
 }

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 const String url = "https://localhost:7041";
-const String appVersion = "1.0.5-BETA";
+const String appVersion = "1.0.6-BETA";
 const bool debug = false; //debug variable
 
 User user = User();
@@ -13,6 +13,7 @@ Station? selectedStation;
 Team? selectedTeam;
 Injury? selectedInjury;
 String? loadMode;
+List<User> referees = [];
 
 Map competitionTypes = {
   1: 'Okresní',
@@ -85,6 +86,10 @@ class User {
     this.tokenId,
     this.userID,
   });
+
+  String get nameString {
+    return "$firstName $lastName (ID: $userID)";
+  }
 }
 
 class Competition {

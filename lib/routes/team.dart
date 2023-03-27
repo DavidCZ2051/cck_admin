@@ -30,9 +30,9 @@ class _TeamState extends State<Team> {
     imageController.capture().then((capturedImage) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await FileSaver.instance.saveFile(
-          "qr_${selectedTeamMember!.id}",
-          capturedImage!,
-          "png",
+          name: "qr_${selectedTeamMember!.id}",
+          bytes: capturedImage!,
+          ext: "png",
         );
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
