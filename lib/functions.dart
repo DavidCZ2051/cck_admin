@@ -1,6 +1,5 @@
 // packages
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 // files
@@ -259,8 +258,6 @@ Future<globals.FunctionObject> editTeam({
   required String token,
   required Map<String, dynamic> team,
 }) async {
-  print(team);
-
   Response response = await put(
     Uri.parse("${globals.url}/api/teams/${team['id']}"),
     headers: {
@@ -388,8 +385,6 @@ Future<globals.FunctionObject> editTeamMember({
   required String token,
   required Map<String, dynamic> teamMember,
 }) async {
-  print(teamMember);
-
   Response response = await put(
     Uri.parse("${globals.url}/api/teams/members/${teamMember['id']}"),
     headers: {
@@ -464,8 +459,6 @@ Future<globals.FunctionObject> editStation({
   required int stationId,
   required Map<String, dynamic> station,
 }) async {
-  print(station);
-
   Response response = await put(
     Uri.parse("${globals.url}/api/stations/$stationId"),
     headers: {

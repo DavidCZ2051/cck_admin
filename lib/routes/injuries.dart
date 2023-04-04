@@ -33,7 +33,7 @@ class _InjuriesState extends State<Injuries> {
       loading["delete"] = true;
     });
     setstate();
-    print("Deleting injury with id: $injuryId");
+    debugPrint("Deleting injury with id: $injuryId");
     var object = await functions.deleteInjury(
       token: token,
       injuryId: globals.selectedInjury!.id,
@@ -72,7 +72,7 @@ class _InjuriesState extends State<Injuries> {
 
     injury["stationId"] = globals.selectedStation!.id;
 
-    print("Creating injury with data: $injury");
+    debugPrint("Creating injury with data: $injury");
     var object = await functions.createInjury(
       token: token,
       injury: injury,
@@ -116,7 +116,7 @@ class _InjuriesState extends State<Injuries> {
       loading["edit"] = true;
     });
 
-    print("Editing injury with data: $injury");
+    debugPrint("Editing injury with data: $injury");
     var object = await functions.editInjury(
       token: token,
       injury: injury,
@@ -559,7 +559,6 @@ class _InjuriesState extends State<Injuries> {
                                 ? null
                                 : () {
                                     editInjury = globals.selectedInjury!.map;
-                                    print(editInjury);
                                     showDialog(
                                       barrierDismissible: false,
                                       context: context,

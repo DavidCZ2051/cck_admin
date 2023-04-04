@@ -34,7 +34,7 @@ class _FigurantsState extends State<Figurants> {
       loading["delete"] = true;
     });
     setstate();
-    print("Deleting figurant with id: $figurantId");
+    debugPrint("Deleting figurant with id: $figurantId");
     var object = await functions.deleteFigurant(
       token: token,
       figurantId: figurantId,
@@ -116,7 +116,7 @@ class _FigurantsState extends State<Figurants> {
       loading["edit"] = true;
     });
 
-    print("Editing figurant with data: $figurant");
+    debugPrint("Editing figurant with data: $figurant");
     var object = await functions.editFigurant(
       token: token,
       figurant: figurant,
@@ -400,7 +400,6 @@ class _FigurantsState extends State<Figurants> {
                                 ? null
                                 : () {
                                     editFigurant = selectedFigurant!.map;
-                                    print(editFigurant);
                                     showDialog(
                                       barrierDismissible: false,
                                       context: context,

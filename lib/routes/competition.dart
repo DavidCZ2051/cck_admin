@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 // files
 import 'package:cck_admin/globals.dart' as globals;
 import 'package:cck_admin/widgets.dart' as widgets;
-import 'package:cck_admin/functions.dart' as functions;
 
 class Competition extends StatefulWidget {
   const Competition({super.key});

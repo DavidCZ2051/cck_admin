@@ -16,8 +16,6 @@ import 'package:cck_admin/routes/injury.dart';
 import 'package:cck_admin/routes/figurants.dart';
 import 'package:cck_admin/routes/tasks.dart';
 import 'package:cck_admin/routes/treatments.dart';
-// files
-import 'package:cck_admin/globals.dart' as globals;
 
 void main() {
   runApp(

@@ -34,7 +34,7 @@ class _CompetitionsState extends State<Competitions> {
       loading["delete"] = true;
     });
     setstate();
-    print("Deleting competition with id: $competitionId");
+    debugPrint("Deleting competition with id: $competitionId");
     var object = await functions.deleteCompetition(
       token: token,
       competitionId: competitionId,
@@ -80,7 +80,7 @@ class _CompetitionsState extends State<Competitions> {
     competition["type"] = globals.getCompetitionTypeId(
       type: competition["type"],
     );
-    print("Editing competition: $competition");
+    debugPrint("Editing competition: $competition");
     var object = await functions.editCompetition(
       token: token,
       competitionId: competitionId,
@@ -133,7 +133,7 @@ class _CompetitionsState extends State<Competitions> {
     competition["type"] = globals.getCompetitionTypeId(
       type: competition["type"],
     );
-    print("Creating competition with data: $competition");
+    debugPrint("Creating competition with data: $competition");
     var object = await functions.createCompetition(
       token: token,
       competition: competition,
@@ -245,9 +245,6 @@ class _CompetitionsState extends State<Competitions> {
                                     selectedCompetition = competition;
                                   });
                                 }
-                                print(selectedCompetition == null
-                                    ? "No competition selected"
-                                    : "Selected competition with id: ${selectedCompetition!.id}");
                               },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -461,7 +458,7 @@ class _CompetitionsState extends State<Competitions> {
                                                                     date;
                                                               });
                                                               setstate();
-                                                              print(
+                                                              debugPrint(
                                                                   "Selected date: ${newCompetition["startDate"]}");
                                                             }
                                                           },
@@ -529,7 +526,7 @@ class _CompetitionsState extends State<Competitions> {
                                                                     date;
                                                               });
                                                               setstate();
-                                                              print(
+                                                              debugPrint(
                                                                   "Selected date: ${newCompetition["endDate"]}");
                                                             }
                                                           },
@@ -614,8 +611,6 @@ class _CompetitionsState extends State<Competitions> {
                             onPressed: selectedCompetition == null
                                 ? null
                                 : () {
-                                    print(globals.competitions);
-
                                     editCompetition["type"] =
                                         selectedCompetition!.type;
                                     editCompetition["startDate"] =
@@ -792,7 +787,7 @@ class _CompetitionsState extends State<Competitions> {
                                                                           date;
                                                                     });
                                                                     setstate();
-                                                                    print(
+                                                                    debugPrint(
                                                                         "Selected date: ${editCompetition["startDate"]}");
                                                                   }
                                                                 },
@@ -868,7 +863,7 @@ class _CompetitionsState extends State<Competitions> {
                                                                           date;
                                                                     });
                                                                     setstate();
-                                                                    print(
+                                                                    debugPrint(
                                                                         "Selected date: ${editCompetition["endDate"]}");
                                                                   }
                                                                 },

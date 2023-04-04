@@ -82,9 +82,9 @@ class _LobbyState extends State<Lobby> {
         ],
       ),
       body: Row(
-        children: [
+        children: const [
           widgets.MyNavigationRail(),
-          const VerticalDivider(thickness: 1.5, width: 1),
+          VerticalDivider(thickness: 1.5, width: 1),
           Expanded(
             child: Center(
               child: Text('Lobby'),
