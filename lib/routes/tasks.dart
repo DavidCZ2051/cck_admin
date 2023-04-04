@@ -34,7 +34,7 @@ class _TasksState extends State<Tasks> {
       loading["delete"] = true;
     });
     setstate();
-    print("Deleting task with id: $injuryTaskId");
+    debugPrint("Deleting task with id: $injuryTaskId");
     var object = await functions.deleteInjuryTask(
       token: token,
       injuryTaskId: injuryTaskId,
@@ -72,7 +72,7 @@ class _TasksState extends State<Tasks> {
 
     task["injuryId"] = globals.selectedInjury!.id;
 
-    print("Creating task with data: $task");
+    debugPrint("Creating task with data: $task");
     var object = await functions.createInjuryTask(
       token: token,
       task: task,
@@ -116,7 +116,7 @@ class _TasksState extends State<Tasks> {
       loading["edit"] = true;
     });
 
-    print("Editing task with data: $task");
+    debugPrint("Editing task with data: $task");
     var object = await functions.editInjuryTask(
       token: token,
       injuryTask: task,
@@ -405,7 +405,6 @@ class _TasksState extends State<Tasks> {
                                 ? null
                                 : () {
                                     editTask = selectedTask!.map;
-                                    print(editTask);
                                     showDialog(
                                       barrierDismissible: false,
                                       context: context,

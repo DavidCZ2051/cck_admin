@@ -33,7 +33,7 @@ class _TeamsState extends State<Teams> {
       loading["delete"] = true;
     });
     setstate();
-    print("Deleting team with id: $teamId");
+    debugPrint("Deleting team with id: $teamId");
     var object = await functions.deleteTeam(
       token: token,
       teamId: teamId,
@@ -67,14 +67,14 @@ class _TeamsState extends State<Teams> {
   }) async {
     team["competitionId"] = globals.selectedCompetition!.id;
 
-    print("Creating team with data: $team");
+    debugPrint("Creating team with data: $team");
 
     setState(() {
       loading["create"] = true;
     });
     setstate();
 
-    print("Creating team with data: $team");
+    debugPrint("Creating team with data: $team");
     var object = await functions.createTeam(
       token: token,
       team: team,
@@ -124,7 +124,7 @@ class _TeamsState extends State<Teams> {
     });
     setstate();
 
-    print("Editing team with data: $team");
+    debugPrint("Editing team with data: $team");
     var object = await functions.editTeam(
       token: token,
       team: team,

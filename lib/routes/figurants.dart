@@ -72,7 +72,7 @@ class _FigurantsState extends State<Figurants> {
 
     figurant["injuryId"] = globals.selectedInjury!.id;
 
-    print("Creating figurant with data: $figurant");
+    debugPrint("Creating figurant with data: $figurant");
     var object = await functions.createFigurant(
       token: token,
       figurant: figurant,

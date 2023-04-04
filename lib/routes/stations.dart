@@ -34,7 +34,7 @@ class _StationsState extends State<Stations> {
       loading["delete"] = true;
     });
     setstate();
-    print("Deleting station with id: $stationId");
+    debugPrint("Deleting station with id: $stationId");
     var object = await functions.deleteStation(
       token: token,
       stationId: selectedStation!.id,
@@ -72,7 +72,7 @@ class _StationsState extends State<Stations> {
     station["type"] = globals.getStationTypeId(type: station["type"]);
     station["tier"] = globals.getStationTierId(tier: station["tier"]);
 
-    print("Creating station with data: $station");
+    debugPrint("Creating station with data: $station");
     var object = await functions.createStation(
       token: token,
       station: station,
@@ -120,7 +120,7 @@ class _StationsState extends State<Stations> {
     station["type"] = globals.getStationTypeId(type: station["type"]);
     station["tier"] = globals.getStationTierId(tier: station["tier"]);
 
-    print("Editing station with data: $station");
+    debugPrint("Editing station with data: $station");
     var object = await functions.editStation(
       token: token,
       station: station,
@@ -461,7 +461,6 @@ class _StationsState extends State<Stations> {
                                         .stationTiers[editStation["tier"]];
                                     editStation["type"] = globals
                                         .stationTypes[editStation["type"]];
-                                    print(editStation);
                                     showDialog(
                                       barrierDismissible: false,
                                       context: context,

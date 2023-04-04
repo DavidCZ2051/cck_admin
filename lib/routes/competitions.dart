@@ -169,6 +169,33 @@ class _CompetitionsState extends State<Competitions> {
     }
   }
 
+  handleRefereeCreate({
+    required String token,
+    required Map referee,
+  }) async {
+    if (referee["administrator"] == null) {
+      referee["administrator"] = false;
+    }
+    referee["administrator"] = referee["administrator"] ? 1 : 0;
+
+    debugPrint("Creating referee with data: $referee");
+    var object = await functions.createReferee(
+      token: token,
+      referee: referee,
+    );
+    if (object.functionCode == globals.FunctionCode.success) {
+      Navigator.pop(context);
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return widgets.ErrorDialog(
+              statusCode: object.statusCode!,
+            );
+          });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -191,9 +218,60 @@ class _CompetitionsState extends State<Competitions> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text("Typ"),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    const Text("Typ"),
+                                    const SizedBox(width: 30),
+                                    IconButton(
+                                      tooltip: "Odhlásit se",
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: ((context) => AlertDialog(
+                                                title:
+                                                    const Text("Odhlásit se"),
+                                                content: const Text(
+                                                    "Opravdu se chcete odhlásit?"),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: const Text("Zrušit"),
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      globals.user =
+                                                          globals.User();
+                                                      globals.competitions = [];
+                                                      globals.selectedCompetition =
+                                                          null;
+                                                      globals.selectedTeam =
+                                                          null;
+                                                      globals.selectedStation =
+                                                          null;
+                                                      globals.selectedInjury =
+                                                          null;
+                                                      globals.loadMode = null;
+                                                      globals.referees = [];
+                                                      Navigator
+                                                          .pushReplacementNamed(
+                                                              context,
+                                                              "/login");
+                                                    },
+                                                    child: const Text(
+                                                        "Odhlásit se"),
+                                                  ),
+                                                ],
+                                              )),
+                                        );
+                                      },
+                                      icon: const Icon(Icons.logout),
+                                    ),
+                                  ],
+                                ),
                               ),
                               Row(
                                 children: const [
@@ -1003,6 +1081,202 @@ class _CompetitionsState extends State<Competitions> {
                                     );
                                   },
                             label: const Text("Smazat"),
+                          ),
+                          const SizedBox(width: 40),
+                          ElevatedButton.icon(
+                            icon: const Icon(Icons.person_add),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.red),
+                            ),
+                            onPressed: () {
+                              Map referee = {};
+                              bool showPassword1 = false;
+                              bool showPassword2 = false;
+                              showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (context) {
+                                  return StatefulBuilder(
+                                    builder: (context, setState) {
+                                      return AlertDialog(
+                                        title:
+                                            const Text("Vytvoření rozhodčího"),
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            TextField(
+                                              decoration: const InputDecoration(
+                                                labelText: "Jméno",
+                                              ),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  referee["firstName"] = value;
+                                                });
+                                              },
+                                            ),
+                                            TextField(
+                                              decoration: const InputDecoration(
+                                                labelText: "Příjmení",
+                                              ),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  referee["lastName"] = value;
+                                                });
+                                              },
+                                            ),
+                                            TextField(
+                                              decoration: const InputDecoration(
+                                                labelText: "Email",
+                                              ),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  referee["email"] = value;
+                                                });
+                                              },
+                                            ),
+                                            TextField(
+                                              decoration: const InputDecoration(
+                                                hintText: "AAABBBCCC",
+                                                labelText:
+                                                    "Telefonní číslo (volitelné)",
+                                              ),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  referee["phoneNumber"] =
+                                                      value;
+                                                });
+                                              },
+                                            ),
+                                            TextField(
+                                              decoration: InputDecoration(
+                                                labelText: "Heslo",
+                                                suffixIcon: IconButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      showPassword1 =
+                                                          !showPassword1;
+                                                    });
+                                                  },
+                                                  icon: Icon(
+                                                    showPassword1
+                                                        ? Icons.visibility
+                                                        : Icons.visibility_off,
+                                                  ),
+                                                ),
+                                              ),
+                                              obscureText: !showPassword1,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  referee["password"] = value;
+                                                });
+                                              },
+                                            ),
+                                            TextField(
+                                              decoration: InputDecoration(
+                                                labelText: "Potvrzení hesla",
+                                                suffixIcon: IconButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      showPassword2 =
+                                                          !showPassword2;
+                                                    });
+                                                  },
+                                                  icon: Icon(
+                                                    showPassword2
+                                                        ? Icons.visibility
+                                                        : Icons.visibility_off,
+                                                  ),
+                                                ),
+                                              ),
+                                              obscureText: !showPassword2,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  referee["password2"] = value;
+                                                });
+                                              },
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 8, 0, 4),
+                                              child: Row(
+                                                children: [
+                                                  Checkbox(
+                                                    value: referee[
+                                                            "administrator"] ??
+                                                        false,
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        referee["administrator"] =
+                                                            value;
+                                                      });
+                                                    },
+                                                  ),
+                                                  const Text(
+                                                    "Administrátor",
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text(
+                                              "Zrušit",
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                Colors.red,
+                                              ),
+                                            ),
+                                            onPressed: (referee["firstName"] ==
+                                                        null ||
+                                                    referee["firstName"] ==
+                                                        "" ||
+                                                    referee["lastName"] ==
+                                                        null ||
+                                                    referee["lastName"] == "" ||
+                                                    referee["email"] == null ||
+                                                    referee["email"] == "" ||
+                                                    referee["password"] ==
+                                                        null ||
+                                                    referee["password"] == "" ||
+                                                    referee["password"] !=
+                                                        referee["password2"])
+                                                ? null
+                                                : () async {
+                                                    await handleRefereeCreate(
+                                                      token:
+                                                          globals.user.token!,
+                                                      referee: referee,
+                                                    );
+                                                  },
+                                            child: const Text(
+                                              "Vytvořit rozhodčího",
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                            label: const Text("Vytvořit rozhodčího"),
                           )
                         ],
                       ),

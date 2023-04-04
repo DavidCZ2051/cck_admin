@@ -29,9 +29,9 @@ class _SettingsState extends State<Settings> {
         title: const Text("Nastavení"),
       ),
       body: Row(
-        children: <Widget>[
+        children: const <Widget>[
           widgets.MyNavigationRail(),
-          const VerticalDivider(thickness: 1.5, width: 1),
+          VerticalDivider(thickness: 1.5, width: 1),
           Expanded(
             child: Center(
               child: Text("Nastavení"),

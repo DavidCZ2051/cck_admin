@@ -27,14 +27,14 @@ class _MyNavigationRailState extends State<MyNavigationRail> {
           }
         });
       },
-      destinations: <NavigationRailDestination>[
+      destinations: const <NavigationRailDestination>[
         NavigationRailDestination(
-          icon: const Icon(Icons.home),
-          label: const Text("Lobby"),
+          icon: Icon(Icons.home),
+          label: Text("Lobby"),
         ),
         NavigationRailDestination(
-          icon: const Icon(Icons.settings),
-          label: const Text("Nastavení"),
+          icon: Icon(Icons.settings),
+          label: Text("Nastavení"),
         ),
       ],
       selectedIndex: globals.navigationDrawer.index,

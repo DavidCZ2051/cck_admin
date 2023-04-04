@@ -7,10 +7,10 @@ import 'package:cck_admin/functions.dart' as functions;
 import 'package:cck_admin/widgets.dart' as widgets;
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({super.key});
 
   @override
-  _LoginState createState() => _LoginState();
+  State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
@@ -32,19 +32,15 @@ class _LoginState extends State<Login> {
       const storage = FlutterSecureStorage();
       storage.write(
           key: "rememberPassword", value: _rememberPassword.toString());
-      print("$_rememberPassword test");
       if (_rememberPassword) {
         storage.write(key: "password", value: password);
-        print("heslo uloženo, $password");
       } else {
         storage.delete(key: "password");
-        print("heslo smazáno");
       }
       globals.loadMode = "competitions";
       Navigator.pushReplacementNamed(context, "/loading");
       password = null;
     } else if (object.functionCode == globals.FunctionCode.error) {
-      print("Request failed with status: ${object.statusCode}.");
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
@@ -71,7 +67,6 @@ class _LoginState extends State<Login> {
         barrierDismissible: true,
       );
     } else if (object.functionCode == globals.FunctionCode.connectionError) {
-      print("Connection error.");
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
@@ -107,10 +102,9 @@ class _LoginState extends State<Login> {
     const storage = FlutterSecureStorage();
     _rememberPassword =
         await storage.read(key: "rememberPassword") == "true" ? true : false;
-    print("rememberPassword from SP: $_rememberPassword");
+    debugPrint("rememberPassword from SP: $_rememberPassword");
     if (_rememberPassword) {
       password = await storage.read(key: "password");
-      print("password from SP: $password");
       setState(() {});
     }
   }

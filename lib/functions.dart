@@ -1117,3 +1117,35 @@ Future<globals.FunctionObject> getReferees({required String token}) async {
     );
   }
 }
+
+Future<globals.FunctionObject> createReferee({
+  required String token,
+  required Map referee,
+}) async {
+  final response = await post(
+    Uri.parse("${globals.url}/api/register"),
+    headers: {
+      'token': token,
+    },
+    body: {
+      "fistName": referee["firstName"],
+      "lastName": referee["lastName"],
+      "email": referee["email"],
+      "password": referee["password"],
+      "phoneNumber": referee["phoneNumber"],
+      "administrator": referee["administrator"].toString(),
+    },
+  );
+
+  if (response.statusCode == 201) {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.success,
+      statusCode: response.statusCode,
+    );
+  } else {
+    return globals.FunctionObject(
+      functionCode: globals.FunctionCode.error,
+      statusCode: response.statusCode,
+    );
+  }
+}

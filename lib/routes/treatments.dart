@@ -34,7 +34,7 @@ class _TreatmentsState extends State<Treatments> {
       loading["delete"] = true;
     });
     setstate();
-    print("Deleting treatment with id: $treatmentId");
+    debugPrint("Deleting treatment with id: $treatmentId");
     var object = await functions.deleteTreatmentProcedure(
       token: token,
       treatmentProdecureId: treatmentId,
@@ -72,7 +72,7 @@ class _TreatmentsState extends State<Treatments> {
 
     treatment["injuryId"] = globals.selectedInjury!.id;
 
-    print("Creating treatment with data: $treatment");
+    debugPrint("Creating treatment with data: $treatment");
     var object = await functions.createTreatmentProcedure(
       token: token,
       treatmentProcedure: treatment,
@@ -116,7 +116,7 @@ class _TreatmentsState extends State<Treatments> {
       loading["edit"] = true;
     });
 
-    print("Editing treatment with data: $treatment");
+    debugPrint("Editing treatment with data: $treatment");
     var object = await functions.editTreatmentProcedure(
       token: token,
       treatmentProcedure: treatment,
@@ -408,7 +408,6 @@ class _TreatmentsState extends State<Treatments> {
                                 ? null
                                 : () {
                                     editTreatment = selectedTreatment!.map;
-                                    print(editTreatment);
                                     showDialog(
                                       barrierDismissible: false,
                                       context: context,

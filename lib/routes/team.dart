@@ -56,7 +56,7 @@ class _TeamState extends State<Team> {
       loading["delete"] = true;
     });
     setstate();
-    print("Deleting team member with id: $teamMemberId");
+    debugPrint("Deleting team member with id: $teamMemberId");
     var object = await functions.deleteTeamMember(
       token: token,
       teamMemberId: selectedTeamMember!.id,
@@ -93,7 +93,7 @@ class _TeamState extends State<Team> {
       loading["create"] = true;
     });
 
-    print("Creating team member with data: $teamMember");
+    debugPrint("Creating team member with data: $teamMember");
     var object = await functions.createTeamMember(
       token: token,
       teamMember: teamMember,
@@ -140,7 +140,7 @@ class _TeamState extends State<Team> {
       loading["edit"] = true;
     });
 
-    print("Editing team member with data: $teamMember");
+    debugPrint("Editing team member with data: $teamMember");
     var object = await functions.editTeamMember(
       token: token,
       teamMember: teamMember,
@@ -507,7 +507,6 @@ class _TeamState extends State<Team> {
                                 ? null
                                 : () {
                                     editTeamMember = selectedTeamMember!.map;
-                                    print(editTeamMember);
                                     showDialog(
                                       barrierDismissible: false,
                                       context: context,
@@ -841,7 +840,6 @@ class _TeamState extends State<Team> {
                                 if (selectedTeamMember!.type == 1)
                                   IconButton(
                                     onPressed: () {
-                                      print(selectedTeamMember!.qrJson);
                                       showDialog(
                                           context: context,
                                           builder: (context) {
