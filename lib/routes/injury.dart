@@ -47,7 +47,7 @@ class _InjuryState extends State<Injury> {
                                     maxLines: 4,
                                     softWrap: true,
                                     overflow: TextOverflow.ellipsis,
-                                    "${globals.selectedInjury!.situation} - ID: ${globals.selectedInjury!.id}"),
+                                    "${globals.selectedInjury!.diagnosis} - ID: ${globals.selectedInjury!.id}"),
                               ),
                               Row(
                                 children: [
@@ -120,67 +120,75 @@ class _InjuryState extends State<Injury> {
                 const VerticalDivider(),
                 Padding(
                   padding: const EdgeInsets.all(20),
-                  child: Card(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                          child: Text(
-                              "Diagnóza: ${globals.selectedInjury!.diagnosis}"),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                          child: Text("ID: ${globals.selectedInjury!.id}"),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                          child: Text(
-                              "Informace: ${globals.selectedInjury!.info}"),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                          child: Text(
-                              "Písmeno: ${globals.selectedInjury!.letter}"),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                          child: Text(
-                              "Maximální počet bodů: ${globals.selectedInjury!.maximalPoints}"),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                          child: Text(
-                              "Nezbytné vybavení: ${globals.selectedInjury!.necessaryEquipment}"),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                          child: Text(
-                              "ID rozhodčího: ${globals.selectedInjury!.refereeId}"),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                          child: Text(
-                              "Situace: ${globals.selectedInjury!.situation}"),
-                        ),
-                        const Divider(),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                          child: Text(
-                              "Počet figurantů: ${globals.selectedInjury!.figurants.length}"),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                          child: Text(
-                              "Počet úloh: ${globals.selectedInjury!.tasks.length}"),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                          child: Text(
-                              "Počet léčebných procedur: ${globals.selectedInjury!.treatmentProcedures.length}"),
-                        ),
-                      ],
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: 640,
+                    ),
+                    child: Card(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                            child: Text(
+                                "Diagnóza: ${globals.selectedInjury!.diagnosis}"),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                            child: Text("ID: ${globals.selectedInjury!.id}"),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                            child: Text(
+                                "Informace: ${globals.selectedInjury!.info}"),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                            child: Text(
+                                "Písmeno: ${globals.selectedInjury!.letter}"),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                            child: Text(
+                                "Maximální počet bodů: ${globals.selectedInjury!.maximalPoints}"),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                            child: Text(
+                                "Nezbytné vybavení: ${globals.selectedInjury!.necessaryEquipment}"),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                            child: Text(
+                                "ID rozhodčího: ${globals.selectedInjury!.refereeId}"),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                            child: Text(
+                                maxLines: 4,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                                "Situace: ${globals.selectedInjury!.situation}"),
+                          ),
+                          const Divider(),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                            child: Text(
+                                "Počet figurantů: ${globals.selectedInjury!.figurants.length}"),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                            child: Text(
+                                "Počet úloh: ${globals.selectedInjury!.tasks.length}"),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                            child: Text(
+                                "Počet léčebných procedur: ${globals.selectedInjury!.treatmentProcedures.length}"),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 )

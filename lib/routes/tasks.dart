@@ -181,7 +181,7 @@ class _TasksState extends State<Tasks> {
                                     maxLines: 4,
                                     softWrap: true,
                                     overflow: TextOverflow.ellipsis,
-                                    "${globals.selectedInjury!.situation} - ID: ${globals.selectedInjury!.id}"),
+                                    "${globals.selectedInjury!.diagnosis} - ID: ${globals.selectedInjury!.id}"),
                               ),
                               Row(
                                 children: [
@@ -253,7 +253,6 @@ class _TasksState extends State<Tasks> {
                 ),
                 const VerticalDivider(),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(25),
@@ -645,11 +644,10 @@ class _TasksState extends State<Tasks> {
                         ),
                       ),
                     if (globals.selectedInjury!.tasks.isNotEmpty)
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Column(
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               for (globals.Task task
                                   in globals.selectedInjury!.tasks)
@@ -678,17 +676,17 @@ class _TasksState extends State<Tasks> {
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
-                                                8, 8, 0, 0),
+                                                8, 8, 8, 0),
                                             child: Text("ID: ${task.id}"),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
-                                                8, 8, 0, 0),
+                                                8, 8, 8, 0),
                                             child: Text("Název: ${task.title}"),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
-                                                8, 8, 0, 8),
+                                                8, 8, 8, 8),
                                             child: Text(
                                               "Maximální počet mínusových bodů: ${task.maximalMinusPoints}",
                                             ),
@@ -700,7 +698,7 @@ class _TasksState extends State<Tasks> {
                                 ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
                   ],
                 ),

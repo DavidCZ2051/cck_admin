@@ -181,7 +181,7 @@ class _TreatmentsState extends State<Treatments> {
                                     maxLines: 4,
                                     softWrap: true,
                                     overflow: TextOverflow.ellipsis,
-                                    "${globals.selectedInjury!.situation} - ID: ${globals.selectedInjury!.id}"),
+                                    "${globals.selectedInjury!.diagnosis} - ID: ${globals.selectedInjury!.id}"),
                               ),
                               Row(
                                 children: [

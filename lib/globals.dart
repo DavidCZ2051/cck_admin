@@ -1,5 +1,5 @@
 const String url = "https://localhost:7041";
-const String appVersion = "1.0.7-BETA";
+const String appVersion = "1.0.8-BETA";
 const bool debug = false; //debug variable
 
 User user = User();

@@ -245,7 +245,7 @@ class _InjuriesState extends State<Injuries> {
                                           maxLines: 4,
                                           softWrap: true,
                                           overflow: TextOverflow.ellipsis,
-                                          "${injury.situation} - ID: ${injury.id}"),
+                                          "${injury.diagnosis} - ID: ${injury.id}"),
                                     ),
                                     Padding(
                                       padding:
@@ -961,67 +961,76 @@ class _InjuriesState extends State<Injuries> {
                     ),
                     const Divider(),
                     if (globals.selectedInjury != null)
-                      Card(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                                  child: Text(
-                                      "Diagnóza: ${globals.selectedInjury!.diagnosis}"),
-                                ),
-                                const SizedBox(width: 50),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.red,
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxWidth: 680,
+                        ),
+                        child: Card(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                                    child: Text(
+                                        "Diagnóza: ${globals.selectedInjury!.diagnosis}"),
                                   ),
-                                  onPressed: () {
-                                    globals.loadMode = "injury";
-                                    Navigator.pushReplacementNamed(
-                                        context, "/loading");
-                                  },
-                                  child: const Text("Otevřít"),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                              child: Text("ID: ${globals.selectedInjury!.id}"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                              child: Text(
-                                  "Informace: ${globals.selectedInjury!.info}"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                              child: Text(
-                                  "Písmeno: ${globals.selectedInjury!.letter}"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                              child: Text(
-                                  "Maximální počet bodů: ${globals.selectedInjury!.maximalPoints}"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                              child: Text(
-                                  "Nezbytné vybavení: ${globals.selectedInjury!.necessaryEquipment}"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                              child: Text(
-                                  "Přiřazený rozhodčí: ${globals.referees.firstWhere((referee) => referee.userID == globals.selectedInjury!.refereeId).nameString}"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                              child: Text(
-                                  "Situace: ${globals.selectedInjury!.situation}"),
-                            ),
-                          ],
+                                  const SizedBox(width: 50),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                    ),
+                                    onPressed: () {
+                                      globals.loadMode = "injury";
+                                      Navigator.pushReplacementNamed(
+                                          context, "/loading");
+                                    },
+                                    child: const Text("Otevřít"),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                                child:
+                                    Text("ID: ${globals.selectedInjury!.id}"),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                                child: Text(
+                                    "Informace: ${globals.selectedInjury!.info}"),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                                child: Text(
+                                    "Písmeno: ${globals.selectedInjury!.letter}"),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                                child: Text(
+                                    "Maximální počet bodů: ${globals.selectedInjury!.maximalPoints}"),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                                child: Text(
+                                    "Nezbytné vybavení: ${globals.selectedInjury!.necessaryEquipment}"),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                                child: Text(
+                                    "Přiřazený rozhodčí: ${globals.referees.firstWhere((referee) => referee.userID == globals.selectedInjury!.refereeId).nameString}"),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                                child: Text(
+                                    maxLines: 4,
+                                    softWrap: true,
+                                    overflow: TextOverflow.ellipsis,
+                                    "Situace: ${globals.selectedInjury!.situation}"),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                   ],
