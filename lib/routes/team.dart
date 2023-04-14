@@ -847,13 +847,63 @@ class _TeamState extends State<Team> {
                                               title: const Text("QR kód"),
                                               content: WidgetsToImage(
                                                 controller: imageController,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: PrettyQr(
-                                                    data: selectedTeamMember!
-                                                        .qrJson,
-                                                    size: 225,
+                                                child: AspectRatio(
+                                                  aspectRatio: 1.6 / 1,
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Row(
+                                                        children: [
+                                                          PrettyQr(
+                                                            data:
+                                                                selectedTeamMember!
+                                                                    .qrJson,
+                                                            size: 400,
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(20),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text(
+                                                                  "${selectedTeamMember!.firstName} ${selectedTeamMember!.lastName}",
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontSize:
+                                                                        30,
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  "Tým číslo ${globals.selectedTeam!.number}",
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontSize:
+                                                                        25,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
